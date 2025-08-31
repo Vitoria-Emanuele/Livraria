@@ -2,16 +2,6 @@ from sqlalchemy.orm import Session
 from .. import models
 from ..schemas import slivro
 
-# Criar livro
-
-
-def criar_livro(db: Session, livro: slivro.LivroCreate):
-    db_livro = models.Livro(**livro.dict())
-    db.add(db_livro)
-    db.commit()
-    db.refresh(db_livro)
-    return db_livro
-
 # Listar todos
 
 
@@ -31,7 +21,7 @@ def atualizar_livro(db: Session, livro_id: int, livro_update: slivro.LivroUpdate
     db_livro = buscar_livro(db, livro_id)
     if not db_livro:
         return None
-    for key, value in livro_update.dict(exclude_unset=True).items():
+    for key, value in livro_update.model_dump(exclude_unset=True).items():
         setattr(db_livro, key, value)
     db.commit()
     db.refresh(db_livro)
@@ -47,3 +37,13 @@ def remover_livro(db: Session, livro_id: int):
         db.commit()
         return True
     return False
+
+# Criar livro
+
+
+def criar_livro(db: Session, livro: slivro.LivroCreate):
+    db_livro = models.Livro(**livro.model_dump())
+    db.add(db_livro)
+    db.commit()
+    db.refresh(db_livro)
+    return db_livro

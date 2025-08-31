@@ -11,15 +11,13 @@ except Exception:
 
 
 DATABASE_URL = os.getenv(
-    "DATABASE_URL",
-    "postgresql+psycopg2://usuario:senha@localhost:5432/minhalivraria"
-)
+    "DATABASE_URL", "postgresql://usuario:senha@localhost:5432/minhalivraria")
 
 
 engine = create_engine(
     DATABASE_URL,
     echo=True,
-    pool_pre_ping=True
+    pool_pre_ping=True,
 )
 
 

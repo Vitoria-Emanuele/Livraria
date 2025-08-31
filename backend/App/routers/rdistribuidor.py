@@ -6,16 +6,20 @@ from ..schemas import sdistribuidor
 
 
 router = APIRouter(
-    prefix="/distribuidores",   # prefixo da rota
-    tags=["Distribuidores"]     # aparece na doc do Swagger
+    prefix="/distribuidor",   # prefixo da rota
+    tags=["Distribuidor"]     # aparece na doc do Swagger
 )
 
-# Criar distribuidor
 
-
-@router.post("/", response_model=sdistribuidor.DistribuidorResponse)
-def criar_distribuidor(distribuidor: sdistribuidor.DistribuidorCreate, db_session: Session = Depends(db.get_db)):
-    return crud_distribuidor.criar_distribuidor(db_session, distribuidor)
+# Buascar distribuidor por ID
+@router.get("/{distribuidor_id}", response_model=sdistribuidor.DistribuidorResponse)
+def buscar_distribuidor(distribuidor_id: int, db_session: Session = Depends(db.get_db)):
+    db_distribuidor = crud_distribuidor.buscar_distribuidor(
+        db_session, distribuidor_id)
+    if not db_distribuidor:
+        raise HTTPException(
+            status_code=404, detail="Distribuidor não encontrado")
+    return db_distribuidor
 
 # Listar distribuidores
 
@@ -24,21 +28,14 @@ def criar_distribuidor(distribuidor: sdistribuidor.DistribuidorCreate, db_sessio
 def listar_distribuidores(db_session: Session = Depends(db.get_db)):
     return crud_distribuidor.listar_distribuidores(db_session)
 
-# Obter distribuidor por ID
 
+# Criar distribuidor
+@router.post("/", response_model=sdistribuidor.DistribuidorResponse)
+def criar_distribuidor(distribuidor: sdistribuidor.DistribuidorCreate, db_session: Session = Depends(db.get_db)):
+    return crud_distribuidor.criar_distribuidor(db_session, distribuidor)
 
-@router.get("/{distribuidor_id}", response_model=sdistribuidor.DistribuidorResponse)
-def obter_distribuidor(distribuidor_id: int, db_session: Session = Depends(db.get_db)):
-    db_distribuidor = crud_distribuidor.obter_distribuidor(
-        db_session, distribuidor_id)
-    if not db_distribuidor:
-        raise HTTPException(
-            status_code=404, detail="Distribuidor não encontrado")
-    return db_distribuidor
 
 # Atualizar distribuidor
-
-
 @router.put("/{distribuidor_id}", response_model=sdistribuidor.DistribuidorResponse)
 def atualizar_distribuidor(distribuidor_id: int, distribuidor: sdistribuidor.DistribuidorUpdate, db_session: Session = Depends(db.get_db)):
     db_distribuidor = crud_distribuidor.atualizar_distribuidor(

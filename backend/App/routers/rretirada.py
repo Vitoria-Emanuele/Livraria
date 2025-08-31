@@ -10,9 +10,12 @@ router = APIRouter(
 )
 
 
-@router.post("/", response_model=sretirada.RetiradaResponse)
-def criar_retirada(retirada: sretirada.RetiradaCreate, db_session: Session = Depends(db.get_db)):
-    return crud_retirada.criar_retirada(db_session, retirada)
+@router.get("/{retirada_id}", response_model=sretirada.RetiradaResponse)
+def obter_retirada(retirada_id: int, db_session: Session = Depends(db.get_db)):
+    retirada = crud_retirada.obter_retirada(db_session, retirada_id)
+    if not retirada:
+        raise HTTPException(status_code=404, detail="Retirada não encontrada")
+    return retirada
 
 
 @router.get("/", response_model=list[sretirada.RetiradaResponse])
@@ -20,12 +23,9 @@ def listar_retiradas(db_session: Session = Depends(db.get_db)):
     return crud_retirada.listar_retiradas(db_session)
 
 
-@router.get("/{retirada_id}", response_model=sretirada.RetiradaResponse)
-def obter_retirada(retirada_id: int, db_session: Session = Depends(db.get_db)):
-    retirada = crud_retirada.obter_retirada(db_session, retirada_id)
-    if not retirada:
-        raise HTTPException(status_code=404, detail="Retirada não encontrada")
-    return retirada
+@router.post("/", response_model=sretirada.RetiradaResponse)
+def criar_retirada(retirada: sretirada.RetiradaCreate, db_session: Session = Depends(db.get_db)):
+    return crud_retirada.criar_retirada(db_session, retirada)
 
 
 @router.put("/{retirada_id}", response_model=sretirada.RetiradaResponse)

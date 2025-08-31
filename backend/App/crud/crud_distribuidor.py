@@ -2,17 +2,6 @@ from sqlalchemy.orm import Session
 from ..schemas import sdistribuidor
 from .. import models
 
-
-# Criar distribuidor
-
-
-def criar_distribuidor(db: Session, distribuidor: sdistribuidor.DistribuidorCreate):
-    db_distribuidor = models.Distribuidor(**distribuidor.dict())
-    db.add(db_distribuidor)
-    db.commit()
-    db.refresh(db_distribuidor)
-    return db_distribuidor
-
 # Listar todos
 
 
@@ -32,7 +21,7 @@ def atualizar_distribuidor(db: Session, distribuidor_id: int, distribuidor_updat
     db_distribuidor = buscar_distribuidor(db, distribuidor_id)
     if not db_distribuidor:
         return None
-    for key, value in distribuidor_update.dict(exclude_unset=True).items():
+    for key, value in distribuidor_update.model_dump(exclude_unset=True).items():
         setattr(db_distribuidor, key, value)
     db.commit()
     db.refresh(db_distribuidor)
@@ -48,3 +37,13 @@ def remover_distribuidor(db: Session, distribuidor_id: int):
         db.commit()
         return True
     return False
+
+# Criar distribuidor
+
+
+def criar_distribuidor(db: Session, distribuidor: sdistribuidor.DistribuidorCreate):
+    db_distribuidor = models.Distribuidor(**distribuidor.model_dump())
+    db.add(db_distribuidor)
+    db.commit()
+    db.refresh(db_distribuidor)
+    return db_distribuidor

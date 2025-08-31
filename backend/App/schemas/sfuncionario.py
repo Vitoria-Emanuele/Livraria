@@ -17,7 +17,7 @@ class FuncionarioBase(BaseModel):
     cidade_funcionario: str
     estado_funcionario: str
     cep_funcionario: str
-    complemento_funcionario: str
+    complemento_funcionario: Optional[str] = None
 
 
 class FuncionarioCreate(FuncionarioBase):

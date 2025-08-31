@@ -2,15 +2,6 @@ from sqlalchemy.orm import Session
 from .. import models
 from ..schemas import sfuncionario
 
-# Criar funcionário
-
-
-def criar_funcionario(db: Session, funcionario: sfuncionario.FuncionarioCreate):
-    db_funcionario = models.Funcionario(**funcionario.dict())
-    db.add(db_funcionario)
-    db.commit()
-    db.refresh(db_funcionario)
-    return db_funcionario
 
 # Listar todos
 
@@ -31,7 +22,7 @@ def atualizar_funcionario(db: Session, funcionario_id: int, funcionario_update: 
     db_funcionario = buscar_funcionario(db, funcionario_id)
     if not db_funcionario:
         return None
-    for key, value in funcionario_update.dict(exclude_unset=True).items():
+    for key, value in funcionario_update.model_dump(exclude_unset=True).items():
         setattr(db_funcionario, key, value)
     db.commit()
     db.refresh(db_funcionario)
@@ -47,3 +38,12 @@ def remover_funcionario(db: Session, funcionario_id: int):
         db.commit()
         return True
     return False
+# Criar funcionário
+
+
+def criar_funcionario(db: Session, funcionario: sfuncionario.FuncionarioCreate):
+    db_funcionario = models.Funcionario(**funcionario.model_dump())
+    db.add(db_funcionario)
+    db.commit()
+    db.refresh(db_funcionario)
+    return db_funcionario

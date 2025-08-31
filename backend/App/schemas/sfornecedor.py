@@ -14,7 +14,7 @@ class FornecedorBase(BaseModel):
     cidade_fornecedor: str
     estado_fornecedor: str
     cep_fornecedor: str
-    complemento_fornecedor: str
+    complemento_fornecedor: Optional[str] = None
 
 
 class FornecedorCreate(FornecedorBase):

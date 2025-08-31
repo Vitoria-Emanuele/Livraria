@@ -18,7 +18,7 @@ class Distribuidor(Base):
     cidade_distribuidor = Column(String(50), nullable=False)
     estado_distribuidor = Column(String(2), nullable=False)
     cep_distribuidor = Column(String(10), nullable=False)
-    complemento_distribuidor = Column(String(50), nullable=False)
+    complemento_distribuidor = Column(String(50), nullable=True)
 
 
 class Fornecedor(Base):
@@ -37,7 +37,7 @@ class Fornecedor(Base):
     cidade_fornecedor = Column(String(50), nullable=False)
     estado_fornecedor = Column(String(2), nullable=False)
     cep_fornecedor = Column(String(10), nullable=False)
-    complemento_fornecedor = Column(String(50), nullable=False)
+    complemento_fornecedor = Column(String(50), nullable=True)
 
 
 class Funcionario(Base):
@@ -59,7 +59,7 @@ class Funcionario(Base):
     cidade_funcionario = Column(String(50), nullable=False)
     estado_funcionario = Column(String(2), nullable=False)
     cep_funcionario = Column(String(10), nullable=False)
-    complemento_funcionario = Column(String(50), nullable=False)
+    complemento_funcionario = Column(String(50), nullable=True)
 
 
 class RegistroEntrada(Base):

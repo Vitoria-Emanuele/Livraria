@@ -2,16 +2,6 @@ from sqlalchemy.orm import Session
 from .. import models
 from ..schemas import sitemretirada
 
-# Criar ItemRetirada
-
-
-def criar_ItemRetirada(db: Session, ItemRetirada: sitemretirada.ItemRetiradaCreate):
-    db_ItemRetirada = models.ItemRetirada(**ItemRetirada.dict())
-    db.add(db_ItemRetirada)
-    db.commit()
-    db.refresh(db_ItemRetirada)
-    return db_ItemRetirada
-
 # Listar todos
 
 
@@ -31,7 +21,7 @@ def atualizar_ItemRetirada(db: Session, ItemRetirada_id: int, ItemRetirada_updat
     db_ItemRetirada = buscar_ItemRetirada(db, ItemRetirada_id)
     if not db_ItemRetirada:
         return None
-    for key, value in ItemRetirada_update.dict(exclude_unset=True).items():
+    for key, value in ItemRetirada_update.model_dump(exclude_unset=True).items():
         setattr(db_ItemRetirada, key, value)
     db.commit()
     db.refresh(db_ItemRetirada)
@@ -47,3 +37,13 @@ def remover_ItemRetirada(db: Session, ItemRetirada_id: int):
         db.commit()
         return True
     return False
+
+# Criar ItemRetirada
+
+
+def criar_ItemRetirada(db: Session, ItemRetirada: sitemretirada.ItemRetiradaCreate):
+    db_ItemRetirada = models.ItemRetirada(**ItemRetirada.model_dump())
+    db.add(db_ItemRetirada)
+    db.commit()
+    db.refresh(db_ItemRetirada)
+    return db_ItemRetirada

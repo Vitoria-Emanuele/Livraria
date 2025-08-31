@@ -10,20 +10,6 @@ router = APIRouter(
     tags=["Funcionario"]     # aparece na doc do Swagger
 )
 
-# Criar funcionario
-
-
-@router.post("/", response_model=sfuncionario.FuncionarioResponse)
-def criar_funcionario(funcionario: sfuncionario.FuncionarioCreate, db_session: Session = Depends(db.get_db)):
-    return crud_funcionario.criar_funcionario(db_session, funcionario)
-
-# Listar funcionario
-
-
-@router.get("/", response_model=list[sfuncionario.FuncionarioResponse])
-def listar_funcionario(db_session: Session = Depends(db.get_db)):
-    return crud_funcionario.listar_funcionario(db_session)
-
 # Obter funcionario por ID
 
 
@@ -36,9 +22,22 @@ def obter_funcionario(funcionario_id: int, db_session: Session = Depends(db.get_
             status_code=404, detail="Funcionario não encontrado")
     return db_funcionario
 
+# Listar funcionario
+
+
+@router.get("/", response_model=list[sfuncionario.FuncionarioResponse])
+def listar_funcionario(db_session: Session = Depends(db.get_db)):
+    return crud_funcionario.listar_funcionario(db_session)
+
+# Criar funcionario
+
+
+@router.post("/", response_model=sfuncionario.FuncionarioResponse)
+def criar_funcionario(funcionario: sfuncionario.FuncionarioCreate, db_session: Session = Depends(db.get_db)):
+    return crud_funcionario.criar_funcionario(db_session, funcionario)
+
+
 # Atualizar funcionario
-
-
 @router.put("/{funcionario_id}", response_model=sfuncionario.FuncionarioResponse)
 def atualizar_funcionario(funcionario_id: int, funcionario: sfuncionario.FuncionarioUpdate, db_session: Session = Depends(db.get_db)):
     db_funcionario = crud_funcionario.atualizar_funcionario(

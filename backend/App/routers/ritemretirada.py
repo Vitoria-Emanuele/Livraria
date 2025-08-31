@@ -10,16 +10,6 @@ router = APIRouter(
 )
 
 
-@router.post("/", response_model=sitemretirada.ItemRetiradaResponse)
-def criar_item_retirada(item:  sitemretirada.ItemRetiradaCreate, db_session: Session = Depends(db.get_db)):
-    return crud_ItemRetirada.criar_item_retirada(db_session, item)
-
-
-@router.get("/", response_model=list[sitemretirada.ItemRetiradaResponse])
-def listar_itens_retirada(db_session: Session = Depends(db.get_db)):
-    return crud_ItemRetirada.listar_itens_retirada(db_session)
-
-
 @router.get("/{id_livro}/{id_retirada}", response_model=sitemretirada.ItemRetiradaResponse)
 def obter_item_retirada(id_livro: int, id_retirada: int, db_session: Session = Depends(db.get_db)):
     item = crud_ItemRetirada.obter_item_retirada(
@@ -28,6 +18,16 @@ def obter_item_retirada(id_livro: int, id_retirada: int, db_session: Session = D
         raise HTTPException(
             status_code=404, detail="Item de retirada não encontrado")
     return item
+
+
+@router.get("/", response_model=list[sitemretirada.ItemRetiradaResponse])
+def listar_itens_retirada(db_session: Session = Depends(db.get_db)):
+    return crud_ItemRetirada.listar_itens_retirada(db_session)
+
+
+@router.post("/", response_model=sitemretirada.ItemRetiradaResponse)
+def criar_item_retirada(item:  sitemretirada.ItemRetiradaCreate, db_session: Session = Depends(db.get_db)):
+    return crud_ItemRetirada.criar_item_retirada(db_session, item)
 
 
 @router.put("/{id_livro}/{id_retirada}", response_model=sitemretirada.ItemRetiradaResponse)

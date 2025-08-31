@@ -14,7 +14,7 @@ class DistribuidorBase(BaseModel):
     cidade_distribuidor: str
     estado_distribuidor: str
     cep_distribuidor: str
-    complemento_distribuidor: str
+    complemento_distribuidor: Optional[str] = None
 
 
 class DistribuidorCreate(DistribuidorBase):

@@ -2,15 +2,6 @@ from sqlalchemy.orm import Session
 from .. import models
 from ..schemas import sitemlote
 
-# Criar ItemLote
-
-
-def criar_ItemLote(db: Session, ItemLote: sitemlote.ItemLoteCreate):
-    db_ItemLote = models.ItemLote(**ItemLote.dict())
-    db.add(db_ItemLote)
-    db.commit()
-    db.refresh(db_ItemLote)
-    return db_ItemLote
 
 # Listar todos
 
@@ -31,7 +22,7 @@ def atualizar_ItemLote(db: Session, ItemLote_id: int, ItemLote_update: sitemlote
     db_ItemLote = buscar_ItemLote(db, ItemLote_id)
     if not db_ItemLote:
         return None
-    for key, value in ItemLote_update.dict(exclude_unset=True).items():
+    for key, value in ItemLote_update.model_dump(exclude_unset=True).items():
         setattr(db_ItemLote, key, value)
     db.commit()
     db.refresh(db_ItemLote)
@@ -47,3 +38,13 @@ def remover_ItemLote(db: Session, ItemLote_id: int):
         db.commit()
         return True
     return False
+
+# Criar ItemLote
+
+
+def criar_ItemLote(db: Session, ItemLote: sitemlote.ItemLoteCreate):
+    db_ItemLote = models.ItemLote(**ItemLote.model_dump())
+    db.add(db_ItemLote)
+    db.commit()
+    db.refresh(db_ItemLote)
+    return db_ItemLote

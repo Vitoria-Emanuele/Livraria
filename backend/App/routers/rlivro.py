@@ -10,9 +10,12 @@ router = APIRouter(
 )
 
 
-@router.post("/", response_model=slivro.LivroResponse)
-def criar_livro(livro: slivro.LivroCreate, db_session: Session = Depends(db.get_db)):
-    return crud_livro.criar_livro(db_session, livro)
+@router.get("/{livro_id}", response_model=slivro.LivroResponse)
+def obter_livro(livro_id: int, db_session: Session = Depends(db.get_db)):
+    livro = crud_livro.obter_livro(db_session, livro_id)
+    if not livro:
+        raise HTTPException(status_code=404, detail="Livro não encontrado")
+    return livro
 
 
 @router.get("/", response_model=list[slivro.LivroResponse])
@@ -20,12 +23,9 @@ def listar_livros(db_session: Session = Depends(db.get_db)):
     return crud_livro.listar_livros(db_session)
 
 
-@router.get("/{livro_id}", response_model=slivro.LivroResponse)
-def obter_livro(livro_id: int, db_session: Session = Depends(db.get_db)):
-    livro = crud_livro.obter_livro(db_session, livro_id)
-    if not livro:
-        raise HTTPException(status_code=404, detail="Livro não encontrado")
-    return livro
+@router.post("/", response_model=slivro.LivroResponse)
+def criar_livro(livro: slivro.LivroCreate, db_session: Session = Depends(db.get_db)):
+    return crud_livro.criar_livro(db_session, livro)
 
 
 @router.put("/{livro_id}", response_model=slivro.LivroResponse)

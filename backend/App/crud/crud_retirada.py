@@ -2,15 +2,6 @@ from sqlalchemy.orm import Session
 from .. import models
 from ..schemas import sretirada
 
-# Criar Retirada
-
-
-def criar_retirada(db: Session, retirada: sretirada.RetiradaCreate):
-    db_retirada = models.Retirada(**retirada.dict())
-    db.add(db_retirada)
-    db.commit()
-    db.refresh(db_retirada)
-    return db_retirada
 
 # Listar todos
 
@@ -31,7 +22,7 @@ def atualizar_retirada(db: Session, retirada_id: int, retirada_update: sretirada
     db_retirada = buscar_retirada(db, retirada_id)
     if not db_retirada:
         return None
-    for key, value in retirada_update.dict(exclude_unset=True).items():
+    for key, value in retirada_update.model_dump(exclude_unset=True).items():
         setattr(db_retirada, key, value)
     db.commit()
     db.refresh(db_retirada)
@@ -47,3 +38,13 @@ def remover_retirada(db: Session, retirada_id: int):
         db.commit()
         return True
     return False
+
+# Criar Retirada
+
+
+def criar_retirada(db: Session, retirada: sretirada.RetiradaCreate):
+    db_retirada = models.Retirada(**retirada.model_dump())
+    db.add(db_retirada)
+    db.commit()
+    db.refresh(db_retirada)
+    return db_retirada

@@ -5,19 +5,9 @@ from ..schemas import sitemlote
 from ..crud import crud_ItemLote
 
 router = APIRouter(
-    prefix="/itens_lote",
+    prefix="/item_lote",
     tags=["Itens de Lote"]
 )
-
-
-@router.post("/", response_model=sitemlote.ItemLoteResponse)
-def criar_item_lote(item: sitemlote.ItemLoteCreate, db_session: Session = Depends(db.get_db)):
-    return crud_ItemLote.criar_item_lote(db_session, item)
-
-
-@router.get("/", response_model=list[sitemlote.ItemLoteResponse])
-def listar_itens_lote(db_session: Session = Depends(db.get_db)):
-    return crud_ItemLote.listar_itens_lote(db_session)
 
 
 @router.get("/{id_lote}/{id_livro}", response_model=sitemlote.ItemLoteResponse)
@@ -27,6 +17,16 @@ def obter_item_lote(id_lote: int, id_livro: int, db_session: Session = Depends(d
         raise HTTPException(
             status_code=404, detail="Item de lote não encontrado")
     return item
+
+
+@router.get("/", response_model=list[sitemlote.ItemLoteResponse])
+def listar_item_lote(db_session: Session = Depends(db.get_db)):
+    return crud_ItemLote.listar_item_lote(db_session)
+
+
+@router.post("/", response_model=sitemlote.ItemLoteResponse)
+def criar_item_lote(item: sitemlote.ItemLoteCreate, db_session: Session = Depends(db.get_db)):
+    return crud_ItemLote.criar_item_lote(db_session, item)
 
 
 @router.put("/{id_lote}/{id_livro}", response_model=sitemlote.ItemLoteResponse)
