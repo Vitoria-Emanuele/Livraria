@@ -1,0 +1,14 @@
+# Arquivos sensíveis
+.env
+.env.local
+
+# Python
+__pycache__/
+*.pyc
+
+# Editor
+.vscode/
+
+# Frontend (Node + Vite)
+frontend/node_modules/
+frontend/dist/

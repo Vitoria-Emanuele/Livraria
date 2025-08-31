@@ -1,0 +1,8 @@
+# Lista de pacotes Python necessários
+
+fastapi             # Framework principal para criar a API
+uvicorn[standard]   # Servidor ASGI para rodar a aplicação
+asyncpg             # Driver assíncrono para PostgreSQL
+sqlalchemy          # ORM para mapear tabelas do PostgreSQL
+pydantic            # Validação de dados (usado pelo FastAPI)
+python-dotenv       # Para carregar variáveis de ambiente do arquivo .env
