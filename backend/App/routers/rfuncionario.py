@@ -14,8 +14,8 @@ router = APIRouter(
 
 
 @router.get("/{funcionario_id}", response_model=sfuncionario.FuncionarioResponse)
-def obter_funcionario(funcionario_id: int, db_session: Session = Depends(db.get_db)):
-    db_funcionario = crud_funcionario.obter_funcionario(
+def buscar_funcionario(funcionario_id: int, db_session: Session = Depends(db.get_db)):
+    db_funcionario = crud_funcionario.buscar_funcionario(
         db_session, funcionario_id)
     if not db_funcionario:
         raise HTTPException(

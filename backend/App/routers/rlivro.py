@@ -5,14 +5,14 @@ from ..schemas import slivro
 from ..crud import crud_livro
 
 router = APIRouter(
-    prefix="/livros",
-    tags=["Livros"]
+    prefix="/livro",
+    tags=["Livro"]
 )
 
 
 @router.get("/{livro_id}", response_model=slivro.LivroResponse)
-def obter_livro(livro_id: int, db_session: Session = Depends(db.get_db)):
-    livro = crud_livro.obter_livro(db_session, livro_id)
+def buscar_livro(livro_id: int, db_session: Session = Depends(db.get_db)):
+    livro = crud_livro.buscar_livro(db_session, livro_id)
     if not livro:
         raise HTTPException(status_code=404, detail="Livro não encontrado")
     return livro

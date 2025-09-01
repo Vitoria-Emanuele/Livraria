@@ -3,7 +3,7 @@ from typing import Optional
 from datetime import date, time
 
 
-class RegistroEntradaBase(BaseModel):
+class registro_entradaBase(BaseModel):
     data_entrada: date
     hora_entrada: time
     id_fornecedor: int
@@ -11,11 +11,11 @@ class RegistroEntradaBase(BaseModel):
     id_distribuidor: Optional[int] = None  # distribuidor é opcional
 
 
-class RegistroEntradaCreate(RegistroEntradaBase):
+class registro_entradaCreate(registro_entradaBase):
     pass
 
 
-class RegistroEntradaUpdate(BaseModel):
+class registro_entradaUpdate(BaseModel):
     data_entrada: Optional[date] = None
     hora_entrada: Optional[time] = None
     id_fornecedor: Optional[int] = None
@@ -23,7 +23,7 @@ class RegistroEntradaUpdate(BaseModel):
     id_distribuidor: Optional[int] = None
 
 
-class RegistroEntradaResponse(RegistroEntradaBase):
+class registro_entradaResponse(registro_entradaBase):
     id_entrada: int
 
     class Config:

@@ -5,14 +5,14 @@ from ..schemas import sretirada
 from ..crud import crud_retirada
 
 router = APIRouter(
-    prefix="/retiradas",
-    tags=["Retiradas"]
+    prefix="/retirada",
+    tags=["Retirada"]
 )
 
 
 @router.get("/{retirada_id}", response_model=sretirada.RetiradaResponse)
-def obter_retirada(retirada_id: int, db_session: Session = Depends(db.get_db)):
-    retirada = crud_retirada.obter_retirada(db_session, retirada_id)
+def buscar_retirada(retirada_id: int, db_session: Session = Depends(db.get_db)):
+    retirada = crud_retirada.buscar_retirada(db_session, retirada_id)
     if not retirada:
         raise HTTPException(status_code=404, detail="Retirada não encontrada")
     return retirada

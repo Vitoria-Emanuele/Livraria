@@ -11,8 +11,8 @@ router = APIRouter(
 
 
 @router.get("/{lote_id}", response_model=slote.LoteResponse)
-def obter_lote(lote_id: int, db_session: Session = Depends(db.get_db)):
-    lote = crud_lote.obter_lote(db_session, lote_id)
+def buscar_lote(lote_id: int, db_session: Session = Depends(db.get_db)):
+    lote = crud_lote.buscar_lote(db_session, lote_id)
     if not lote:
         raise HTTPException(status_code=404, detail="Lote não encontrado")
     return lote

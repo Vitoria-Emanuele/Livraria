@@ -62,7 +62,7 @@ class Funcionario(Base):
     complemento_funcionario = Column(String(50), nullable=True)
 
 
-class RegistroEntrada(Base):
+class registro_entrada(Base):
     __tablename__ = "registro_entrada"
     __table_args__ = {"schema": "estoque"}
 
@@ -83,7 +83,7 @@ class Lote(Base):
 
     id_lote = Column(Integer, primary_key=True, index=True)
     valor_lote = Column(Numeric(12, 2), nullable=False)
-    quantidade_itens_lote = Column(Integer, nullable=False)
+    quantidade_item_lote = Column(Integer, nullable=False)
     id_entrada = Column(Integer, ForeignKey(
         "estoque.registro_entrada.id_entrada"), nullable=False)
 
@@ -101,7 +101,7 @@ class Livro(Base):
     estoque_atual = Column(Integer, nullable=False, default=0)
 
 
-class ItemLote(Base):
+class item_lote(Base):
     __tablename__ = "item_lote"
     __table_args__ = {"schema": "estoque"}
 
@@ -125,7 +125,7 @@ class Retirada(Base):
         "estoque.funcionario.id_funcionario"), nullable=False)
 
 
-class ItemRetirada(Base):
+class item_retirada(Base):
     __tablename__ = "item_retirada"
     __table_args__ = {"schema": "estoque"}
 

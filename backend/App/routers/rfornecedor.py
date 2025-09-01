@@ -14,7 +14,7 @@ router = APIRouter(
 
 
 @router.get("/{fornecedor_id}", response_model=sfornecedor.FornecedorResponse)
-def obter_fornecedor(fornecedor_id: int, db_session: Session = Depends(db.get_db)):
+def buscar_fornecedor(fornecedor_id: int, db_session: Session = Depends(db.get_db)):
     db_fornecedor = crud_fornecedor.buscar_fornecedor(
         db_session, fornecedor_id)
     if not db_fornecedor:

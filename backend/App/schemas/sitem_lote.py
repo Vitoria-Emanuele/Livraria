@@ -2,24 +2,24 @@ from pydantic import BaseModel
 from typing import Optional
 
 
-class ItemLoteBase(BaseModel):
+class item_loteBase(BaseModel):
     id_lote: int
     id_livro: int
     quantidade_item_lote: int
     valor_item_lote: float
 
 
-class ItemLoteCreate(ItemLoteBase):
+class item_loteCreate(item_loteBase):
     pass
 
 
-class ItemLoteUpdate(BaseModel):
+class item_loteUpdate(BaseModel):
     id_lote: Optional[int] = None
     id_livro: Optional[int] = None
     quantidade_item_lote: Optional[int] = None
     valor_item_lote: Optional[float] = None
 
 
-class ItemLoteResponse(ItemLoteBase):
+class item_loteResponse(item_loteBase):
     class Config:
         from_attributes = True
