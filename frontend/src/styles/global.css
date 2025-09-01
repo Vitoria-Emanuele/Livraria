@@ -1,0 +1,49 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Estilos do corpo */
+  body {
+    font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+    background-color: #F8F6F2; /* Cor de fundo suave */
+    color: #2C5530; /* Cor do texto */
+    line-height: 1.6;
+  }
+  
+  /* Scrollbar personalizado para ficar bonito */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #4A7C59;
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #2C5530;
+  }
+  
+  /* Classes utilitárias */
+  .text-center {
+    text-align: center;
+  }
+  
+  .mb-2 {
+    margin-bottom: 1rem;
+  }
+  
+  .mt-3 {
+    margin-top: 1.5rem;
+  }
+  
+  .p-3 {
+    padding: 1.5rem;
+  }
