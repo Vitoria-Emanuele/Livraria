@@ -4,7 +4,7 @@ from typing import Optional
 
 class LoteBase(BaseModel):
     valor_lote: float
-    quantidade_item_lote: int
+    quantidade_itens_lote: int
     id_entrada: int
 
 
@@ -14,7 +14,7 @@ class LoteCreate(LoteBase):
 
 class LoteUpdate(BaseModel):
     valor_lote: Optional[float] = None
-    quantidade_item_lote: Optional[int] = None
+    quantidade_itens_lote: Optional[int] = None
     id_entrada: Optional[int] = None
 
 

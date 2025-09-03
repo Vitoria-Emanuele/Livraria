@@ -6,8 +6,8 @@ from ..schemas import slote
 # Listar todos
 
 
-def listar_lotes(db: Session):
-    return db.query(models.lote).all()
+def listar_lote(db: Session):
+    return db.query(models.Lote).all()
 
 # Buscar por ID
 

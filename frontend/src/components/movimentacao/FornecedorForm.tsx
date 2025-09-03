@@ -9,11 +9,11 @@ import { useCep } from '../../hooks/useCep';
 import { estoqueService } from '../../services';
 
 interface FornecedorFormProps {
-  onSuccess?: (dadosFornecedor: any) => void;
+  onSubmit?: (dadosFornecedor: any) => void;
   onCancel?: () => void;
 }
 
-export default function FornecedorForm({ onSuccess, onCancel }: FornecedorFormProps) {
+export default function FornecedorForm({ onSubmit, onCancel }: FornecedorFormProps) {
   const [formData, setFormData] = useState({
     cnpj_fornecedor: '',
     razao_social_fornecedor: '',
@@ -31,6 +31,7 @@ export default function FornecedorForm({ onSuccess, onCancel }: FornecedorFormPr
 
   const [enviando, setEnviando] = useState(false);
   const { buscarEnderecoPorCep, carregando } = useCep();
+
   const limparFormatacao = (valor: string): string => {
     return valor.replace(/\D/g, ''); 
   };
@@ -77,10 +78,9 @@ export default function FornecedorForm({ onSuccess, onCancel }: FornecedorFormPr
       console.log('Enviando dados:', dadosParaEnviar);
 
       const fornecedorCriado = await estoqueService.criarFornecedor(dadosParaEnviar);
-   
-      // Aqui vamos integrar com o service
-      if (onSuccess) {
-        onSuccess(fornecedorCriado);
+      
+      if (onSubmit) {
+        onSubmit(fornecedorCriado);
       }
     } catch (error) {
       console.error('Erro ao criar fornecedor:', error);
@@ -262,9 +262,11 @@ export default function FornecedorForm({ onSuccess, onCancel }: FornecedorFormPr
       </Grid>
 
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1, mt: 3 }}>
-        <Button onClick={onCancel} color="inherit" disabled={enviando}>
-          Cancelar
-        </Button>
+        {onCancel && (
+          <Button onClick={onCancel} color="inherit" disabled={enviando}>
+            Cancelar
+          </Button>
+        )}
         <Button type="submit" variant="contained" disabled={enviando}>
           {enviando ? <CircularProgress size={20} /> : 'Salvar Fornecedor'}
         </Button>

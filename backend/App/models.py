@@ -83,7 +83,7 @@ class Lote(Base):
 
     id_lote = Column(Integer, primary_key=True, index=True)
     valor_lote = Column(Numeric(12, 2), nullable=False)
-    quantidade_item_lote = Column(Integer, nullable=False)
+    quantidade_itens_lote = Column(Integer, nullable=False)
     id_entrada = Column(Integer, ForeignKey(
         "estoque.registro_entrada.id_entrada"), nullable=False)
 
@@ -109,7 +109,7 @@ class item_lote(Base):
                      primary_key=True, nullable=False)
     id_livro = Column(Integer, ForeignKey(
         "estoque.livro.id_livro"), primary_key=True, nullable=False)
-    quantidade_item_lote = Column(Integer, nullable=False)
+    quantidade_itens_lote = Column(Integer, nullable=False)
     valor_item_lote = Column(Numeric(9, 2), nullable=False)
 
 

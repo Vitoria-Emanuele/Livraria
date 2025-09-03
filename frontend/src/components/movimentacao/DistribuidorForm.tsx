@@ -8,25 +8,25 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { useCep } from '../../hooks/useCep';
 import { estoqueService } from '../../services';
 
-interface FornecedorFormProps {
-  onSuccess?: (dadosFornecedor: any) => void;
+interface DistribuidorFormProps {
+  onSubmit?: (dadosDistribuidor: any) => void;
   onCancel?: () => void;
 }
 
-export default function FornecedorForm({ onSuccess, onCancel }: FornecedorFormProps) {
+export default function DistribuidorForm({ onSubmit, onCancel }: DistribuidorFormProps) {
   const [formData, setFormData] = useState({
-    cnpj_fornecedor: '',
-    razao_social_fornecedor: '',
-    nome_fantasia_fornecedor: '',
-    email_fornecedor: '',
-    telefone_fornecedor: '',
-    logradouro_fornecedor: '',
-    numero_logradouro_fornecedor: '',
-    bairro_fornecedor: '',
-    cidade_fornecedor: '',
-    estado_fornecedor: '',
-    cep_fornecedor: '',
-    complemento_fornecedor: ''
+    cnpj_distribuidor: '',
+    razao_social_distribuidor: '',
+    nome_fantasia_distribuidor: '',
+    email_distribuidor: '',
+    telefone_distribuidor: '',
+    logradouro_distribuidor: '',
+    numero_logradouro_distribuidor: '',
+    bairro_distribuidor: '',
+    cidade_distribuidor: '',
+    estado_distribuidor: '',
+    cep_distribuidor: '',
+    complemento_distribuidor: ''
   });
 
   const [enviando, setEnviando] = useState(false);
@@ -38,22 +38,22 @@ export default function FornecedorForm({ onSuccess, onCancel }: FornecedorFormPr
 
   useEffect(() => {
     const preencherEndereco = async () => {
-      if (formData.cep_fornecedor.length === 9) {
-        const endereco = await buscarEnderecoPorCep(formData.cep_fornecedor);
+      if (formData.cep_distribuidor.length === 9) {
+        const endereco = await buscarEnderecoPorCep(formData.cep_distribuidor);
         if (endereco) {
           setFormData(prev => ({
             ...prev,
-            logradouro_fornecedor: endereco.logradouro,
-            bairro_fornecedor: endereco.bairro,
-            cidade_fornecedor: endereco.localidade,
-            estado_fornecedor: endereco.uf
+            logradouro_distribuidor: endereco.logradouro,
+            bairro_distribuidor: endereco.bairro,
+            cidade_distribuidor: endereco.localidade,
+            estado_distribuidor: endereco.uf
           }));
         }
       }
     };
 
     preencherEndereco();
-  }, [formData.cep_fornecedor]);
+  }, [formData.cep_distribuidor]);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -61,30 +61,30 @@ export default function FornecedorForm({ onSuccess, onCancel }: FornecedorFormPr
 
     try {
       const dadosParaEnviar = {
-        cnpj_fornecedor: limparFormatacao(formData.cnpj_fornecedor),
-        nome_fantasia_fornecedor: formData.nome_fantasia_fornecedor,
-        razao_social_fornecedor: formData.razao_social_fornecedor,
-        email_fornecedor: formData.email_fornecedor,
-        telefone_fornecedor: limparFormatacao(formData.telefone_fornecedor),
-        logradouro_fornecedor: formData.logradouro_fornecedor,
-        numero_logradouro_fornecedor: parseInt(formData.numero_logradouro_fornecedor) || 0,
-        bairro_fornecedor: formData.bairro_fornecedor,
-        cidade_fornecedor: formData.cidade_fornecedor,
-        estado_fornecedor: formData.estado_fornecedor,
-        cep_fornecedor: limparFormatacao(formData.cep_fornecedor),
-        complemento_fornecedor: formData.complemento_fornecedor
+        cnpj_distribuidor: limparFormatacao(formData.cnpj_distribuidor),
+        nome_fantasia_distribuidor: formData.nome_fantasia_distribuidor,
+        razao_social_distribuidor: formData.razao_social_distribuidor,
+        email_distribuidor: formData.email_distribuidor,
+        telefone_distribuidor: limparFormatacao(formData.telefone_distribuidor),
+        logradouro_distribuidor: formData.logradouro_distribuidor,
+        numero_logradouro_distribuidor: parseInt(formData.numero_logradouro_distribuidor) || 0,
+        bairro_distribuidor: formData.bairro_distribuidor,
+        cidade_distribuidor: formData.cidade_distribuidor,
+        estado_distribuidor: formData.estado_distribuidor,
+        cep_distribuidor: limparFormatacao(formData.cep_distribuidor),
+        complemento_distribuidor: formData.complemento_distribuidor
       };
 
       console.log('Enviando dados:', dadosParaEnviar);
 
-      const fornecedorCriado = await estoqueService.criarFornecedor(dadosParaEnviar);
+      const distribuidorCriado = await estoqueService.criarDistribuidor(dadosParaEnviar);
 
-      if (onSuccess) {
-        onSuccess(fornecedorCriado);
+      if (onSubmit) {
+        onSubmit(distribuidorCriado);
       }
     } catch (error) {
-      console.error('Erro ao criar fornecedor:', error);
-      alert('Erro ao criar fornecedor. Verifique o console.');
+      console.error('Erro ao criar distribuidor:', error);
+      alert('Erro ao criar distribuidor. Verifique o console.');
     } finally {
       setEnviando(false);
     }
@@ -112,7 +112,7 @@ export default function FornecedorForm({ onSuccess, onCancel }: FornecedorFormPr
     
     setFormData(prev => ({
       ...prev,
-      cep_fornecedor: value
+      cep_distribuidor: value
     }));
   };
 
@@ -128,8 +128,8 @@ export default function FornecedorForm({ onSuccess, onCancel }: FornecedorFormPr
             required
             fullWidth
             label="CNPJ"
-            value={formData.cnpj_fornecedor}
-            onChange={handleChange('cnpj_fornecedor')}
+            value={formData.cnpj_distribuidor}
+            onChange={handleChange('cnpj_distribuidor')}
             placeholder="00.000.000/0000-00"
           />
         </Grid>
@@ -139,8 +139,8 @@ export default function FornecedorForm({ onSuccess, onCancel }: FornecedorFormPr
             required
             fullWidth
             label="Razão Social *"
-            value={formData.razao_social_fornecedor}
-            onChange={handleChange('razao_social_fornecedor')}
+            value={formData.razao_social_distribuidor}
+            onChange={handleChange('razao_social_distribuidor')}
           />
         </Grid>
 
@@ -149,8 +149,8 @@ export default function FornecedorForm({ onSuccess, onCancel }: FornecedorFormPr
             required
             fullWidth
             label="Nome Fantasia *"
-            value={formData.nome_fantasia_fornecedor}
-            onChange={handleChange('nome_fantasia_fornecedor')}
+            value={formData.nome_fantasia_distribuidor}
+            onChange={handleChange('nome_fantasia_distribuidor')}
           />
         </Grid>
 
@@ -160,8 +160,8 @@ export default function FornecedorForm({ onSuccess, onCancel }: FornecedorFormPr
             fullWidth
             type="email"
             label="Email *"
-            value={formData.email_fornecedor}
-            onChange={handleChange('email_fornecedor')}
+            value={formData.email_distribuidor}
+            onChange={handleChange('email_distribuidor')}
           />
         </Grid>
 
@@ -170,8 +170,8 @@ export default function FornecedorForm({ onSuccess, onCancel }: FornecedorFormPr
             required
             fullWidth
             label="Telefone *"
-            value={formData.telefone_fornecedor}
-            onChange={handleChange('telefone_fornecedor')}
+            value={formData.telefone_distribuidor}
+            onChange={handleChange('telefone_distribuidor')}
             placeholder="(11) 99999-9999"
           />
         </Grid>
@@ -181,7 +181,7 @@ export default function FornecedorForm({ onSuccess, onCancel }: FornecedorFormPr
             required
             fullWidth
             label="CEP *"
-            value={formData.cep_fornecedor}
+            value={formData.cep_distribuidor}
             onChange={handleCepChange}
             placeholder="00000-000"
             disabled={carregando}
@@ -199,8 +199,8 @@ export default function FornecedorForm({ onSuccess, onCancel }: FornecedorFormPr
             required
             fullWidth
             label="Logradouro *"
-            value={formData.logradouro_fornecedor}
-            onChange={handleChange('logradouro_fornecedor')}
+            value={formData.logradouro_distribuidor}
+            onChange={handleChange('logradouro_distribuidor')}
             disabled={carregando}
           />
         </Grid>
@@ -210,8 +210,8 @@ export default function FornecedorForm({ onSuccess, onCancel }: FornecedorFormPr
             required
             fullWidth
             label="Número *"
-            value={formData.numero_logradouro_fornecedor}
-            onChange={handleChange('numero_logradouro_fornecedor')}
+            value={formData.numero_logradouro_distribuidor}
+            onChange={handleChange('numero_logradouro_distribuidor')}
             type="number"
           />
         </Grid>
@@ -221,8 +221,8 @@ export default function FornecedorForm({ onSuccess, onCancel }: FornecedorFormPr
             required
             fullWidth
             label="Bairro *"
-            value={formData.bairro_fornecedor}
-            onChange={handleChange('bairro_fornecedor')}
+            value={formData.bairro_distribuidor}
+            onChange={handleChange('bairro_distribuidor')}
             disabled={carregando}
           />
         </Grid>
@@ -232,8 +232,8 @@ export default function FornecedorForm({ onSuccess, onCancel }: FornecedorFormPr
             required
             fullWidth
             label="Cidade *"
-            value={formData.cidade_fornecedor}
-            onChange={handleChange('cidade_fornecedor')}
+            value={formData.cidade_distribuidor}
+            onChange={handleChange('cidade_distribuidor')}
             disabled={carregando}
           />
         </Grid>
@@ -243,8 +243,8 @@ export default function FornecedorForm({ onSuccess, onCancel }: FornecedorFormPr
             required
             fullWidth
             label="Estado *"
-            value={formData.estado_fornecedor}
-            onChange={handleChange('estado_fornecedor')}
+            value={formData.estado_distribuidor}
+            onChange={handleChange('estado_distribuidor')}
             placeholder="SP"
             disabled={carregando}
           />
@@ -254,26 +254,26 @@ export default function FornecedorForm({ onSuccess, onCancel }: FornecedorFormPr
           <TextField
             fullWidth
             label="Complemento"
-            value={formData.complemento_fornecedor}
-            onChange={handleChange('complemento_fornecedor')}
+            value={formData.complemento_distribuidor}
+            onChange={handleChange('complemento_distribuidor')}
             placeholder="Apartamento, bloco, etc."
           />
         </Grid>
       </Grid>
 
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1, mt: 3 }}>
-        <Button onClick={onCancel} color="inherit" disabled={enviando}>
-          Cancelar
-        </Button>
-
+        {onCancel && (
+          <Button onClick={onCancel} color="inherit" disabled={enviando}>
+            Cancelar
+          </Button>
+        )}
         <Button 
           type="submit" 
           variant="contained" 
           disabled={enviando}
         >
-          {enviando ? <CircularProgress size={20} /> : 'Salvar Fornecedor'}
+          {enviando ? <CircularProgress size={20} /> : 'Salvar Distribuidor'}
         </Button>
-        
       </Box>
     </Box>
   );

@@ -1,19 +1,14 @@
-import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-import InputAdornment from '@mui/material/InputAdornment';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
-
-interface LivroFormProps {
-  onNext: (livros: LivroData[]) => void;
-  onBack: () => void;
-  quantidadeitem: number;
-}
+import { NumericFormat } from 'react-number-format';
+import { useState } from 'react';
+import { MenuItem } from '@mui/material';
 
 export interface LivroData {
   isbn_livro: string;
@@ -25,7 +20,15 @@ export interface LivroData {
   valor_item_lote: string;
 }
 
-export default function LivroForm({ onNext, onBack, quantidadeitem }: LivroFormProps) {
+interface LivroFormProps {
+  onLivrosChange?: (livros: LivroData[]) => void;
+}
+
+const GENEROS_LITERARIOS = [
+  'Romance','Ficção Científica','Fantasia','Terror','Mistério','Suspense','Aventura','Biografia','História','Poesia','Drama','Comédia','Infantil','Juvenil','Autoajuda','Didático','Religioso','Acadêmico','Outro'
+];
+
+export default function LivroForm({ onLivrosChange }: LivroFormProps) {
   const [livros, setLivros] = useState<LivroData[]>([
     {
       isbn_livro: '',
@@ -41,7 +44,7 @@ export default function LivroForm({ onNext, onBack, quantidadeitem }: LivroFormP
   const [erros, setErros] = useState<Partial<LivroData>[]>([]);
 
   const adicionarLivro = () => {
-    setLivros(prev => [...prev, {
+    const novosLivros = [...livros, {
       isbn_livro: '',
       titulo_livro: '',
       autor_livro: '',
@@ -49,36 +52,53 @@ export default function LivroForm({ onNext, onBack, quantidadeitem }: LivroFormP
       editora_livro: '',
       quantidade_item_lote: '',
       valor_item_lote: ''
-    }]);
+    }];
+    
+    setLivros(novosLivros);
+    if (onLivrosChange) onLivrosChange(novosLivros);
   };
 
   const removerLivro = (index: number) => {
     if (livros.length > 1) {
-      setLivros(prev => prev.filter((_, i) => i !== index));
+      const novosLivros = livros.filter((_, i) => i !== index);
+      setLivros(novosLivros);
       setErros(prev => prev.filter((_, i) => i !== index));
+      if (onLivrosChange) onLivrosChange(novosLivros);
     }
   };
 
   const atualizarLivro = (index: number, field: keyof LivroData, value: string) => {
-    setLivros(prev => prev.map((livro, i) => 
+    const novosLivros = livros.map((livro, i) => 
       i === index ? { ...livro, [field]: value } : livro
-    ));
+    );
+    
+    setLivros(novosLivros);
+    if (onLivrosChange) onLivrosChange(novosLivros);
   };
+
 
   const validarFormulario = (): boolean => {
     const novosErros: Partial<LivroData>[] = [];
     let valido = true;
 
-    livros.forEach((livro, ) => {
+    livros.forEach((livro) => {
       const erro: Partial<LivroData> = {};
 
       if (!livro.isbn_livro) erro.isbn_livro = 'ISBN é obrigatório';
       if (!livro.titulo_livro) erro.titulo_livro = 'Título é obrigatório';
+      if (!livro.genero_literario) {
+        erro.genero_literario = 'Selecione um gênero literário';
+      }
       if (!livro.quantidade_item_lote || parseInt(livro.quantidade_item_lote) <= 0) {
         erro.quantidade_item_lote = 'Quantidade é obrigatória';
       }
       if (!livro.valor_item_lote || parseFloat(livro.valor_item_lote) <= 0) {
         erro.valor_item_lote = 'Valor é obrigatório';
+      }
+
+      const valorNumerico = parseFloat(livro.valor_item_lote);
+      if (!livro.valor_item_lote || isNaN(valorNumerico) || valorNumerico < 0){ 
+        erro.valor_item_lote = 'Valor unitário é obrigatório';
       }
 
       novosErros.push(erro);
@@ -89,38 +109,10 @@ export default function LivroForm({ onNext, onBack, quantidadeitem }: LivroFormP
     return valido;
   };
 
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    
-    if (validarFormulario()) {
-      onNext(livros);
-    }
-  };
-
-  const formatarValor = (valor: string): string => {
-    if (!valor) return '';
-    
-    const numero = parseFloat(valor);
-    if (isNaN(numero)) return valor;
-    
-    return numero.toLocaleString('pt-BR', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    });
-  };
-
-  const totalitemAdicionados = livros.reduce((total, livro) => 
-    total + (parseInt(livro.quantidade_item_lote) || 0), 0
-  );
-
   return (
-    <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
+    <Box sx={{ mt: 2 }}>
       <Typography variant="h6" gutterBottom>
         Adicionar Livros ao Lote
-      </Typography>
-
-      <Typography variant="body2" color="textSecondary" gutterBottom>
-        item adicionados: {totalitemAdicionados} de {quantidadeitem}
       </Typography>
 
       {livros.map((livro, index) => (
@@ -181,11 +173,24 @@ export default function LivroForm({ onNext, onBack, quantidadeitem }: LivroFormP
 
             <Grid size={{ xs: 12, sm: 6 }}>
               <TextField
+                select
+                required
                 fullWidth
                 label="Gênero Literário"
-                value={livro.genero_literario}
+                value={livro.genero_literario || ''}
                 onChange={(e) => atualizarLivro(index, 'genero_literario', e.target.value)}
-              />
+                error={!!erros[index]?.genero_literario}
+                helperText={erros[index]?.genero_literario}
+              >
+                <MenuItem value="">
+                  <em>Selecione um gênero</em>
+                </MenuItem>
+                {GENEROS_LITERARIOS.map((genero) => (
+                  <MenuItem key={genero} value={genero}>
+                    {genero}
+                  </MenuItem>
+                ))}
+              </TextField>
             </Grid>
 
             <Grid size={{ xs: 12, sm: 6 }}>
@@ -207,29 +212,27 @@ export default function LivroForm({ onNext, onBack, quantidadeitem }: LivroFormP
                 error={!!erros[index]?.quantidade_item_lote}
                 helperText={erros[index]?.quantidade_item_lote}
                 type="number"
-                inputProps={{ min: 1 }}
               />
             </Grid>
 
             <Grid size={{ xs: 12, sm: 3 }}>
-              <TextField
+              <NumericFormat
+                customInput={TextField}
                 required
                 fullWidth
                 label="Valor Unitário"
-                value={formatarValor(livro.valor_item_lote)}
-                onChange={(e) => {
-                  const valor = e.target.value.replace(/[^\d,]/g, '').replace(',', '.');
-                  if (/^\d*\.?\d*$/.test(valor) || valor === '') {
-                    atualizarLivro(index, 'valor_item_lote', valor);
-                  }
+                value={livro.valor_item_lote}
+                onValueChange={(values) => {
+                  atualizarLivro(index, 'valor_item_lote', values.value);
                 }}
+                decimalScale={2}
+                fixedDecimalScale
+                decimalSeparator=","
+                thousandSeparator="."
+                prefix="R$ "
+                placeholder="R$ 0,00"
                 error={!!erros[index]?.valor_item_lote}
                 helperText={erros[index]?.valor_item_lote}
-                slotProps={{
-                  input: {
-                    startAdornment: <InputAdornment position="start">R$</InputAdornment>,
-                  }
-                }}
               />
             </Grid>
           </Grid>
@@ -244,15 +247,6 @@ export default function LivroForm({ onNext, onBack, quantidadeitem }: LivroFormP
       >
         Adicionar Outro Livro
       </Button>
-
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
-        <Button onClick={onBack} color="inherit">
-          Voltar
-        </Button>
-        <Button type="submit" variant="contained">
-          Próximo → Confirmar
-        </Button>
-      </Box>
     </Box>
   );
 }

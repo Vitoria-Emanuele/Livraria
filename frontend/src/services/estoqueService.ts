@@ -32,7 +32,7 @@ export interface FornecedorCreate {
   complemento_fornecedor: string;
 }
 
-// Adicione as interfaces para Distribuidor
+// interfaces para Distribuidor
 export interface Distribuidor {
   id_distribuidor: number;
   cnpj_distribuidor: string;
@@ -65,6 +65,28 @@ export interface DistribuidorCreate {
 }
 
 
+// Interfaces para Lote
+export interface Lote {
+  id_lote: number;
+  valor_lote: number; 
+  quantidade_itens_lote: number;
+  id_entrada: number;
+}
+
+export interface LoteCreate {
+  valor_lote: number; 
+  quantidade_itens_lote: number;
+  id_entrada: number;
+}
+
+export interface LoteResponse {
+  id_lote: number;
+  valor_lote: number;
+  quantidade_itens_lote: number;
+  id_entrada: number;
+}
+
+
 export const estoqueService = {
   // Fornecedor
   listarFornecedor: (): Promise<Fornecedor[]> => 
@@ -79,6 +101,22 @@ export const estoqueService = {
 
   criarDistribuidor: (distribuidor: any): Promise<any> => 
     api.post('/distribuidor/', distribuidor).then(response => response.data),
+
+  // Lote
+  listarLote: (): Promise<Lote[]> => 
+    api.get('/lote/').then(response => response.data),
+
+  buscarLote: (lote_id: number): Promise<Lote> => 
+    api.get(`/lote/${lote_id}`).then(response => response.data),
+
+  criarLote: (lote: LoteCreate): Promise<Lote> => 
+    api.post('/lote/', lote).then(response => response.data),
+
+  atualizarLote: (lote_id: number, lote: Partial<LoteCreate>): Promise<Lote> => 
+    api.put(`/lote/${lote_id}`, lote).then(response => response.data),
+
+  removerLote: (lote_id: number): Promise<{ok: boolean}> => 
+    api.delete(`/lote/${lote_id}`).then(response => response.data),
 
   // Livros
   listarLivros: (): Promise<any[]> => 

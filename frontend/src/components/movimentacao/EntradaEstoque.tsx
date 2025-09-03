@@ -1,149 +1,136 @@
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import ModalForm from '../ui/ModalForm';
-import CustomStepper from '../ui/CusstomStepper';
-import FornecedorForm from './FornecedorForm';
-import DistribuidorForm from './DistribuidorForm';
-import LoteForm from './LoteForm';
-import type { LivroData } from './LivroForm';
-import LivroForm from './LivroForm';
-import { useEffect, useState } from 'react';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import { useState } from 'react';
 import { useFornecedor } from '../../hooks/useFornecedor';
 import { useDistribuidor } from '../../hooks/useDistribuidor';
+import ModalForm from '../ui/ModalForm';
+import FornecedorForm from './FornecedorForm';
+import DistribuidorForm from './DistribuidorForm';
+import type { LivroData } from './LivroForm';
+import LivroForm from './LivroForm';
 
 interface FornecedorData {
-  id_fornecedor?: string;
+  id_fornecedor?: number;
   cnpj_fornecedor: string;
   razao_social_fornecedor: string;
   nome_fantasia_fornecedor: string;
-  email_fornecedor: string;
-  telefone_fornecedor: string;
-  logradouro: string;
-  numero: string;
-  bairro: string;
-  cidade: string;
-  estado: string;
-  cep: string;
-  complemento?: string;
 }
 
 interface DistribuidorData {
-  id_distribuidor?: string;
+  id_distribuidor?: number;
   cnpj_distribuidor: string;
   razao_social_distribuidor: string;
   nome_fantasia_distribuidor: string;
-  email_distribuidor: string;
-  telefone_distribuidor: string;
-  logradouro: string;
-  numero: string;
-  bairro: string;
-  cidade: string;
-  estado: string;
-  cep: string;
-  complemento?: string;
 }
-
-interface LoteData {
-  valor_lote: string;
-  quantidade_itens_lote: string;
-}
-
-
 
 export default function EntradaEstoque() {
-  // Estados para controle do stepper
-  const [activeStep, setActiveStep] = useState(0);
-  
   // Estados para dados do formulário
   const [fornecedor, setFornecedor] = useState<FornecedorData | null>(null);
   const [distribuidor, setDistribuidor] = useState<DistribuidorData | null>(null);
-  const [lote, setLote] = useState<LoteData | null>(null);
   const [livros, setLivros] = useState<LivroData[]>([]);
   
   // Estados para controle dos modais
   const [modalFornecedorAberto, setModalFornecedorAberto] = useState(false);
   const [modalDistribuidorAberto, setModalDistribuidorAberto] = useState(false);
 
+  const { fornecedores } = useFornecedor();
   const { distribuidores } = useDistribuidor();
 
-  // Definição das etapas do stepper
-  const steps = [
-    { label: 'Fornecedor'},
-    { label: 'Distribuidor' },
-    { label: 'Lote' },
-    { label: 'Livros',},
-    { label: 'Confirmação' }
-  ];
+  // Calcular dados do lote automaticamente com base nos livros
+  const calcularDadosLote = () => {
+    const quantidade_itens_lote = livros.length;
 
-  // Funções de navegação
-  const avancarEtapa = () => {
+    const valor_lote = livros.reduce((total, livro) => {
+      const quantidade = parseInt(livro.quantidade_item_lote) || 0;
+      const valorUnitario = parseFloat(livro.valor_item_lote) || 0;
+      return total + (quantidade * valorUnitario);
+    }, 0);
 
-    if(activeStep == 0 && !fornecedor){
-      alert("Selecione ou cadastre um Fornecedor antes de avançar!")
-      return;
-    }
-    setActiveStep((prev) => prev + 1);
+    return {
+      quantidade_itens_lote: quantidade_itens_lote,
+      valor_lote: valor_lote
+    };
   };
 
-  const voltarEtapa = () => {
-    setActiveStep((prev) => prev - 1);
-  };
-
-  const reiniciar = () => {
-    setActiveStep(0);
-    setFornecedor(null);
-    setDistribuidor(null);
-    setLote(null);
-    setLivros([]);
-  };
-
-  // Handlers para os formulários
   const handleFornecedorSalvo = (dadosFornecedor: FornecedorData) => {
     setFornecedor(dadosFornecedor);
     setModalFornecedorAberto(false);
-    avancarEtapa();
   };
 
   const handleDistribuidorSalvo = (dadosDistribuidor: DistribuidorData) => {
     setDistribuidor(dadosDistribuidor);
     setModalDistribuidorAberto(false);
-    avancarEtapa();
   };
 
-  const handleLoteSalvo = (dadosLote: LoteData) => {
-    setLote(dadosLote);
-    avancarEtapa();
+  const handleLivrosChange = (novosLivros: LivroData[]) => {
+    setLivros(novosLivros);
   };
 
-  const handleLivrosSalvos = (dadosLivros: LivroData[]) => {
-    setLivros(dadosLivros);
-    avancarEtapa();
+  const handleSubmit = async () => {
+    // Validações básicas
+    if (!fornecedor) {
+      alert("Selecione ou cadastre um fornecedor antes de continuar!");
+      return;
+    }
+
+    if (livros.length === 0) {
+      alert("Adicione pelo menos um livro ao lote!");
+      return;
+    }
+
+    try {
+      // Calcular dados do lote automaticamente
+      const dadosLote = calcularDadosLote();
+      
+      // Montar objeto completo para envio
+      const dadosEntrada = {
+        fornecedor: fornecedor,
+        distribuidor: distribuidor,
+        lote: dadosLote,
+        livros: livros
+      };
+
+      console.log('Dados para envio:', dadosEntrada);
+      
+      // Aqui você faria a chamada para o serviço que envia os dados
+      // await estoqueService.criarEntradaEstoque(dadosEntrada);
+      
+      alert("Entrada de estoque registrada com sucesso!");
+      // Limpar formulário após sucesso
+      setFornecedor(null);
+      setDistribuidor(null);
+      setLivros([]);
+      
+    } catch (error) {
+      console.error('Erro ao registrar entrada:', error);
+      alert('Erro ao registrar entrada. Verifique o console.');
+    }
   };
 
-  const { fornecedores, carregando: carregandoFornecedor } = useFornecedor();
-  
-  useEffect(() => {
-    console.log('Fornecedor atual:', fornecedor);
-    console.log('Botão próximo deve estar habilitado?', !(activeStep === 0 && !fornecedor));
-  }, [fornecedor, activeStep]);
+  const dadosLote = calcularDadosLote();
 
-  // Conteúdo de cada etapa
-  const renderizarConteudoEtapa = () => {
-    switch (activeStep) {
-      case 0: // Fornecedor
-        return (
-          <Box>
-            <Typography variant="body1" gutterBottom>
-              {fornecedor ? 'Fornecedor selecionado:' : 'Selecione ou cadastre um fornecedor'}
+  return (
+    <Box sx={{ maxWidth: 1000, margin: '0 auto', p: 3 }}>
+      <Typography variant="h4" gutterBottom>
+        Entrada de Estoque
+      </Typography>
+
+      {/* Seção de Fornecedor e Distribuidor */}
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h6" gutterBottom>
+          Origem dos Livros
+        </Typography>
+        
+        <Grid container spacing={3}>
+          {/* Fornecedor (Obrigatório) */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <Typography variant="subtitle2" gutterBottom color="primary">
+              Fornecedor *
             </Typography>
-            {fornecedor && (
-              <Box sx={{ p: 2, bgcolor: 'grey.100', borderRadius: 1, mb: 2 }}>
-                <Typography><strong>CNPJ:</strong> {fornecedor.cnpj_fornecedor}</Typography>
-                <Typography><strong>Razão Social:</strong> {fornecedor.razao_social_fornecedor}</Typography>
-                <Typography><strong>Nome Fantasia:</strong> {fornecedor.nome_fantasia_fornecedor}</Typography>
-              </Box>
-            )}
+            
             {fornecedores.length > 0 && (
               <Box sx={{ mb: 2 }}>
                 <select 
@@ -151,33 +138,16 @@ export default function EntradaEstoque() {
                   onChange={(e) => { 
                     if (e.target.value) {
                       const selectedFornecedor = fornecedores.find(f => 
-                        f.id_fornecedor?.toString() === e.target.value
+                        f.id_fornecedor === Number(e.target.value)
                       );
-                      
                       if (selectedFornecedor) {
-                        console.log('Fornecedor selecionado:', selectedFornecedor);
-                        // Converte para o formato correto
-                        setFornecedor({
-                          id_fornecedor: selectedFornecedor.id_fornecedor,
-                          cnpj_fornecedor: selectedFornecedor.cnpj_fornecedor,
-                          razao_social_fornecedor: selectedFornecedor.razao_social_fornecedor,
-                          nome_fantasia_fornecedor: selectedFornecedor.nome_fantasia_fornecedor,
-                          email_fornecedor: selectedFornecedor.email_fornecedor || '',
-                          telefone_fornecedor: selectedFornecedor.telefone_fornecedor || '',
-                          logradouro: selectedFornecedor.logradouro_fornecedor || '',
-                          numero: selectedFornecedor.numero_logradouro_fornecedor || '',
-                          bairro: selectedFornecedor.bairro_fornecedor || '',
-                          cidade: selectedFornecedor.cidade_fornecedor || '',
-                          estado: selectedFornecedor.estado_fornecedor || '',
-                          cep: selectedFornecedor.cep_fornecedor || '',
-                          complemento: selectedFornecedor.complemento_fornecedor || ''
-                        } as any);
+                        setFornecedor(selectedFornecedor as FornecedorData);
                       }
                     } else {
                       setFornecedor(null);
                     }
                   }}
-                  style={{ width: '100%', padding: '8px', marginBottom: '16px' }}
+                  style={{ width: '100%', padding: '10px', marginBottom: '12px' }}
                 >
                   <option value="">Selecione um fornecedor</option>
                   {fornecedores.map(fornecedor => (
@@ -188,51 +158,50 @@ export default function EntradaEstoque() {
                 </select>
               </Box>
             )}
+            
             <Button 
-              variant="contained"
+              variant="outlined"
               onClick={() => setModalFornecedorAberto(true)}
+              fullWidth
             >
-              Novo Fornecedor
+              Cadastrar Novo Fornecedor
             </Button>
             
-          </Box>
-        );
-
-      case 1: // Distribuidor
-        return (
-          <Box>
-            <Typography variant="body1" gutterBottom>
-              {distribuidor ? 'Distribuidor selecionado:' : 'Selecione ou cadastre um distribuidor'}
-            </Typography>
-            {distribuidor && (
-              <Box sx={{ p: 2, bgcolor: 'grey.100', borderRadius: 1, mb: 2 }}>
-                <Typography><strong>CNPJ:</strong> {distribuidor.cnpj_distribuidor}</Typography>
-                <Typography><strong>Razão Social:</strong> {distribuidor.razao_social_distribuidor}</Typography>
-                <Typography><strong>Nome Fantasia:</strong> {distribuidor.nome_fantasia_distribuidor}</Typography>
+            {fornecedor && (
+              <Box sx={{ mt: 2, p: 2, bgcolor: 'grey.100', borderRadius: 1 }}>
+                <Typography variant="body2">
+                  <strong>Selecionado:</strong> {fornecedor.razao_social_fornecedor}
+                </Typography>
+                <Typography variant="body2">
+                  <strong>CNPJ:</strong> {fornecedor.cnpj_fornecedor}
+                </Typography>
               </Box>
-            
             )}
+          </Grid>
 
+          {/* Distribuidor (Opcional) */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <Typography variant="subtitle2" gutterBottom>
+              Distribuidor (Opcional)
+            </Typography>
+            
             {distribuidores.length > 0 && (
               <Box sx={{ mb: 2 }}>
-                <Typography variant="subtitle2" gutterBottom>
-                  Selecione um distribuidor existente:
-                </Typography>
                 <select 
                   value={distribuidor?.id_distribuidor || ''}
                   onChange={(e) => {
                     if (e.target.value) {
                       const selectedDistribuidor = distribuidores.find(d => 
-                        d.id_distribuidor?.toString() === e.target.value
+                        d.id_distribuidor === Number(e.target.value)
                       );
                       if (selectedDistribuidor) {
-                        setDistribuidor(selectedDistribuidor as any);
+                        setDistribuidor(selectedDistribuidor as DistribuidorData);
                       }
                     } else {
                       setDistribuidor(null);
                     }
                   }}
-                  style={{ width: '100%', padding: '8px', marginBottom: '16px' }}
+                  style={{ width: '100%', padding: '10px', marginBottom: '12px' }}
                 >
                   <option value="">Selecione um distribuidor</option>
                   {distribuidores.map(distribuidor => (
@@ -243,90 +212,78 @@ export default function EntradaEstoque() {
                 </select>
               </Box>
             )}
-            <Box sx={{ display: 'flex', gap: 2 }}>
-              <Button 
-                variant={distribuidor ? "outlined" : "contained"}
-                onClick={() => setModalDistribuidorAberto(true)}
-              >
-                {distribuidor ? 'Alterar Distribuidor' : 'Cadastrar Distribuidor'}
-              </Button>
-              <Button onClick={avancarEtapa} color="inherit">
-                Pular Etapa
-              </Button>
-            </Box>
-          </Box>
-        );
-
-      case 2: // Lote
-        return (
-          <LoteForm 
-            onNext={handleLoteSalvo}
-            onBack={voltarEtapa}
-          />
-        );
-
-      case 3: // Livros
-        return (
-          <LivroForm 
-            onNext={handleLivrosSalvos}
-            onBack={voltarEtapa}
-            quantidade_itens_lote={lote ? parseInt(lote.quantidade_itens_lote) : 0}
-          />
-        );
-
-      case 4: // Confirmação
-        return (
-          <Box>
-            <Typography variant="h6" gutterBottom>
-              Confirmação de Entrada
-            </Typography>
-            <Typography variant="body1">
-              Revise os dados abaixo antes de confirmar a entrada do lote.
-            </Typography>
             
-            {/* Aqui viriam os dados de resumo */}
-            <Box sx={{ mt: 3, p: 2, bgcolor: 'grey.50', borderRadius: 1 }}>
-              <Typography variant="subtitle2">Resumo da entrada:</Typography>
-              <Typography>Fornecedor: {fornecedor?.razao_social_fornecedor}</Typography>
-              <Typography>Distribuidor: {distribuidor?.razao_social_distribuidor || 'Não informado'}</Typography>
-              <Typography>Valor do lote: R$ {lote?.valor_lote}</Typography>
-              <Typography>Quantidade de livros: {livros.length}</Typography>
-            </Box>
-
             <Button 
-              variant="contained" 
-              onClick={reiniciar}
-              sx={{ mt: 3 }}
+              variant="outlined"
+              onClick={() => setModalDistribuidorAberto(true)}
+              fullWidth
             >
-              Confirmar Entrada
+              Cadastrar Novo Distribuidor
             </Button>
-          </Box>
-        );
+            
+            {distribuidor && (
+              <Box sx={{ mt: 2, p: 2, bgcolor: 'grey.100', borderRadius: 1 }}>
+                <Typography variant="body2">
+                  <strong>Selecionado:</strong> {distribuidor.razao_social_distribuidor}
+                </Typography>
+                <Typography variant="body2">
+                  <strong>CNPJ:</strong> {distribuidor.cnpj_distribuidor}
+                </Typography>
+              </Box>
+            )}
+          </Grid>
+        </Grid>
+      </Box>
 
-      default:
-        return <Typography>Etapa não encontrada</Typography>;
-    }
-  };
+      {/* Formulário de Livros */}
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h6" gutterBottom>
+          Livros do Lote
+        </Typography>
+        <LivroForm onLivrosChange={handleLivrosChange} />
+      </Box>
 
-  return (
-    <Box sx={{ maxWidth: 800, margin: '0 auto', p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        Entrada de Estoque
-      </Typography>
+      {/* Resumo do Lote (calculado automaticamente) */}
+      {livros.length > 0 && (
+        <Box sx={{ mb: 4 }}>
+          <Typography variant="h6" gutterBottom>
+            Resumo do Lote
+          </Typography>
+          <Paper elevation={2} sx={{ p: 3 }}>
+            <Grid container spacing={2}>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <Typography variant="body1">
+                  <strong>Quantidade total de itens:</strong> {dadosLote.quantidade_itens_lote}
+                </Typography>
+              </Grid>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <Typography variant="body1">
+                  <strong>Valor total do lote:</strong> R$ {dadosLote.valor_lote.toFixed(2)}
+                </Typography>
+              </Grid>
+              <Grid size={{ xs: 12 }}>
+                <Typography variant="body2" color="textSecondary">
+                  * Valores calculados automaticamente com base nos livros adicionados
+                </Typography>
+              </Grid>
+            </Grid>
+          </Paper>
+        </Box>
+      )}
 
-      <CustomStepper
-        steps={steps}
-        activeStep={activeStep}
-        onNext={avancarEtapa}
-        onBack={voltarEtapa}
-        onReset={reiniciar}
-        isLastStep={activeStep === steps.length - 1}
-        disableNext={activeStep === 0 && !fornecedor}
-      >
-        {renderizarConteudoEtapa()}
-      </CustomStepper>
+      {/* Botão de Submissão */}
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
+        <Button 
+          variant="contained" 
+          size="large"
+          onClick={handleSubmit}
+          disabled={!fornecedor || livros.length === 0}
+        >
+          Registrar Entrada de Estoque
+        </Button>
+      </Box>
 
-      {/* Modais */}
+      {/* Modais para cadastro */}
       <ModalForm
         open={modalFornecedorAberto}
         onClose={() => setModalFornecedorAberto(false)}
@@ -334,7 +291,7 @@ export default function EntradaEstoque() {
         maxWidth="md"
       >
         <FornecedorForm
-          onSuccess={handleFornecedorSalvo}
+          onSubmit={handleFornecedorSalvo}
           onCancel={() => setModalFornecedorAberto(false)}
         />
       </ModalForm>
@@ -346,7 +303,7 @@ export default function EntradaEstoque() {
         maxWidth="md"
       >
         <DistribuidorForm
-          onSuccess={handleDistribuidorSalvo}
+          onSubmit={handleDistribuidorSalvo}
           onCancel={() => setModalDistribuidorAberto(false)}
         />
       </ModalForm>

@@ -5,8 +5,8 @@ from ..schemas import slote
 from ..crud import crud_lote
 
 router = APIRouter(
-    prefix="/lotes",
-    tags=["Lotes"]
+    prefix="/lote",
+    tags=["Lote"]
 )
 
 
@@ -19,8 +19,8 @@ def buscar_lote(lote_id: int, db_session: Session = Depends(db.get_db)):
 
 
 @router.get("/", response_model=list[slote.LoteResponse])
-def listar_lotes(db_session: Session = Depends(db.get_db)):
-    return crud_lote.listar_lotes(db_session)
+def listar_lote(db_session: Session = Depends(db.get_db)):
+    return crud_lote.listar_lote(db_session)
 
 
 @router.post("/", response_model=slote.LoteResponse)
