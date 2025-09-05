@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Numeric, Date, Time, ForeignKey
+from sqlalchemy import Column, Integer, String, Numeric, Date, Time, ForeignKey, Boolean
 from .db import Base
 
 
@@ -60,6 +60,18 @@ class Funcionario(Base):
     estado_funcionario = Column(String(2), nullable=False)
     cep_funcionario = Column(String(10), nullable=False)
     complemento_funcionario = Column(String(50), nullable=True)
+
+
+class Usuario(Base):
+    __tablename__ = "usuario"
+    __table_args__ = {"schema": "estoque"}
+    id_usuario = Column(Integer, primary_key=True, index=True)
+    email_login = Column(String(100), nullable=False)
+    senha_hash = Column(String(200), nullable=False)
+    role = Column(String(20), nullable=False)
+    ativo = Column(Boolean, nullable=False)
+    id_funcionario = Column(Integer, ForeignKey(
+        "estoque.funcionario.id_funcionario"), nullable=False)
 
 
 class registro_entrada(Base):
