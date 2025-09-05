@@ -27,12 +27,12 @@
 
 ### Modelagem Entidade Relacionamento:
 
-<img width="2101" height="1201" alt="BD_Livraria-ModelagemEntidadeRelacionamento drawio" src="https://github.com/user-attachments/assets/5e960c8d-33fe-4492-a63b-b37af0961fb6" />
+<img width="2101" height="1511" alt="BD_Livraria-ModelagemEntidadeRelacionamento drawio" src="https://github.com/user-attachments/assets/c857596f-3ee6-46da-9128-65eba48b1315" />
+
 
 ### Modelagem Relacional:
 
-<img width="1281" height="833" alt="BD_Livraria-ModelagemRelacional drawio" src="https://github.com/user-attachments/assets/005729cd-ec1d-4692-9593-e1212a7da514" />
-
+<img width="1282" height="933" alt="BD_Livraria-ModelagemRelacional drawio" src="https://github.com/user-attachments/assets/bfca6088-fa57-4511-a7d2-46c0c8790fe6" />
 
 ### Modelagem UML:
 
