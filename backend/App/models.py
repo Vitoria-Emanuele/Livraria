@@ -66,12 +66,12 @@ class Usuario(Base):
     __tablename__ = "usuario"
     __table_args__ = {"schema": "estoque"}
     id_usuario = Column(Integer, primary_key=True, index=True)
-    email_login = Column(String(100), nullable=False)
+    email_login = Column(String(100), nullable=False, unique=True, index=True)
     senha_hash = Column(String(200), nullable=False)
     role = Column(String(20), nullable=False)
-    ativo = Column(Boolean, nullable=False)
+    ativo = Column(Boolean, nullable=False, default=True)
     id_funcionario = Column(Integer, ForeignKey(
-        "estoque.funcionario.id_funcionario"), nullable=False)
+        "estoque.funcionario.id_funcionario"), nullable=False, unique=True)
 
 
 class registro_entrada(Base):
