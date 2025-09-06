@@ -1,7 +1,8 @@
-import os
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+
+from backend.App.config import settings
 
 try:
     from dotenv import load_dotenv
@@ -10,15 +11,9 @@ except Exception:
     pass
 
 
-DATABASE_URL = os.getenv(
-    "DATABASE_URL", "postgresql://usuario:senha@localhost:5432/minhalivraria")
+DATABASE_URL = settings.DATABASE_URL
 
-
-engine = create_engine(
-    DATABASE_URL,
-    echo=True,
-    pool_pre_ping=True,
-)
+engine = create_engine(DATABASE_URL)
 
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .routers import rdistribuidor, rfornecedor, rfuncionario, rusuario, ritem_lote, ritem_retirada, rlivro, rlote, rregistroentrada, rretirada
+from .routers import rdistribuidor, rfornecedor, rfuncionario, rusuario, ritem_lote, ritem_retirada, rlivro, rlote, rregistroentrada, rretirada, rauth
 
 
 app = FastAPI(title="API da Livraria", version="1.0")
@@ -33,6 +33,7 @@ app.include_router(rdistribuidor.router)
 app.include_router(rfornecedor.router)
 app.include_router(rfuncionario.router)
 app.include_router(rusuario.router)
+app.include_router(rauth.router)
 app.include_router(rregistroentrada.router)
 app.include_router(rlote.router)
 app.include_router(rlivro.router)
