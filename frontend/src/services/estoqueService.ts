@@ -65,6 +65,42 @@ export interface FornecedorCreate {
 }
 
 // Interface do Funcionario
+export interface Funcionario {
+  id_funcionario: number;
+  nome_funcionario: string;
+  ctps_funcionario: string;
+  cpf_funcionario: string;
+  setor: string;
+  cargo: string;
+  salario: number;
+  telefone_funcionario: string;
+  email_funcionario: string;
+  logradouro_funcionario: string;
+  numero_logradouro_funcionario: number;
+  bairro_funcionario: string;
+  cidade_funcionario: string;
+  estado_funcionario: string;
+  cep_funcionario: string;
+  complemento_funcionario: string;
+}
+
+export interface FuncionarioCreate {
+  nome_funcionario: string;
+  ctps_funcionario: string;
+  cpf_funcionario: string;
+  setor: string;
+  cargo: string;
+  salario: number;
+  telefone_funcionario: string;
+  email_funcionario: string;
+  logradouro_funcionario: string;
+  numero_logradouro_funcionario: number;
+  bairro_funcionario: string;
+  cidade_funcionario: string;
+  estado_funcionario: string;
+  cep_funcionario: string;
+  complemento_funcionario: string;
+}
 
 // Interface do Registro de Entrada
 export interface RegistroEntrada {
@@ -96,15 +132,28 @@ export interface LoteCreate {
   id_entrada: number;
 }
 
-export interface LoteResponse {
-  id_lote: number;
-  valor_lote: number;
-  quantidade_itens_lote: number;
-  id_entrada: number;
+// Interface do Livro
+export interface Livro {
+  id_livro: number;
+  isbn_livro: number;
+  titulo_livro: string;
+  autor_livro: string;
+  genero_literario: string;
+  editora_livro: string;
+  estoque_atual: number;
 }
 
+export interface LivroCreate {
+  isbn_livro: number;
+  titulo_livro: string;
+  autor_livro: string;
+  genero_literario: string;
+  editora_livro: string;
+  estoque_atual: number;
+}
 
-export interface ItemLoteCreate {
+// Interface do Item Lote
+export interface ItemLote {
   id_lote: number;  
   id_livro: number;      
   quantidade_itens_lote: number;         
@@ -118,13 +167,36 @@ export interface ItemLoteCreate {
   valor_item_lote: number;
 }
 
-// Interface do Livro
-
-// Interface do Item de Lote
-
 // Interface da Retirada
+export interface Retirada {
+  id_retirada: number;
+  id_funcionario: number;
+  motivo_retirada: string;
+  data_retirada: string;
+  hora_retirada: string;
+}
+
+export interface RetiradaCreate {
+  id_funcionario: number;
+  motivo_retirada: string;
+  data_retirada: string;
+  hora_retirada: string;
+}
 
 // Interface do Item retirada
+export interface ItemRetirada {
+  id_retirada: number;  
+  id_livro: number;      
+  quantidade_itens_retirada: number;         
+  valor_unitario_retirada: number;     
+}
+
+export interface ItemRetiradaCreate {
+  id_retirada: number;
+  id_livro: number;
+  quantidade_itens_retirada: number;
+  valor_unitario_retirada: number;
+}
 
 export const estoqueService = {
 
@@ -132,14 +204,14 @@ export const estoqueService = {
   buscarDistribuidor: (distribuidor_id: number): Promise<Distribuidor> => 
     api.get(`/distribuidor/${distribuidor_id}`).then(response => response.data),
 
-  listarDistribuidor: (): Promise<any[]> => 
+  listarDistribuidor: (): Promise<Distribuidor[]> => 
     api.get('/distribuidor/').then(response => response.data),
 
-  criarDistribuidor: (distribuidor: any): Promise<any> => 
+  criarDistribuidor: (distribuidor: DistribuidorCreate): Promise<Distribuidor> => 
     api.post('/distribuidor/', distribuidor).then(response => response.data),
 
-  atualizarDistribuidor: (distribuidor_id: number, Distribuidor: Partial<DistribuidorCreate>): Promise<Distribuidor> => 
-    api.put(`distribuidor/${distribuidor_id}`, Distribuidor).then(response => response.data),
+  atualizarDistribuidor: (distribuidor_id: number, distribuidor: Partial<DistribuidorCreate>): Promise<Distribuidor> => 
+    api.put(`/distribuidor/${distribuidor_id}`, distribuidor).then(response => response.data),
 
   removerDistribuidor: (distribuidor_id: number): Promise<{ok: boolean}> => 
     api.delete(`/distribuidor/${distribuidor_id}`).then(response => response.data),
@@ -154,15 +226,43 @@ export const estoqueService = {
   criarFornecedor: (fornecedor: FornecedorCreate): Promise<Fornecedor> => 
     api.post('/fornecedor/', fornecedor).then(response => response.data),
 
-  atualizarFornecedor: (fornecedor_id: number, Fornecedor: Partial<FornecedorCreate>): Promise<Fornecedor> => 
-    api.put(`fornecedor/${fornecedor_id}`, Fornecedor).then(response => response.data),
+  atualizarFornecedor: (fornecedor_id: number, fornecedor: Partial<FornecedorCreate>): Promise<Fornecedor> => 
+    api.put(`/fornecedor/${fornecedor_id}`, fornecedor).then(response => response.data),
 
   removerFornecedor: (fornecedor_id: number): Promise<{ok: boolean}> => 
     api.delete(`/fornecedor/${fornecedor_id}`).then(response => response.data),
 
   // Funcionario
+  buscarFuncionario: (funcionario_id: number): Promise<Funcionario> => 
+    api.get(`/funcionario/${funcionario_id}`).then(response => response.data),
 
-  // Regustro de Entrada
+  listarFuncionario: (): Promise<Funcionario[]> => 
+    api.get('/funcionario/').then(response => response.data),
+
+  criarFuncionario: (funcionario: FuncionarioCreate): Promise<Funcionario> => 
+    api.post('/funcionario/', funcionario).then(response => response.data),
+
+  atualizarFuncionario: (funcionario_id: number, funcionario: Partial<FuncionarioCreate>): Promise<Funcionario> => 
+    api.put(`/funcionario/${funcionario_id}`, funcionario).then(response => response.data),
+
+  removerFuncionario: (funcionario_id: number): Promise<{ok: boolean}> => 
+    api.delete(`/funcionario/${funcionario_id}`).then(response => response.data),
+
+  // Registro de Entrada
+  buscarRegistroEntrada: (entrada_id: number): Promise<RegistroEntrada> => 
+    api.get(`/registro_entrada/${entrada_id}`).then(response => response.data),
+
+  listarRegistroEntrada: (): Promise<RegistroEntrada[]> => 
+    api.get('/registro_entrada/').then(response => response.data),
+
+  criarRegistroEntrada: (entrada: RegistroEntradaCreate): Promise<RegistroEntrada> => 
+    api.post('/registro_entrada/', entrada).then(response => response.data),
+
+  atualizarRegistroEntrada: (entrada_id: number, entrada: Partial<RegistroEntradaCreate>): Promise<RegistroEntrada> => 
+    api.put(`/registro_entrada/${entrada_id}`, entrada).then(response => response.data),
+
+  removerRegistroEntrada: (entrada_id: number): Promise<{ok: boolean}> => 
+    api.delete(`/registro_entrada/${entrada_id}`).then(response => response.data),
 
   // Lote
   listarLote: (): Promise<Lote[]> => 
@@ -181,21 +281,66 @@ export const estoqueService = {
     api.delete(`/lote/${lote_id}`).then(response => response.data),
 
   // Livros
-  listarLivros: (): Promise<any[]> => 
+  buscarLivro: (livro_id: number): Promise<Livro> => 
+    api.get(`/livro/${livro_id}`).then(response => response.data),
+
+  listarLivros: (): Promise<Livro[]> => 
     api.get('/livro/').then(response => response.data),
 
-  criarLivro: (livro: any): Promise<any[]> => 
+  criarLivro: (livro: LivroCreate): Promise<Livro> => 
     api.post('/livro/', livro).then(response => response.data),
 
-  // Item do lotes
+  atualizarLivro: (livro_id: number, livro: Partial<LivroCreate>): Promise<Livro> => 
+    api.put(`/livro/${livro_id}`, livro).then(response => response.data),
 
-  // Registro de Entrada
-  registrarEntrada: (entrada: any): Promise<any> => 
-    api.post('/registro_entrada/', entrada).then(response => response.data),
+  removerLivro: (livro_id: number): Promise<{ok: boolean}> => 
+    api.delete(`/livro/${livro_id}`).then(response => response.data),
+
+  // Item do Lote
+  buscarItemLote: (lote_id: number, livro_id: number): Promise<ItemLote> => 
+    api.get(`/item_lote/${lote_id}/${livro_id}`).then(response => response.data),
+
+  listarItensLote: (lote_id: number): Promise<ItemLote[]> => 
+    api.get(`/item_lote/${lote_id}`).then(response => response.data),
+
+  criarItemLote: (itemLote: ItemLoteCreate): Promise<ItemLote> => 
+    api.post('/item_lote/', itemLote).then(response => response.data),
+
+  atualizarItemLote: (lote_id: number, livro_id: number, itemLote: Partial<ItemLoteCreate>): Promise<ItemLote> => 
+    api.put(`/item_lote/${lote_id}/${livro_id}`, itemLote).then(response => response.data),
+
+  removerItemLote: (lote_id: number, livro_id: number): Promise<{ok: boolean}> => 
+    api.delete(`/item_lote/${lote_id}/${livro_id}`).then(response => response.data),
 
   // Retirada
-  registrarSaida: (saida: any): Promise<any> => 
-    api.post('/retiradas', saida).then(response => response.data),
+  buscarRetirada: (retirada_id: number): Promise<Retirada> => 
+    api.get(`/retirada/${retirada_id}`).then(response => response.data),
 
-  // Item de retirada
+  listarRetiradas: (): Promise<Retirada[]> => 
+    api.get('/retirada/').then(response => response.data),
+
+  criarRetirada: (retirada: RetiradaCreate): Promise<Retirada> => 
+    api.post('/retirada/', retirada).then(response => response.data),
+
+  atualizarRetirada: (retirada_id: number, retirada: Partial<RetiradaCreate>): Promise<Retirada> => 
+    api.put(`/retirada/${retirada_id}`, retirada).then(response => response.data),
+
+  removerRetirada: (retirada_id: number): Promise<{ok: boolean}> => 
+    api.delete(`/retirada/${retirada_id}`).then(response => response.data),
+
+  // Item de Retirada
+  buscarItemRetirada: (retirada_id: number, livro_id: number): Promise<ItemRetirada> => 
+    api.get(`/item_retirada/${retirada_id}/${livro_id}`).then(response => response.data),
+
+  listarItensRetirada: (retirada_id: number): Promise<ItemRetirada[]> => 
+    api.get(`/item_retirada/${retirada_id}`).then(response => response.data),
+
+  criarItemRetirada: (itemRetirada: ItemRetiradaCreate): Promise<ItemRetirada> => 
+    api.post('/item_retirada/', itemRetirada).then(response => response.data),
+
+  atualizarItemRetirada: (retirada_id: number, livro_id: number, itemRetirada: Partial<ItemRetiradaCreate>): Promise<ItemRetirada> => 
+    api.put(`/item_retirada/${retirada_id}/${livro_id}`, itemRetirada).then(response => response.data),
+
+  removerItemRetirada: (retirada_id: number, livro_id: number): Promise<{ok: boolean}> => 
+    api.delete(`/item_retirada/${retirada_id}/${livro_id}`).then(response => response.data),
 };
