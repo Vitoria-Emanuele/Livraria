@@ -22,11 +22,11 @@ export default function LoteForm() {
     const novosErros: Partial<LoteData> = {};
 
     if (!formData.valor_lote || parseFloat(formData.valor_lote.replace(',', '.')) <= 0) {
-      novosErros.valor_lote = 'Valor do lote é obrigatório e deve ser maior que zero';
+      novosErros.valor_lote = 'Valor do lote e obrigatorio e deve ser maior que zero';
     }
 
     if (!formData.quantidade_itens_lote || parseInt(formData.quantidade_itens_lote) <= 0) {
-      novosErros.quantidade_itens_lote = 'Quantidade de itens é obrigatória';
+      novosErros.quantidade_itens_lote = 'Quantidade de itens e obrigatoria';
     }
 
     setErros(novosErros);

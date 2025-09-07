@@ -135,7 +135,7 @@ export interface LoteCreate {
 // Interface do Livro
 export interface Livro {
   id_livro: number;
-  isbn_livro: number;
+  isbn_livro: string;
   titulo_livro: string;
   autor_livro: string;
   genero_literario: string;
@@ -144,7 +144,7 @@ export interface Livro {
 }
 
 export interface LivroCreate {
-  isbn_livro: number;
+  isbn_livro: string;
   titulo_livro: string;
   autor_livro: string;
   genero_literario: string;
@@ -196,6 +196,45 @@ export interface ItemRetiradaCreate {
   id_livro: number;
   quantidade_itens_retirada: number;
   valor_unitario_retirada: number;
+}
+
+// Interface do Usuario
+export interface Usuario {
+  id_usuario: number;
+  email_login: string;
+  senha_hash: string;
+  role: string;
+  ativo: boolean;
+  id_funcionario: number;
+}
+
+export interface UsuarioCreate {
+  email_login: string;
+  senha: string; 
+  role: string;
+  ativo: boolean;
+  id_funcionario: number;
+}
+
+export interface UsuarioUpdate {
+  email_login?: string;
+  senha?: string; 
+  role?: string;
+  ativo?: boolean;
+  id_funcionario?: number;
+}
+
+export interface LoginRequest {
+  username: string;
+  password: string;
+}
+
+export interface LoginResponse {
+  access_token:string;
+  token_type: string;
+  usuario_id: number;
+  email: string;
+  role:string;
 }
 
 export const estoqueService = {
@@ -343,4 +382,30 @@ export const estoqueService = {
 
   removerItemRetirada: (retirada_id: number, livro_id: number): Promise<{ok: boolean}> => 
     api.delete(`/item_retirada/${retirada_id}/${livro_id}`).then(response => response.data),
+
+  // Autenticacao
+  login: (credenciais: LoginRequest): Promise<LoginResponse> =>
+    api.post('/login/', credenciais).then(response => response.data),
+  
+  
+  getUsuarioLogado: (): Promise<Usuario> =>
+    api.get('/me/').then(response => response.data),
+
+  buscarUsuario: (usuario_id: number): Promise<Usuario> =>
+    api.get(`/usuario/${usuario_id}`).then(response => response.data),
+  
+  listarUsuarios: (): Promise<Usuario[]> =>
+    api.get('/usuario/').then(response => response.data),
+  
+  criarUsuario: (usuario: UsuarioCreate): Promise<Usuario> =>
+    api.post('/usuario/', usuario).then(response => response.data),
+  
+  atualizarUsuario: (usuario_id: number, usuario: UsuarioUpdate): Promise<Usuario> =>
+    api.put(`/usuario/${usuario_id}`, usuario).then(response => response.data),
+  
+  removerUsuario: (usuario_id: number): Promise<{ ok: boolean }> =>
+    api.delete(`/usuario/${usuario_id}`).then(response => response.data),
+ 
+
+
 };

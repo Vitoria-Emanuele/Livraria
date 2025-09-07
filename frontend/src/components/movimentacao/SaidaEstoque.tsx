@@ -27,18 +27,18 @@ export default function SaidaEstoque() {
     valor_unitario_retirada: ''
   }]);
 
-  // Mock data - depois virá do backend
+  // Mock data - depois vira do backend
   const motivos = [
     { value: 'venda', label: 'Venda' },
     { value: 'perda', label: 'Perda/Danificado' },
-    { value: 'devolucao', label: 'Devolução ao Fornecedor' },
+    { value: 'devolucao', label: 'Devolucao ao Fornecedor' },
     { value: 'ajuste', label: 'Ajuste de Estoque' },
     { value: 'outro', label: 'Outro' }
   ];
 
   const livrosEstoque = [
     { id: '1', isbn: '978-85-123-4567-8', titulo: 'Dom Casmurro', estoque: 15, valor: 29.90 },
-    { id: '2', isbn: '978-85-234-5678-9', titulo: 'O Cortiço', estoque: 8, valor: 35.00 },
+    { id: '2', isbn: '978-85-234-5678-9', titulo: 'O Cortico', estoque: 8, valor: 35.00 },
     { id: '3', isbn: '978-85-345-6789-0', titulo: 'Iracema', estoque: 12, valor: 25.50 }
   ];
 
@@ -90,8 +90,8 @@ export default function SaidaEstoque() {
       item: item
     };
 
-    console.log('Dados da saída:', dadosSaida);
-    alert('Saída de estoque registrada com sucesso!');
+    console.log('Dados da saida:', dadosSaida);
+    alert('Saida de estoque registrada com sucesso!');
   };
 
   const totalitem = item.reduce((total, item) => 
@@ -101,7 +101,7 @@ export default function SaidaEstoque() {
   return (
     <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 800, margin: '0 auto' }}>
       <Typography variant="h4" gutterBottom>
-        Saída de Estoque
+        Saida de Estoque
       </Typography>
 
       <Grid container spacing={3}>
@@ -175,7 +175,7 @@ export default function SaidaEstoque() {
                   <TextField
                     required
                     fullWidth
-                    label="Valor Unitário"
+                    label="Valor Unitario"
                     value={item.valor_unitario_retirada}
                     onChange={(e) => atualizarItem(index, 'valor_unitario_retirada', e.target.value)}
                     slotProps={{
@@ -211,7 +211,7 @@ export default function SaidaEstoque() {
       </Typography>
 
       <Button type="submit" variant="contained" size="large" fullWidth>
-        Confirmar Saída de Estoque
+        Confirmar Saida de Estoque
       </Button>
     </Box>
   );

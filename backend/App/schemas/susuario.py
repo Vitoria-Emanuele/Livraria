@@ -1,7 +1,7 @@
 from pydantic import BaseModel, EmailStr
 from typing import Optional
 
-# Dados básicos de usuário (sem senha)
+# Dados basicos de usuario (sem senha)
 
 
 class UsuarioBase(BaseModel):
@@ -11,12 +11,12 @@ class UsuarioBase(BaseModel):
     id_funcionario: int
 
 
-# Para criação de usuário, inclui senha em texto
+# Para criacao de usuario, inclui senha em texto
 class UsuarioCreate(UsuarioBase):
     senha: str
 
 
-# Para atualização parcial de usuário, senha opcional em texto
+# Para atualizacao parcial de usuario, senha opcional em texto
 class UsuarioUpdate(BaseModel):
     email_login: Optional[EmailStr] = None
     senha: Optional[str] = None  # senha em texto

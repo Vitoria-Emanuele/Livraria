@@ -8,7 +8,7 @@ class registro_entradaBase(BaseModel):
     hora_entrada: time
     id_fornecedor: int
     id_funcionario: int
-    id_distribuidor: Optional[int] = None  # distribuidor é opcional
+    id_distribuidor: Optional[int] = None  # distribuidor e opcional
 
 
 class registro_entradaCreate(registro_entradaBase):

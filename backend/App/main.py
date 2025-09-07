@@ -11,14 +11,14 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:5173",      # Seu React (Vite)
-        "http://127.0.0.1:5173",      # IP local também
-        "http://localhost:3000",      # Caso use Create React App também
+        "http://127.0.0.1:5173",      # IP local tambem
+        "http://localhost:3000",      # Caso use Create React App tambem
         "http://127.0.0.1:3000"       # IP local do CRA
     ],
     allow_credentials=True,           # Permite cookies/auth
-    allow_methods=["*"],              # Permite TODOS os métodos HTTP
+    allow_methods=["*"],              # Permite TODOS os metodos HTTP
     allow_headers=["*"],              # Permite TODOS os headers
-    expose_headers=["*"],             # Expõe todos os headers na resposta
+    expose_headers=["*"],             # Expoe todos os headers na resposta
     max_age=600,                      # Cache de 10min para preflight
 )
 

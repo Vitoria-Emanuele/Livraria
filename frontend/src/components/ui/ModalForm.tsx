@@ -52,7 +52,7 @@ export default function ModalForm({
           }[maxWidth]
         }}
       >
-        {/* Cabeçalho do modal com título e botão fechar */}
+        {/* Cabecalho do modal com titulo e botao fechar */}
         <Box sx={{ 
           display: 'flex', 
           justifyContent: 'space-between', 
@@ -75,7 +75,7 @@ export default function ModalForm({
           </IconButton>
         </Box>
 
-        {/* Conteúdo do modal (formulário) */}
+        {/* Conteúdo do modal (formulario) */}
         <Box>
           {children}
         </Box>

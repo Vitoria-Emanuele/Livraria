@@ -1,6 +1,6 @@
 ## Livraria
 
-A primeira parte do projeto contempla uma aplicação pronta para o sistema para gerenciamento de estoque de livraria, desenvolvido com FastAPI no backend e React + TypeScript no frontend.
+A primeira parte do projeto contempla uma aplicacao pronta para o sistema para gerenciamento de estoque de livraria, desenvolvido com FastAPI no backend e React + TypeScript no frontend.
 
 ### Tecnologias: 
 
@@ -21,25 +21,25 @@ estoque-livraria/
 📦 Livraria
 ├── 📂 backend
 │   └── 📂 App
-│       ├── 📂 crud           # Operações de banco de dados
+│       ├── 📂 crud           # Operacoes de banco de dados
 │       ├── 📂 routers        # Endpoints da API
-│       ├── 📂 schemas        # Validação de dados
-│       ├── 📜 main.py        # Aplicação FastAPI
+│       ├── 📂 schemas        # Validacao de dados
+│       ├── 📜 main.py        # Aplicacao FastAPI
 │       ├── 📜 models.py      # Modelos do banco
-│       ├── 📜 db.py          # Conexão com PostgreSQL
+│       ├── 📜 db.py          # Conexao com PostgreSQL
 │       └── 📜 requirements.txt
 │
 └── 📂 frontend
     ├── 📂 src
     │   ├── 📂 assets         # Imagens e recursos
     │   ├── 📂 components
-    │   │   ├── 📂 movimentacao  # Formulários da aba de movimentações do estoque
-    │   │   └── 📂 ui           # Componentes reutilizáveis
+    │   │   ├── 📂 movimentacao  # Formularios da aba de movimentacoes do estoque
+    │   │   └── 📂 ui           # Componentes reutilizaveis
     │   ├── 📂 hooks          # Hooks customizados
-    │   ├── 📂 layouts        # Layouts da aplicação
-    │   ├── 📂 pages          # Páginas principais
-    │   ├── 📂 services       # Comunicação com API
+    │   ├── 📂 layouts        # Layouts da aplicacao
+    │   ├── 📂 pages          # Paginas principais
+    │   ├── 📂 services       # Comunicacao com API
     │   └── 📂 styles         # Estilos CSS
     ├── 📜 package.json       # Dependências frontend
-    └── 📜 vite.config.ts     # Configuração Vite
+    └── 📜 vite.config.ts     # Configuracao Vite
 ```

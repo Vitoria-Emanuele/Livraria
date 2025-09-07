@@ -12,23 +12,25 @@ import logo from '../assets/logo.png'
 
 import MovimentacaoPage from '../pages/MovimentacaoPage';
 import DashboardPage from '../pages/DashboardPage';
+import { useAuth } from '../hooks/useAuth';
+import { Box, Button, Typography } from '@mui/material';
+import { Logout } from '@mui/icons-material';
 
 
 
-// Navegação do sistema - modifique aqui com seus item de menu
 const NAVIGATION: Navigation = [
   {
     kind: 'header',
-    title: 'Gestão de Estoque',
+    title: 'Gestao de Estoque',
   },
   {
     segment: 'dashboard',
-    title: 'Visão Geral',
+    title: 'Visao Geral',
     icon: <DashboardIcon />,
   },
   {
     segment: 'movimentacao',
-    title: 'Movimentação do Estoque',
+    title: 'Movimentacao do Estoque',
     icon: <AssignmentIcon />,
   },
   {
@@ -38,14 +40,14 @@ const NAVIGATION: Navigation = [
   },
   {
     segment: 'relatorios',
-    title: 'Relatórios',
+    title: 'Relatorios',
     icon: <AnalyticsIcon />,
   },
 ];
 
-// Conteudo principal temporário
+// Conteudo principal temporario
 function MainContent() {
-  // Simulação de roteamento baseado no pathname
+  // Simulacao de roteamento baseado no pathname
   const pathname = window.location.pathname;
   
   const renderizarConteudo = () => {
@@ -53,7 +55,7 @@ function MainContent() {
       return <MovimentacaoPage />;
     }
     
-    // Página padrão (Dashboard)
+    // Pagina padrao (Dashboard)
     return <DashboardPage />;
   };
 
@@ -62,11 +64,29 @@ function MainContent() {
   
 }
 
-//barra em cima
 function ToolbarActions() {
+  const { user, logout } = useAuth();
+
   return (
-    <div style={{ display: 'flex', alignItems: 'center' }}>
-    </div>
+    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+      <Typography variant="body2" sx={{ color: 'white' }}>
+        Ola!
+      </Typography>
+      
+      <Button
+        color="inherit"
+        startIcon={<Logout />}
+        onClick={logout}
+        sx={{ 
+          border: '1px solid rgba(255,255,255,0.3)',
+          '&:hover': {
+            bgcolor: 'rgba(255,255,255,0.1)'
+          }
+        }}
+      >
+        Sair
+      </Button>
+    </Box>
   );
 }
 

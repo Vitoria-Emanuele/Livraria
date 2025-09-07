@@ -11,13 +11,13 @@ export default function DashboardPage() {
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" gutterBottom>
-        Visão Geral - Sistema de Estoque
+        Visao Geral - Sistema de Estoque
       </Typography>
 
       <Grid container spacing={3} sx={{ mb: 4 }}>
         <Grid size={{ xs: 12, md: 4 }}>
           <InfoCard
-            title="Necessitam Reposição"
+            title="Necessitam Reposicao"
             value={12}
             icon={<WarningIcon />}
             color="error"
@@ -27,7 +27,7 @@ export default function DashboardPage() {
 
         <Grid size={{ xs: 12, md: 4 }}>
           <InfoCard
-            title="Movimentações Hoje"
+            title="Movimentacoes Hoje"
             value={8}
             icon={<SwapVertIcon />}
             color="info"
@@ -36,7 +36,7 @@ export default function DashboardPage() {
 
         <Grid size={{ xs: 12, md: 4 }}>
           <InfoCard
-            title="Funcionário"
+            title="Funcionario"
             value="Maria Silva"
             icon={<PersonIcon />}
             subtitle="Gerente de Estoque"
@@ -46,7 +46,7 @@ export default function DashboardPage() {
       </Grid>
 
       <Typography variant="h5" gutterBottom>
-        Bem-vindo ao Sistema de Gestão
+        Bem-vindo ao Sistema de Gestao
       </Typography>
       <Typography color="textSecondary">
         Utilize o menu lateral para acessar as funcionalidades do sistema.

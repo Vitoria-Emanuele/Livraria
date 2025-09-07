@@ -18,7 +18,7 @@ def buscar_distribuidor(distribuidor_id: int, db_session: Session = Depends(db.g
         db_session, distribuidor_id)
     if not db_distribuidor:
         raise HTTPException(
-            status_code=404, detail="Distribuidor não encontrado")
+            status_code=404, detail="Distribuidor nao encontrado")
     return db_distribuidor
 
 # Listar distribuidores
@@ -42,7 +42,7 @@ def atualizar_distribuidor(distribuidor_id: int, distribuidor: sdistribuidor.Dis
         db_session, distribuidor_id, distribuidor)
     if not db_distribuidor:
         raise HTTPException(
-            status_code=404, detail="Distribuidor não encontrado")
+            status_code=404, detail="Distribuidor nao encontrado")
     return db_distribuidor
 
 # Remover distribuidor
@@ -54,5 +54,5 @@ def remover_distribuidor(distribuidor_id: int, db_session: Session = Depends(db.
         db_session, distribuidor_id)
     if not sucesso:
         raise HTTPException(
-            status_code=404, detail="Distribuidor não encontrado")
+            status_code=404, detail="Distribuidor nao encontrado")
     return {"ok": True}

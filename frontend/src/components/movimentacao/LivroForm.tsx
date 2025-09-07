@@ -25,7 +25,7 @@ interface LivroFormProps {
 }
 
 const GENEROS_LITERARIOS = [
-  'Romance','Ficção Científica','Fantasia','Terror','Mistério','Suspense','Aventura','Biografia','História','Poesia','Drama','Comédia','Infantil','Juvenil','Autoajuda','Didático','Religioso','Acadêmico','Outro'
+  'Romance','Ficcao Cientifica','Fantasia','Terror','Misterio','Suspense','Aventura','Biografia','Historia','Poesia','Drama','Comedia','Infantil','Juvenil','Autoajuda','Didatico','Religioso','Acadêmico','Outro'
 ];
 
 export default function LivroForm({ onLivrosChange }: LivroFormProps) {
@@ -84,21 +84,21 @@ export default function LivroForm({ onLivrosChange }: LivroFormProps) {
     livros.forEach((livro) => {
       const erro: Partial<LivroData> = {};
 
-      if (!livro.isbn_livro) erro.isbn_livro = 'ISBN é obrigatório';
-      if (!livro.titulo_livro) erro.titulo_livro = 'Título é obrigatório';
+      if (!livro.isbn_livro) erro.isbn_livro = 'ISBN e obrigatorio';
+      if (!livro.titulo_livro) erro.titulo_livro = 'Titulo e obrigatorio';
       if (!livro.genero_literario) {
-        erro.genero_literario = 'Selecione um gênero literário';
+        erro.genero_literario = 'Selecione um gênero literario';
       }
       if (!livro.quantidade_item_lote || parseInt(livro.quantidade_item_lote) <= 0) {
-        erro.quantidade_item_lote = 'Quantidade é obrigatória';
+        erro.quantidade_item_lote = 'Quantidade e obrigatoria';
       }
       if (!livro.valor_item_lote || parseFloat(livro.valor_item_lote) <= 0) {
-        erro.valor_item_lote = 'Valor é obrigatório';
+        erro.valor_item_lote = 'Valor e obrigatorio';
       }
 
       const valorNumerico = parseFloat(livro.valor_item_lote);
       if (!livro.valor_item_lote || isNaN(valorNumerico) || valorNumerico < 0){ 
-        erro.valor_item_lote = 'Valor unitário é obrigatório';
+        erro.valor_item_lote = 'Valor unitario e obrigatorio';
       }
 
       novosErros.push(erro);
@@ -154,7 +154,7 @@ export default function LivroForm({ onLivrosChange }: LivroFormProps) {
               <TextField
                 required
                 fullWidth
-                label="Título do Livro"
+                label="Titulo do Livro"
                 value={livro.titulo_livro}
                 onChange={(e) => atualizarLivro(index, 'titulo_livro', e.target.value)}
                 error={!!erros[index]?.titulo_livro}
@@ -176,7 +176,7 @@ export default function LivroForm({ onLivrosChange }: LivroFormProps) {
                 select
                 required
                 fullWidth
-                label="Gênero Literário"
+                label="Gênero Literario"
                 value={livro.genero_literario || ''}
                 onChange={(e) => atualizarLivro(index, 'genero_literario', e.target.value)}
                 error={!!erros[index]?.genero_literario}
@@ -220,7 +220,7 @@ export default function LivroForm({ onLivrosChange }: LivroFormProps) {
                 customInput={TextField}
                 required
                 fullWidth
-                label="Valor Unitário"
+                label="Valor Unitario"
                 value={livro.valor_item_lote}
                 onValueChange={(values) => {
                   atualizarLivro(index, 'valor_item_lote', values.value);

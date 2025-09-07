@@ -1,28 +1,28 @@
 # Backend 
 
-### Requisitos do Sistema de Gestão de Estoque para Livraria
-#### Gestão de Fornecedores e Distribuidores:
+### Requisitos do Sistema de Gestao de Estoque para Livraria
+#### Gestao de Fornecedores e Distribuidores:
 - Cadastro completo de fornecedores e distribuidores;
-- Controle de entregas realizadas por fornecedores diretos ou através de distribuidores;
+- Controle de entregas realizadas por fornecedores diretos ou atraves de distribuidores;
   
 #### Controle de Entrada de Mercadoria:
 - Registro de lotes mistos contendo múltiplos livros diferentes;
-- Sistema flexível para entrada de remessas com variedade de produtos;
-- Identificação única para cada lote recebido.
+- Sistema flexivel para entrada de remessas com variedade de produtos;
+- Identificacao única para cada lote recebido.
 
 #### Rastreamento de Responsabilidade:
-- Todas as movimentações vinculadas ao funcionário responsável;
-- Registro de auditoria com data, hora e responsável por cada operação;
-- Controle de permissões por nível de usuário.
+- Todas as movimentacoes vinculadas ao funcionario responsavel;
+- Registro de auditoria com data, hora e responsavel por cada operacao;
+- Controle de permissoes por nivel de usuario.
 
-#### Gestão de Estoque Inteligente:
-- Sistema de alertas para estoque baixo com níveis configuráveis;
-- Relatórios financeiros: valor do estoque, custos, giro de mercadoria;
-- Relatórios de marketing: livros mais movimentados, tendências por categoria.
+#### Gestao de Estoque Inteligente:
+- Sistema de alertas para estoque baixo com niveis configuraveis;
+- Relatorios financeiros: valor do estoque, custos, giro de mercadoria;
+- Relatorios de marketing: livros mais movimentados, tendências por categoria.
 
-### Integração e Expansibilidade:
-- API preparada para integração com sistema de vendas
-- Arquitetura modular que permite conexão com outros sistemas
+### Integracao e Expansibilidade:
+- API preparada para integracao com sistema de vendas
+- Arquitetura modular que permite conexao com outros sistemas
 
 
 ### Modelagem Entidade Relacionamento:

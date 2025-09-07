@@ -14,7 +14,7 @@ router = APIRouter(
 def buscar_lote(lote_id: int, db_session: Session = Depends(db.get_db)):
     lote = crud_lote.buscar_lote(db_session, lote_id)
     if not lote:
-        raise HTTPException(status_code=404, detail="Lote não encontrado")
+        raise HTTPException(status_code=404, detail="Lote nao encontrado")
     return lote
 
 
@@ -32,7 +32,7 @@ def criar_lote(lote: slote.LoteCreate, db_session: Session = Depends(db.get_db))
 def atualizar_lote(lote_id: int, lote: slote.LoteUpdate, db_session: Session = Depends(db.get_db)):
     lote_db = crud_lote.atualizar_lote(db_session, lote_id, lote)
     if not lote_db:
-        raise HTTPException(status_code=404, detail="Lote não encontrado")
+        raise HTTPException(status_code=404, detail="Lote nao encontrado")
     return lote_db
 
 
@@ -40,5 +40,5 @@ def atualizar_lote(lote_id: int, lote: slote.LoteUpdate, db_session: Session = D
 def remover_lote(lote_id: int, db_session: Session = Depends(db.get_db)):
     sucesso = crud_lote.remover_lote(db_session, lote_id)
     if not sucesso:
-        raise HTTPException(status_code=404, detail="Lote não encontrado")
+        raise HTTPException(status_code=404, detail="Lote nao encontrado")
     return {"ok": True}

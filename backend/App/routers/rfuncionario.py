@@ -19,7 +19,7 @@ def buscar_funcionario(funcionario_id: int, db_session: Session = Depends(db.get
         db_session, funcionario_id)
     if not db_funcionario:
         raise HTTPException(
-            status_code=404, detail="Funcionario não encontrado")
+            status_code=404, detail="Funcionario nao encontrado")
     return db_funcionario
 
 # Listar funcionario
@@ -44,7 +44,7 @@ def atualizar_funcionario(funcionario_id: int, funcionario: sfuncionario.Funcion
         db_session, funcionario_id, funcionario)
     if not db_funcionario:
         raise HTTPException(
-            status_code=404, detail="Funcionario não encontrado")
+            status_code=404, detail="Funcionario nao encontrado")
     return db_funcionario
 
 # Remover funcionario
@@ -55,5 +55,5 @@ def remover_funcionario(funcionario_id: int, db_session: Session = Depends(db.ge
     sucesso = crud_funcionario.remover_funcionario(db_session, funcionario_id)
     if not sucesso:
         raise HTTPException(
-            status_code=404, detail="Funcionario não encontrado")
+            status_code=404, detail="Funcionario nao encontrado")
     return {"ok": True}

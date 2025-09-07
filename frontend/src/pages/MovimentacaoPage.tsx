@@ -49,17 +49,17 @@ export default function MovimentacaoPage() {
   return (
     <Box sx={{ width: '100%' }}>
       <Typography variant="h4" gutterBottom>
-        Movimentação de Estoque
+        Movimentacao de Estoque
       </Typography>
 
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs 
           value={abaAtiva} 
           onChange={handleMudancaAba}
-          aria-label="abas de movimentação de estoque"
+          aria-label="abas de movimentacao de estoque"
         >
           <Tab label="Entrada" {...a11yProps(0)} />
-          <Tab label="Saída" {...a11yProps(1)} />
+          <Tab label="Saida" {...a11yProps(1)} />
         </Tabs>
       </Box>
 

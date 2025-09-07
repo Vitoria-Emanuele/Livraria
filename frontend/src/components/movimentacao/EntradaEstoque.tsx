@@ -27,7 +27,7 @@ interface DistribuidorData {
 }
 
 export default function EntradaEstoque() {
-  // Estados para dados do formulário
+  // Estados para dados do formulario
   const [fornecedor, setFornecedor] = useState<FornecedorData | null>(null);
   const [distribuidor, setDistribuidor] = useState<DistribuidorData | null>(null);
   const [livros, setLivros] = useState<LivroData[]>([]);
@@ -70,7 +70,7 @@ export default function EntradaEstoque() {
   };
 
   const handleSubmit = async () => {
-    // Validações básicas
+    // Validacoes basicas
     if (!fornecedor) {
       alert("Selecione ou cadastre um fornecedor antes de continuar!");
       return;
@@ -95,11 +95,11 @@ export default function EntradaEstoque() {
 
       console.log('Dados para envio:', dadosEntrada);
       
-      // Aqui você faria a chamada para o serviço que envia os dados
+      // Aqui você faria a chamada para o servico que envia os dados
       // await estoqueService.criarEntradaEstoque(dadosEntrada);
       
       alert("Entrada de estoque registrada com sucesso!");
-      // Limpar formulário após sucesso
+      // Limpar formulario apos sucesso
       setFornecedor(null);
       setDistribuidor(null);
       setLivros([]);
@@ -118,14 +118,14 @@ export default function EntradaEstoque() {
         Entrada de Estoque
       </Typography>
 
-      {/* Seção de Fornecedor e Distribuidor */}
+      {/* Secao de Fornecedor e Distribuidor */}
       <Box sx={{ mb: 4 }}>
         <Typography variant="h6" gutterBottom>
           Origem dos Livros
         </Typography>
         
         <Grid container spacing={3}>
-          {/* Fornecedor (Obrigatório) */}
+          {/* Fornecedor (Obrigatorio) */}
           <Grid size={{ xs: 12, md: 6 }}>
             <Typography variant="subtitle2" gutterBottom color="primary">
               Fornecedor *
@@ -235,7 +235,7 @@ export default function EntradaEstoque() {
         </Grid>
       </Box>
 
-      {/* Formulário de Livros */}
+      {/* Formulario de Livros */}
       <Box sx={{ mb: 4 }}>
         <Typography variant="h6" gutterBottom>
           Livros do Lote
@@ -271,7 +271,7 @@ export default function EntradaEstoque() {
         </Box>
       )}
 
-      {/* Botão de Submissão */}
+      {/* Botao de Submissao */}
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
         <Button 
           variant="contained" 

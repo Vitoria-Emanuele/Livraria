@@ -1,5 +1,3 @@
-//Navegação por etapas
-
 import React from 'react';
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
@@ -57,7 +55,7 @@ export default function CustomStepper({
         {children}
       </Box>
 
-      {/* Botões de navegação */}
+      {/* Botoes de navegacao */}
       <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
         <Button
           color="inherit"
@@ -73,7 +71,7 @@ export default function CustomStepper({
         <Button
            onClick={isLastStep ? onReset : onNext}
            disabled={disableNext}
-           >{isLastStep ? 'Finalizar' : 'Próximo'}
+           >{isLastStep ? 'Finalizar' : 'Proximo'}
 
         </Button>
       </Box>

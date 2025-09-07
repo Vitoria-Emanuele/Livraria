@@ -13,12 +13,12 @@ import PersonIcon from '@mui/icons-material/Person';
 
 // Interface que define as propriedades do componente
 interface InfoCardProps {
-  title: string;           // Título do card
+  title: string;           // Titulo do card
   value: string | number;  // Valor principal (pode ser texto ou número)
   icon: React.ReactElement; // Ícone do card
   color?: 'primary' | 'error' | 'success' | 'warning' | 'info'; // Cor do card
   subtitle?: string;       // Texto adicional (opcional)
-  alert?: boolean;         // Se é um card de alerta
+  alert?: boolean;         // Se e um card de alerta
 }
 
 // Componente InfoCard
@@ -105,7 +105,7 @@ export default function InfoCard({
             )}
           </Box>
 
-          {/* Área do ícone */}
+          {/* Área do icone */}
           <Box
             sx={{
               display: 'flex',
@@ -121,7 +121,7 @@ export default function InfoCard({
           </Box>
         </Box>
 
-        {/* Mensagem de alerta se necessário */}
+        {/* Mensagem de alerta se necessario */}
         {alert && (
           <Typography 
             variant="caption" 
@@ -132,7 +132,7 @@ export default function InfoCard({
               mt: 1
             }}
           >
-            Atenção: necessária ação imediata
+            Atencao: necessaria acao imediata
           </Typography>
         )}
       </CardContent>
@@ -146,24 +146,24 @@ export function ExampleUsage() {
     <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
       {/* Card de estoque baixo */}
       <InfoCard
-        title="Necessitam Reposição"
+        title="Necessitam Reposicao"
         value={12}
         icon={<WarningIcon />}
         color="error"
         alert={true}
       />
       
-      {/* Card de movimentações */}
+      {/* Card de movimentacoes */}
       <InfoCard
-        title="Movimentações Hoje"
+        title="Movimentacoes Hoje"
         value={8}
         icon={<SwapVertIcon />}
         color="info"
       />
       
-      {/* Card de funcionário */}
+      {/* Card de funcionario */}
       <InfoCard
-        title="Funcionário"
+        title="Funcionario"
         value="Maria Silva"
         icon={<PersonIcon />}
         subtitle="Gerente de Estoque"

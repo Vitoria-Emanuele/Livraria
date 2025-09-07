@@ -18,7 +18,7 @@ const colors = {
   },
   text: {
     primary: '#2C5530',   // Texto escuro
-    secondary: '#5D4037', // Texto secundário
+    secondary: '#5D4037', // Texto secundario
   }
 };
 
@@ -29,7 +29,7 @@ export const livrariaTheme = createTheme({
     secondary: colors.secondary,
     background: colors.background,
     text: colors.text,
-    mode: 'light',        // Começamos com tema claro
+    mode: 'light',        // Comecamos com tema claro
   },
   
   // Tipografia - fontes dos textos
@@ -56,7 +56,7 @@ export const livrariaTheme = createTheme({
     }
   },
 
-  // Componentes - personalização específica
+  // Componentes - personalizacao especifica
   components: {
     MuiAppBar: {
       styleOverrides: {
@@ -70,7 +70,7 @@ export const livrariaTheme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: '8px',
-          textTransform: 'none', // remove CAPS LOCK dos botões
+          textTransform: 'none', // remove CAPS LOCK dos botoes
           fontWeight: 500,
         },
         contained: {

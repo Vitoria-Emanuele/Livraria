@@ -15,7 +15,7 @@ def buscar_item_lote(id_lote: int, id_livro: int, db_session: Session = Depends(
     item = crud_item_lote.buscar_item_lote(db_session, id_lote, id_livro)
     if not item:
         raise HTTPException(
-            status_code=404, detail="Item de lote não encontrado")
+            status_code=404, detail="Item de lote nao encontrado")
     return item
 
 
@@ -35,7 +35,7 @@ def atualizar_item_lote(id_lote: int, id_livro: int, item: sitem_lote.item_loteU
         db_session, id_lote, id_livro, item)
     if not item_db:
         raise HTTPException(
-            status_code=404, detail="Item de lote não encontrado")
+            status_code=404, detail="Item de lote nao encontrado")
     return item_db
 
 
@@ -44,5 +44,5 @@ def remover_item_lote(id_lote: int, id_livro: int, db_session: Session = Depends
     sucesso = crud_item_lote.remover_item_lote(db_session, id_lote, id_livro)
     if not sucesso:
         raise HTTPException(
-            status_code=404, detail="Item de lote não encontrado")
+            status_code=404, detail="Item de lote nao encontrado")
     return {"ok": True}

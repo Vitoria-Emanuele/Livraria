@@ -3,7 +3,7 @@ from .. import models
 from ..schemas import susuario
 from passlib.context import CryptContext
 
-# Configuração do passlib
+# Configuracao do passlib
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 

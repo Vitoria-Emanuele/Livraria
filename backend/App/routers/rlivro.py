@@ -14,7 +14,7 @@ router = APIRouter(
 def buscar_livro(livro_id: int, db_session: Session = Depends(db.get_db)):
     livro = crud_livro.buscar_livro(db_session, livro_id)
     if not livro:
-        raise HTTPException(status_code=404, detail="Livro não encontrado")
+        raise HTTPException(status_code=404, detail="Livro nao encontrado")
     return livro
 
 
@@ -32,7 +32,7 @@ def criar_livro(livro: slivro.LivroCreate, db_session: Session = Depends(db.get_
 def atualizar_livro(livro_id: int, livro: slivro.LivroUpdate, db_session: Session = Depends(db.get_db)):
     livro_db = crud_livro.atualizar_livro(db_session, livro_id, livro)
     if not livro_db:
-        raise HTTPException(status_code=404, detail="Livro não encontrado")
+        raise HTTPException(status_code=404, detail="Livro nao encontrado")
     return livro_db
 
 
@@ -40,5 +40,5 @@ def atualizar_livro(livro_id: int, livro: slivro.LivroUpdate, db_session: Sessio
 def remover_livro(livro_id: int, db_session: Session = Depends(db.get_db)):
     sucesso = crud_livro.remover_livro(db_session, livro_id)
     if not sucesso:
-        raise HTTPException(status_code=404, detail="Livro não encontrado")
+        raise HTTPException(status_code=404, detail="Livro nao encontrado")
     return {"ok": True}

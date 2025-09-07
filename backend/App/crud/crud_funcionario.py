@@ -38,7 +38,7 @@ def remover_funcionario(db: Session, funcionario_id: int):
         db.commit()
         return True
     return False
-# Criar funcionário
+# Criar funcionario
 
 
 def criar_funcionario(db: Session, funcionario: sfuncionario.FuncionarioCreate):

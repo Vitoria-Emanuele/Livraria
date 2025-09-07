@@ -119,7 +119,7 @@ export default function FornecedorForm({ onSubmit, onCancel }: FornecedorFormPro
   return (
     <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
       <Typography variant="subtitle2" color="textSecondary" gutterBottom>
-        Campos obrigatórios *
+        Campos obrigatorios *
       </Typography>
 
       <Grid container spacing={2}>
@@ -138,7 +138,7 @@ export default function FornecedorForm({ onSubmit, onCancel }: FornecedorFormPro
           <TextField
             required
             fullWidth
-            label="Razão Social *"
+            label="Razao Social *"
             value={formData.razao_social_fornecedor}
             onChange={handleChange('razao_social_fornecedor')}
           />
@@ -190,7 +190,7 @@ export default function FornecedorForm({ onSubmit, onCancel }: FornecedorFormPro
                 endAdornment: carregando ? <CircularProgress size={20} /> : null
               }
             }}
-            helperText={carregando ? "Buscando endereço..." : "Digite o CEP para preencher automaticamente"}
+            helperText={carregando ? "Buscando endereco..." : "Digite o CEP para preencher automaticamente"}
           />
         </Grid>
 

@@ -16,7 +16,7 @@ def buscar_item_retirada(id_livro: int, id_retirada: int, db_session: Session = 
         db_session, id_livro, id_retirada)
     if not item:
         raise HTTPException(
-            status_code=404, detail="Item de retirada não encontrado")
+            status_code=404, detail="Item de retirada nao encontrado")
     return item
 
 
@@ -36,7 +36,7 @@ def atualizar_item_retirada(id_livro: int, id_retirada: int, item:  sitem_retira
         db_session, id_livro, id_retirada, item)
     if not item_db:
         raise HTTPException(
-            status_code=404, detail="Item de retirada não encontrado")
+            status_code=404, detail="Item de retirada nao encontrado")
     return item_db
 
 
@@ -46,5 +46,5 @@ def remover_item_retirada(id_livro: int, id_retirada: int, db_session: Session =
         db_session, id_livro, id_retirada)
     if not sucesso:
         raise HTTPException(
-            status_code=404, detail="Item de retirada não encontrado")
+            status_code=404, detail="Item de retirada nao encontrado")
     return {"ok": True}

@@ -16,7 +16,7 @@ def buscar_registro(registro_id: int, db_session: Session = Depends(db.get_db)):
         db_session, registro_id)
     if not registro:
         raise HTTPException(
-            status_code=404, detail="Registro de entrada não encontrado")
+            status_code=404, detail="Registro de entrada nao encontrado")
     return registro
 
 
@@ -36,7 +36,7 @@ def atualizar_registro(registro_id: int, registro: sregistroentrada.registro_ent
         db_session, registro_id, registro)
     if not registro_db:
         raise HTTPException(
-            status_code=404, detail="Registro de entrada não encontrado")
+            status_code=404, detail="Registro de entrada nao encontrado")
     return registro_db
 
 
@@ -46,5 +46,5 @@ def remover_registro(registro_id: int, db_session: Session = Depends(db.get_db))
         db_session, registro_id)
     if not sucesso:
         raise HTTPException(
-            status_code=404, detail="Registro de entrada não encontrado")
+            status_code=404, detail="Registro de entrada nao encontrado")
     return {"ok": True}
