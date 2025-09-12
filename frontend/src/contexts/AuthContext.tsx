@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect, type ReactNode} from 'react';
 import { authService } from '../services/authService';
 
-// Interface do contexto
+// interface do contexto
 export interface AuthContextType {
   isAuthenticated: boolean;
   user: any | null;
@@ -12,7 +12,7 @@ export interface AuthContextType {
   isLoading: boolean;
 }
 
-// Cria e exporta o contexto
+// cria e exporta o contexto
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 interface AuthProviderProps {
@@ -25,7 +25,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  // Verificar se há token válido ao inicializar
+  // verificar se ha token valido ao inicializar
   useEffect(() => {
     const token = localStorage.getItem('access_token');
     if (token) {
@@ -66,14 +66,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setUser(userData);
       
     } catch (err: any) {
-      // Extrai a mensagem de erro corretamente
+      // extrai a mensagem de erro corretamente
       let errorMessage = 'Erro ao fazer login';
       
       if (err.response?.data?.detail) {
-        // Se for um erro de validacao do FastAPI
+        // se for um erro de validacao do FastAPI
         errorMessage = err.response.data.detail;
       } else if (err.response?.data?.msg) {
-        // Se for outro formato de erro
+        // se for outro formato de erro
         errorMessage = err.response.data.msg;
       } else if (err.message) {
         errorMessage = err.message;

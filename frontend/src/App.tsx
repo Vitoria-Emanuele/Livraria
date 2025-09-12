@@ -8,7 +8,7 @@ import './styles/global.css';
 import DashboardLivraria from './layouts/dashboardLayout';
 import LoginPage from './pages/LoginPage';
 
-// Componente para proteger rotas
+// componente para proteger rotas
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isAuthenticated, isLoading } = useAuth();
   
@@ -19,7 +19,7 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
   return isAuthenticated ? <>{children}</> : <Navigate to="/login/" replace />;
 };
 
-// Componente para pagina do Dashboard
+// componente para pagina do Dashboard
 const DashboardPage = () => {
   return <DashboardLivraria />;
 };

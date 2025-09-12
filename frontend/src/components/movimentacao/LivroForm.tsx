@@ -40,7 +40,7 @@ const formatarValor = (valor: string): string => {
 
 
 const GENEROS_LITERARIOS = [
-  'Romance','Ficcao Cientifica','Fantasia','Terror','Misterio','Suspense','Aventura','Biografia','Historia','Poesia','Drama','Comedia','Infantil','Juvenil','Autoajuda','Didatico','Religioso','Acadêmico','Outro'
+  'Romance','Ficção Científica','Fantasia','Terror','Mistério','Suspense','Aventura','Biografia','História','Poesia','Drama','Comédia','Infantil','Juvenil','Autoajuda','Didático','Religioso','Acadêmico','Outro'
 ];
 
 export default function LivroForm({ onLivrosChange, onReset, resetTrigger }: LivroFormProps) {
@@ -227,6 +227,8 @@ export default function LivroForm({ onLivrosChange, onReset, resetTrigger }: Liv
        'Digite o ISBN completo (10 ou 13 dígitos)')
     );
   };
+
+  // interface
 
   return (
     <Box sx={{ mt: 2 }}>

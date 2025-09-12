@@ -64,7 +64,7 @@ export interface FornecedorCreate {
   complemento_fornecedor: string;
 }
 
-// Interface do Funcionario
+// interface do Funcionario
 export interface Funcionario {
   id_funcionario: number;
   nome_funcionario: string;
@@ -102,7 +102,7 @@ export interface FuncionarioCreate {
   complemento_funcionario: string;
 }
 
-// Interface do Registro de Entrada
+// interface do Registro de Entrada
 export interface RegistroEntrada {
   id_entrada: number;
   data_entrada: string;
@@ -120,7 +120,7 @@ export interface RegistroEntradaCreate {
   id_funcionario: number;
 }
 
-// Interfaces para Lote
+// interfaces para Lote
 export interface Lote {
   id_lote: number;
   valor_lote: number; 
@@ -134,7 +134,7 @@ export interface LoteCreate {
   id_entrada: number;
 }
 
-// Interface do Livro
+// interface do Livro
 export interface Livro {
   id_livro: number;
   isbn_livro: string;
@@ -154,7 +154,7 @@ export interface LivroCreate {
   estoque_atual: number;
 }
 
-// Interface do Item Lote
+// interface do Item Lote
 export interface ItemLote {
   id_lote: number;  
   id_livro: number;      
@@ -169,7 +169,7 @@ export interface ItemLoteCreate {
   valor_item_lote: number;
 }
 
-// Interface da Retirada
+// interface da Retirada
 export interface Retirada {
   id_retirada: number;
   id_funcionario: number;
@@ -185,7 +185,7 @@ export interface RetiradaCreate {
   hora_retirada: string;
 }
 
-// Interface do Item retirada
+// interface do Item retirada
 export interface ItemRetirada {
   id_retirada: number;  
   id_livro: number;      
@@ -200,7 +200,7 @@ export interface ItemRetiradaCreate {
   valor_unitario_retirada: number;
 }
 
-// Interface do Usuario
+// interface do Usuario
 export interface Usuario {
   id_usuario: number;
   email_login: string;
@@ -239,30 +239,26 @@ export interface LoginResponse {
   role: string;
 }
 
-// Função auxiliar para buscar livro por ISBN com tratamento de erro
+// fucao auxiliar para buscar livro por isbn 
 export const buscarLivroPorIsbn = async (isbn: string): Promise<Livro | null> => {
   const isbnLimpo = isbn.replace(/[-\s]/g, '');
-  
-  // Validação do ISBN
   if (isbnLimpo.length < 10) {
     return null;
   }
   
   try {
-    // Usa o endpoint específico para ISBN
     const response = await api.get(`/livro/isbn/${isbnLimpo}`);
     return response.data;
   } catch (error: any) {
-    // Livro não encontrado
     if (error.response?.status === 404) {
       return null;
     }
-    
-    // Outros erros
     console.error('Erro ao buscar livro por ISBN:', error);
     throw error;
   }
 }
+
+// interface para a entrada completa
 
 export interface EntradaEstoqueRequest {
   id_fornecedor: number;
@@ -279,6 +275,7 @@ export interface EntradaEstoqueRequest {
   }>;
 }
 
+// interface para a saida
 export interface SaidaEstoqueRequest {
   motivo_retirada: string;
   id_funcionario: number;
@@ -292,7 +289,7 @@ export interface SaidaEstoqueRequest {
 
 export const estoqueService = {
 
-  // Distribuidor
+  // distribuidor
   buscarDistribuidor: (distribuidor_id: number): Promise<Distribuidor> => 
     api.get(`/distribuidor/${distribuidor_id}`).then(response => response.data),
 
@@ -308,7 +305,7 @@ export const estoqueService = {
   removerDistribuidor: (distribuidor_id: number): Promise<{ok: boolean}> => 
     api.delete(`/distribuidor/${distribuidor_id}`).then(response => response.data),
 
-  // Fornecedor
+  // fornecedor
   buscarFornecedor: (fornecedor_id: number): Promise<Fornecedor> => 
     api.get(`/fornecedor/${fornecedor_id}`).then(response => response.data),
 
@@ -324,7 +321,7 @@ export const estoqueService = {
   removerFornecedor: (fornecedor_id: number): Promise<{ok: boolean}> => 
     api.delete(`/fornecedor/${fornecedor_id}`).then(response => response.data),
 
-  // Funcionario
+  // funcionario
   buscarFuncionario: (funcionario_id: number): Promise<Funcionario> => 
     api.get(`/funcionario/${funcionario_id}`).then(response => response.data),
 
@@ -340,7 +337,7 @@ export const estoqueService = {
   removerFuncionario: (funcionario_id: number): Promise<{ok: boolean}> => 
     api.delete(`/funcionario/${funcionario_id}`).then(response => response.data),
 
-  // Registro de Entrada
+  // registro de entrada
   buscarRegistroEntrada: (entrada_id: number): Promise<RegistroEntrada> => 
     api.get(`/registro_entrada/${entrada_id}`).then(response => response.data),
 
@@ -356,7 +353,7 @@ export const estoqueService = {
   removerRegistroEntrada: (entrada_id: number): Promise<{ok: boolean}> => 
     api.delete(`/registro_entrada/${entrada_id}`).then(response => response.data),
 
-  // Lote
+  // lote
   listarLote: (): Promise<Lote[]> => 
     api.get('/lote/').then(response => response.data),
 
@@ -372,7 +369,7 @@ export const estoqueService = {
   removerLote: (lote_id: number): Promise<{ok: boolean}> => 
     api.delete(`/lote/${lote_id}`).then(response => response.data),
 
-  // Livros
+  // livros
   buscarLivro: (livro_id: number): Promise<Livro> => 
     api.get(`/livro/${livro_id}`).then(response => response.data),
 
@@ -391,7 +388,7 @@ export const estoqueService = {
   removerLivro: (livro_id: number): Promise<{ok: boolean}> => 
     api.delete(`/livro/${livro_id}`).then(response => response.data),
 
-  // Item do Lote
+  // item do lote
   buscarItemLote: (lote_id: number, livro_id: number): Promise<ItemLote> => 
     api.get(`/item_lote/${lote_id}/${livro_id}`).then(response => response.data),
 
@@ -407,7 +404,7 @@ export const estoqueService = {
   removerItemLote: (lote_id: number, livro_id: number): Promise<{ok: boolean}> => 
     api.delete(`/item_lote/${lote_id}/${livro_id}`).then(response => response.data),
 
-  // Retirada
+  // retirada
   buscarRetirada: (retirada_id: number): Promise<Retirada> => 
     api.get(`/retirada/${retirada_id}`).then(response => response.data),
 
@@ -423,7 +420,7 @@ export const estoqueService = {
   removerRetirada: (retirada_id: number): Promise<{ok: boolean}> => 
     api.delete(`/retirada/${retirada_id}`).then(response => response.data),
 
-  // Item de Retirada
+  // item de retirada
   buscarItemRetirada: (retirada_id: number, livro_id: number): Promise<ItemRetirada> => 
     api.get(`/item_retirada/${retirada_id}/${livro_id}`).then(response => response.data),
 
@@ -439,7 +436,7 @@ export const estoqueService = {
   removerItemRetirada: (retirada_id: number, livro_id: number): Promise<{ok: boolean}> => 
     api.delete(`/item_retirada/${retirada_id}/${livro_id}`).then(response => response.data),
 
-  // Autenticacao
+  // autenticacao
   login: (credenciais: LoginRequest): Promise<LoginResponse> =>
     api.post('/login/', credenciais).then(response => response.data),
   
@@ -474,7 +471,7 @@ export const estoqueService = {
       const horaEntrada = agora.toTimeString().split(' ')[0]; // "HH:MM:SS"
 
   
-      // Criar REGISTRO_ENTRADA (com data/hora automática no backend)
+      // criar registro_entrada com data/hora automatica no backend
       const registroEntrada = await estoqueService.criarRegistroEntrada({
         data_entrada: dataEntrada,
         hora_entrada: horaEntrada,
@@ -485,7 +482,7 @@ export const estoqueService = {
   
       console.log('Registro entrada criado:', registroEntrada);
   
-      // 2. Calcular totais para LOTE
+      // calcular totais para lote
       const valorTotal = dados.livros.reduce((total, livro) => 
         total + (livro.quantidade * livro.valor_unitario), 0);
       
@@ -494,7 +491,7 @@ export const estoqueService = {
   
       console.log('Totais do lote - Valor:', valorTotal, 'Quantidade:', quantidadeTotal);
   
-      // 3. Criar LOTE vinculado ao registro_entrada
+      // criar lote vinculado ao registro_entrada
       const lote = await estoqueService.criarLote({
         valor_lote: valorTotal,
         quantidade_itens_lote: quantidadeTotal,
@@ -503,16 +500,16 @@ export const estoqueService = {
   
       console.log('Lote criado:', lote);
   
-      // 4. Processar cada livro
+      // processar cada livro
       for (const [index, livro] of dados.livros.entries()) {
         console.log(`Processando livro ${index + 1}/${dados.livros.length}:`, livro.isbn_livro);
   
-        // Verificar se livro já existe
+        // verificar se livro ja existe
         const isbnLimpo = livro.isbn_livro.replace(/[-\s]/g, '');
         let livroExistente = await buscarLivroPorIsbn(isbnLimpo);
         
         if (!livroExistente) {
-          // Livro NOVO: criar com estoque inicial
+          // para livro novo: criar com estoque inicial
           console.log('Livro não encontrado, criando novo...');
           livroExistente = await estoqueService.criarLivro({
             isbn_livro: isbnLimpo,
@@ -524,7 +521,7 @@ export const estoqueService = {
           });
           console.log('Novo livro criado:', livroExistente);
         } else {
-          // Livro EXISTENTE: atualizar estoque
+          // livro existente: atualizar estoque
           console.log('Livro existente encontrado, atualizando estoque...');
           await estoqueService.atualizarLivro(livroExistente.id_livro, {
             estoque_atual: livroExistente.estoque_atual + livro.quantidade
@@ -532,7 +529,7 @@ export const estoqueService = {
           console.log('Estoque atualizado para:', livroExistente.estoque_atual + livro.quantidade);
         }
   
-        // 5. Criar ITEM_LOTE
+        // criar item_lote
         console.log('Criando item do lote...');
         const itemLote = await estoqueService.criarItemLote({
           id_lote: lote.id_lote,
@@ -552,14 +549,14 @@ export const estoqueService = {
 
   },
 
-  // Saida completa
+  // saida completa
   criarSaidaEstoqueCompleta: async (
     dados: SaidaEstoqueRequest
   ): Promise<void> => {
     try {
       console.log('Iniciando processo de saída de estoque:', dados);
 
-      // 1. Criar RETIRADA (com data/hora automática)
+      // criar retirada com data/hora automatica
       const retirada = await estoqueService.criarRetirada({
         motivo_retirada: dados.motivo_retirada,
         data_retirada: new Date().toISOString().split('T')[0], // formato YYYY-MM-DD
@@ -569,11 +566,11 @@ export const estoqueService = {
 
       console.log('Retirada criada:', retirada);
 
-      // 2. Processar cada item da retirada
+      // processar cada item da retirada
       for (const item of dados.itens) {
         console.log('Processando item:', item);
 
-        // Verificar se o livro existe e tem estoque suficiente
+        // verificar se o livro existe e tem estoque suficiente
         const livro = await estoqueService.buscarLivro(item.id_livro);
         if (!livro) {
           throw new Error(`Livro com ID ${item.id_livro} não encontrado`);
@@ -583,7 +580,7 @@ export const estoqueService = {
           throw new Error(`Estoque insuficiente para ${livro.titulo_livro}. Disponível: ${livro.estoque_atual}, Solicitado: ${item.quantidade}`);
         }
 
-        // 3. Criar ITEM_RETIRADA
+        // criar intem_retirada
         const itemRetirada = await estoqueService.criarItemRetirada({
           id_retirada: retirada.id_retirada,
           id_livro: item.id_livro,
@@ -593,7 +590,7 @@ export const estoqueService = {
 
         console.log('Item retirada criado:', itemRetirada);
 
-        // 4. Atualizar estoque do livro (subtrair a quantidade)
+        // atualizar estoque do livro 
         const novoEstoque = livro.estoque_atual - item.quantidade;
         await estoqueService.atualizarLivro(item.id_livro, {
           estoque_atual: novoEstoque

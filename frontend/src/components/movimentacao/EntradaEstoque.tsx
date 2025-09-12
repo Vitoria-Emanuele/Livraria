@@ -31,21 +31,21 @@ interface DistribuidorData {
 }
 
 export default function EntradaEstoque() {
-  // Estados para dados do formulario
+  // estados para dados do formulario
   const {user} = useAuth();
   const [fornecedor, setFornecedor] = useState<FornecedorData | null>(null);
   const [distribuidor, setDistribuidor] = useState<DistribuidorData | null>(null);
   const [livros, setLivros] = useState<LivroData[]>([]);
   
   const [livroFormKey, setLivroFormKey] = useState(0);
-  // Estados para controle dos modais
+  // estados para controle dos modais
   const [modalFornecedorAberto, setModalFornecedorAberto] = useState(false);
   const [modalDistribuidorAberto, setModalDistribuidorAberto] = useState(false);
 
   const { fornecedores } = useFornecedor();
   const { distribuidores } = useDistribuidor();
 
-  // Calcular dados do lote automaticamente com base nos livros
+  // calcular dados do lote automaticamente com base nos livros
   const calcularDadosLote = () => {
     const quantidade_itens_lote = livros.reduce((total, livro) => {
       return total + (parseInt(livro.quantidade_item_lote));
@@ -158,20 +158,20 @@ export default function EntradaEstoque() {
 
   const dadosLote = calcularDadosLote();
 
+  // Interface
   return (
     <Box sx={{ maxWidth: 1000, margin: '0 auto', p: 3 }}>
       <Typography variant="h4" gutterBottom>
         Entrada de Estoque
       </Typography>
 
-      {/* Secao de Fornecedor e Distribuidor */}
+      
       <Box sx={{ mb: 4 }}>
         <Typography variant="h6" gutterBottom>
           Origem dos Livros
         </Typography>
         
         <Grid container spacing={3}>
-          {/* Fornecedor (Obrigatorio) */}
           <Grid size={{ xs: 12, md: 6 }}>
             <Typography variant="subtitle2" gutterBottom color="primary">
               Fornecedor *
@@ -210,7 +210,7 @@ export default function EntradaEstoque() {
               onClick={() => setModalFornecedorAberto(true)}
               fullWidth
             >
-              Cadastrar Novo Fornecedor
+              Cadastrar novo fornecedor
             </Button>
             
             {fornecedor && (
@@ -224,8 +224,6 @@ export default function EntradaEstoque() {
               </Box>
             )}
           </Grid>
-
-          {/* Distribuidor (Opcional) */}
           <Grid size={{ xs: 12, md: 6 }}>
             <Typography variant="subtitle2" gutterBottom>
               Distribuidor (Opcional)
@@ -264,7 +262,7 @@ export default function EntradaEstoque() {
               onClick={() => setModalDistribuidorAberto(true)}
               fullWidth
             >
-              Cadastrar Novo Distribuidor
+              Cadastrar novo distribuidor
             </Button>
             
             {distribuidor && (
@@ -281,7 +279,6 @@ export default function EntradaEstoque() {
         </Grid>
       </Box>
 
-      {/* Formulario de Livros */}
       <Box sx={{ mb: 4 }}>
         <Typography variant="h6" gutterBottom>
           Livros do Lote
@@ -291,7 +288,6 @@ export default function EntradaEstoque() {
         onLivrosChange={handleLivrosChange} />
       </Box>
 
-      {/* Resumo do Lote (calculado automaticamente) */}
       {livros.length > 0 && (
         <Box sx={{ mb: 4 }}>
           <Typography variant="h6" gutterBottom>
@@ -319,7 +315,6 @@ export default function EntradaEstoque() {
         </Box>
       )}
 
-      {/* Botao de Submissao */}
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
         <Button 
           variant="contained" 
@@ -331,7 +326,7 @@ export default function EntradaEstoque() {
         </Button>
       </Box>
 
-      {/* Modais para cadastro */}
+
       <ModalForm
         open={modalFornecedorAberto}
         onClose={() => setModalFornecedorAberto(false)}

@@ -7,7 +7,6 @@ import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
 
 
-// Interface que define as propriedades do componente
 interface InfoCardProps {
   title: string;          
   value: string | number;  
@@ -26,7 +25,6 @@ export default function InfoCard({
   alert = false 
 }: InfoCardProps) {
   
-  // Hook para acessar o tema do MUI
   const theme = useTheme();
   
   const colorStyles = {
@@ -125,7 +123,7 @@ export default function InfoCard({
               mt: 1
             }}
           >
-            Atencao: necessaria ação imediata
+            Atenção: necessaria ação imediata
           </Typography>
         )}
       </CardContent>

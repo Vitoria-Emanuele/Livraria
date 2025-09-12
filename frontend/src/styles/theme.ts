@@ -1,6 +1,5 @@
 import { createTheme } from '@mui/material/styles';
 
-// Cores da sua livraria - vamos escolher juntas!
 const colors = {
   primary: {
     main: '#2C5530',
@@ -17,22 +16,22 @@ const colors = {
     paper: '#e5dbc9',
   },
   text: {
-    primary: '#2C5530',   // Texto escuro
-    secondary: '#5D4037', // Texto secundario
+    primary: '#2C5530',   
+    secondary: '#5D4037', 
   }
 };
 
-// Criando o tema principal
+
 export const livrariaTheme = createTheme({
   palette: {
     primary: colors.primary,
     secondary: colors.secondary,
     background: colors.background,
     text: colors.text,
-    mode: 'light',        // Comecamos com tema claro
+    mode: 'light',        
   },
   
-  // Tipografia - fontes dos textos
+
   typography: {
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
     h1: {
@@ -56,7 +55,7 @@ export const livrariaTheme = createTheme({
     }
   },
 
-  // Componentes - personalizacao especifica
+
   components: {
     MuiAppBar: {
       styleOverrides: {
@@ -70,7 +69,7 @@ export const livrariaTheme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: '8px',
-          textTransform: 'none', // remove CAPS LOCK dos botoes
+          textTransform: 'none', 
           fontWeight: 500,
         },
         contained: {

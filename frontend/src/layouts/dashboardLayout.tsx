@@ -1,4 +1,3 @@
-// dashboardLayout.tsx - VERSÃO CORRIGIDA
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import AnalyticsIcon from '@mui/icons-material/Analytics';
@@ -9,12 +8,10 @@ import { livrariaTheme } from '../styles/theme';
 import logo from '../assets/logo.png';
 import MovimentacaoPage from '../pages/MovimentacaoPage';
 import DashboardPage from '../pages/DashboardPage';
-// import EstoquePage from '../pages/EstoquePage'; CRIAR ESTA PÁGINA
-// import RelatoriosPage from '../pages/RelatoriosPage';  CRIAR ESTA PÁGINA
 import { useAuth } from '../hooks/useAuth';
 import { Box, Button } from '@mui/material';
 import { Logout } from '@mui/icons-material';
-import { useLocation } from 'react-router-dom'; // ✅ Mudança importante
+import { useLocation } from 'react-router-dom'; 
 
 const NAVIGATION: Navigation = [
   {

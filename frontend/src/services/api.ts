@@ -32,7 +32,7 @@ api.interceptors.request.use(
   }
 );
 
-// Interceptor para logging (útil para debug)
+// interceptor para logging para debug
 api.interceptors.response.use(
   (response) => {
     console.log(`Resposta recebida: ${response.status}`);

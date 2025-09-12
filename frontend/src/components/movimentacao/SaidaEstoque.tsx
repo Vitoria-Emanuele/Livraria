@@ -55,7 +55,7 @@ export default function SaidaEstoque() {
   };
 
   const buscarLivroPorIsbn = async (isbn: string, index: number) => {
-    if (isbn.length < 10) return; // Só busca se tiver ISBN completo
+    if (isbn.length < 10) return;
     
     try {
       const livro = await estoqueService.buscarLivroPorIsbn(isbn);
@@ -71,7 +71,6 @@ export default function SaidaEstoque() {
       }
     } catch (error) {
       console.error('Erro ao buscar livro:', error);
-      // Livro não encontrado - usuário pode continuar digitando manualmente
     }
   };
 
@@ -91,7 +90,7 @@ export default function SaidaEstoque() {
       return;
     }
 
-    // Validar estoque e quantidades
+    // validar estoque e quantidades
     for (const [index, item] of itens.entries()) {
       const quantidade = parseInt(item.quantidade) || 0;
       
@@ -121,7 +120,7 @@ export default function SaidaEstoque() {
         return;
       }
 
-      // Para cada item, buscar o ID do livro pelo ISBN
+      // para cada item, buscar o ID do livro pelo ISBN
       const itensComIds = await Promise.all(
         itens.map(async (item) => {
           const livro = await estoqueService.buscarLivroPorIsbn(item.isbn_livro);
@@ -133,7 +132,7 @@ export default function SaidaEstoque() {
         })
       );
 
-      // Verificar se todos os livros foram encontrados
+      // verificar se todos os livros foram encontrados
       if (itensComIds.some(item => item.id_livro === 0)) {
         alert('Alguns livros não foram encontrados no sistema. Verifique os ISBNs.');
         return;
@@ -158,7 +157,7 @@ export default function SaidaEstoque() {
     }
   };
 
-  // Calcular totais
+  // calcular totais
   const quantidadeTotal = itens.reduce((total, item) => 
     total + (parseInt(item.quantidade) || 0), 0
   );
@@ -175,7 +174,6 @@ export default function SaidaEstoque() {
         Saída de Estoque
       </Typography>
 
-      {/* Motivo da Retirada */}
       <Box sx={{ mb: 4 }}>
         <Typography variant="h6" gutterBottom>
           Motivo da Retirada
@@ -197,7 +195,6 @@ export default function SaidaEstoque() {
         </TextField>
       </Box>
 
-      {/* Itens da Retirada */}
       <Box sx={{ mb: 4 }}>
         <Typography variant="h6" gutterBottom>
           Livros para Retirada
@@ -206,7 +203,6 @@ export default function SaidaEstoque() {
         {itens.map((item, index) => (
           <Paper key={index} sx={{ p: 3, mb: 2, border: '1px solid', borderColor: 'divider' }}>
             <Grid container spacing={2} alignItems="center">
-              {/* ISBN */}
               <Grid size={{ xs: 12, md: 4 }}>
                 <TextField
                   required
@@ -223,7 +219,6 @@ export default function SaidaEstoque() {
                 />
               </Grid>
 
-              {/* Quantidade */}
               <Grid size={{ xs: 12, md: 2 }}>
                 <TextField
                   required
@@ -232,12 +227,10 @@ export default function SaidaEstoque() {
                   value={item.quantidade}
                   onChange={(e) => atualizarItem(index, 'quantidade', e.target.value.replace(/\D/g, ''))}
                   type="number"
-                  inputProps={{ min: 1, max: item.estoque_atual }}
                   helperText={item.estoque_atual !== undefined ? `Estoque: ${item.estoque_atual}` : ''}
                 />
               </Grid>
 
-              {/* Valor Unitário */}
               <Grid size={{ xs: 12, md: 3 }}>
                 <TextField
                   required
@@ -246,13 +239,9 @@ export default function SaidaEstoque() {
                   value={item.valor_unitario}
                   onChange={(e) => atualizarItem(index, 'valor_unitario', e.target.value)}
                   placeholder="0,00"
-                  InputProps={{
-                    startAdornment: <Typography sx={{ mr: 1 }}>R$</Typography>,
-                  }}
                 />
               </Grid>
 
-              {/* Botão Remover */}
               <Grid size={{ xs: 12, md: 2 }}>
                 <Button
                   variant="outlined"
@@ -264,7 +253,6 @@ export default function SaidaEstoque() {
                 </Button>
               </Grid>
 
-              {/* Informações do Livro (quando encontrado) */}
               {item.titulo_livro && (
                 <Grid size={{ xs: 12 }}>
                   <Typography variant="body2" color="text.secondary">
@@ -283,11 +271,11 @@ export default function SaidaEstoque() {
           variant="outlined"
           sx={{ mt: 2 }}
         >
-          Adicionar Outro Livro
+          Adicionar Livro
         </Button>
       </Box>
 
-      {/* Resumo */}
+
       {itens.length > 0 && (
         <Paper sx={{ p: 3, mb: 4 }}>
           <Typography variant="h6" gutterBottom>
@@ -307,7 +295,6 @@ export default function SaidaEstoque() {
         </Paper>
       )}
 
-      {/* Botões */}
       <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end' }}>
         <Button
           variant="outlined"

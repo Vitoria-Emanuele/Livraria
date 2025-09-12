@@ -6,8 +6,6 @@ import { useNavigate, Navigate } from 'react-router-dom';
 
 import logo from '../assets/logo.png'
 
-
-// estilos customizados para a pagina de login
 const loginStyles = {
   container: {
     display: 'flex',
