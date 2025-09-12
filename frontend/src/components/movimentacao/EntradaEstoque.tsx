@@ -11,6 +11,10 @@ import FornecedorForm from './FornecedorForm';
 import DistribuidorForm from './DistribuidorForm';
 import type { LivroData } from './LivroForm';
 import LivroForm from './LivroForm';
+import { estoqueService, type EntradaEstoqueRequest } from '../../services';
+import { useAuth } from '../../hooks/useAuth';
+
+
 
 interface FornecedorData {
   id_fornecedor?: number;
@@ -28,10 +32,12 @@ interface DistribuidorData {
 
 export default function EntradaEstoque() {
   // Estados para dados do formulario
+  const {user} = useAuth();
   const [fornecedor, setFornecedor] = useState<FornecedorData | null>(null);
   const [distribuidor, setDistribuidor] = useState<DistribuidorData | null>(null);
   const [livros, setLivros] = useState<LivroData[]>([]);
   
+  const [livroFormKey, setLivroFormKey] = useState(0);
   // Estados para controle dos modais
   const [modalFornecedorAberto, setModalFornecedorAberto] = useState(false);
   const [modalDistribuidorAberto, setModalDistribuidorAberto] = useState(false);
@@ -41,7 +47,9 @@ export default function EntradaEstoque() {
 
   // Calcular dados do lote automaticamente com base nos livros
   const calcularDadosLote = () => {
-    const quantidade_itens_lote = livros.length;
+    const quantidade_itens_lote = livros.reduce((total, livro) => {
+      return total + (parseInt(livro.quantidade_item_lote));
+    }, 0);
 
     const valor_lote = livros.reduce((total, livro) => {
       const quantidade = parseInt(livro.quantidade_item_lote) || 0;
@@ -69,41 +77,79 @@ export default function EntradaEstoque() {
     setLivros(novosLivros);
   };
 
+
+  const limparFormulario = () => {
+    setFornecedor(null);
+    setDistribuidor(null);
+    setLivros([]);
+    
+    setLivroFormKey(prev => prev + 1);
+
+    setTimeout(() => {
+      const fornecedorSelect = document.querySelector('select[name="fornecedor"]') as HTMLSelectElement;
+      const distribuidorSelect = document.querySelector('select[name="distribuidor"]') as HTMLSelectElement;
+      
+      if (fornecedorSelect) fornecedorSelect.value = '';
+      if (distribuidorSelect) distribuidorSelect.value = '';
+    }, 100)
+  };
+
   const handleSubmit = async () => {
-    // Validacoes basicas
-    if (!fornecedor) {
+    if (!fornecedor || !fornecedor.id_fornecedor) {
       alert("Selecione ou cadastre um fornecedor antes de continuar!");
       return;
     }
-
+  
     if (livros.length === 0) {
       alert("Adicione pelo menos um livro ao lote!");
       return;
     }
 
-    try {
-      // Calcular dados do lote automaticamente
-      const dadosLote = calcularDadosLote();
-      
-      // Montar objeto completo para envio
-      const dadosEntrada = {
-        fornecedor: fornecedor,
-        distribuidor: distribuidor,
-        lote: dadosLote,
-        livros: livros
-      };
+    console.log('Usuário logado:', user);
+  
+    if (!user) {
+      alert('Usuário não autenticado!');
+      return;
+    }
 
-      console.log('Dados para envio:', dadosEntrada);
-      
-      // Aqui você faria a chamada para o servico que envia os dados
-      // await estoqueService.criarEntradaEstoque(dadosEntrada);
-      
+  const idFuncionario = user.id_funcionario || user.funcionario_id || user.funcionario?.id || user.id;
+
+  if (!idFuncionario) {
+    alert('Não foi possível identificar o funcionário!');
+    console.error('Estrutura do usuário:', user);
+    return;
+  }
+  
+    try {
+      const dadosEntrada: EntradaEstoqueRequest = {
+        id_fornecedor: fornecedor.id_fornecedor,
+        id_distribuidor: distribuidor?.id_distribuidor || undefined,
+        id_funcionario: idFuncionario,
+        livros: livros.map(livro => {
+
+          const isbnLimpo = livro.isbn_livro.replace(/[-\s]/g, '');
+
+          return{
+            isbn_livro: isbnLimpo,
+            titulo_livro: livro.titulo_livro,
+            autor_livro: livro.autor_livro,
+            genero_literario: livro.genero_literario,
+            editora_livro: livro.editora_livro,
+            quantidade: parseInt(livro.quantidade_item_lote) || 0,
+            valor_unitario: parseFloat(livro.valor_item_lote) || 0
+          }
+        })
+      };
+  
+      await estoqueService.criarEntradaEstoqueCompleta(dadosEntrada);
+  
       alert("Entrada de estoque registrada com sucesso!");
-      // Limpar formulario apos sucesso
-      setFornecedor(null);
-      setDistribuidor(null);
-      setLivros([]);
       
+      
+      // Limpar formulário
+      limparFormulario()
+      
+  
     } catch (error) {
       console.error('Erro ao registrar entrada:', error);
       alert('Erro ao registrar entrada. Verifique o console.');
@@ -240,7 +286,9 @@ export default function EntradaEstoque() {
         <Typography variant="h6" gutterBottom>
           Livros do Lote
         </Typography>
-        <LivroForm onLivrosChange={handleLivrosChange} />
+        <LivroForm
+        key={livroFormKey}
+        onLivrosChange={handleLivrosChange} />
       </Box>
 
       {/* Resumo do Lote (calculado automaticamente) */}

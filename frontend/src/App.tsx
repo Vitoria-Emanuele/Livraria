@@ -1,4 +1,3 @@
-// frontend/src/App.tsx
 import { ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
@@ -34,7 +33,31 @@ function App() {
           <Routes>
             <Route path="/login/" element={<LoginPage />} />
             <Route 
-              path="/dashboard/" 
+              path="/dashboard/*" 
+              element={
+                <ProtectedRoute>
+                  <DashboardPage />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/movimentacao/*" 
+              element={
+                <ProtectedRoute>
+                  <DashboardPage />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/estoque/*" 
+              element={
+                <ProtectedRoute>
+                  <DashboardPage />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/relatorios/*" 
               element={
                 <ProtectedRoute>
                   <DashboardPage />

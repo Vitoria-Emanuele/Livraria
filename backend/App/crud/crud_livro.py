@@ -14,6 +14,13 @@ def listar_livros(db: Session):
 def buscar_livro(db: Session, livro_id: int):
     return db.query(models.Livro).filter(models.Livro.id_livro == livro_id).first()
 
+# buscar por ISBN
+
+
+def buscar_isbn_livro(db: Session, isbn_livro: str):
+    return db.query(models.Livro).filter(models.Livro.isbn_livro == isbn_livro).first()
+
+
 # Atualizar
 
 

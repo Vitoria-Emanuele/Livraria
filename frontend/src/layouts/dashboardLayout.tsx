@@ -1,22 +1,20 @@
+// dashboardLayout.tsx - VERSÃO CORRIGIDA
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import AnalyticsIcon from '@mui/icons-material/Analytics';
 import AssignmentIcon from '@mui/icons-material/Assignment';
-
-
 import { AppProvider, type Navigation } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
-
 import { livrariaTheme } from '../styles/theme';
-import logo from '../assets/logo.png'
-
+import logo from '../assets/logo.png';
 import MovimentacaoPage from '../pages/MovimentacaoPage';
 import DashboardPage from '../pages/DashboardPage';
+// import EstoquePage from '../pages/EstoquePage'; CRIAR ESTA PÁGINA
+// import RelatoriosPage from '../pages/RelatoriosPage';  CRIAR ESTA PÁGINA
 import { useAuth } from '../hooks/useAuth';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import { Logout } from '@mui/icons-material';
-
-
+import { useLocation } from 'react-router-dom'; // ✅ Mudança importante
 
 const NAVIGATION: Navigation = [
   {
@@ -45,43 +43,34 @@ const NAVIGATION: Navigation = [
   },
 ];
 
-// Conteudo principal temporario
-function MainContent() {
-  // Simulacao de roteamento baseado no pathname
-  const pathname = window.location.pathname;
-  
-  const renderizarConteudo = () => {
-    if (pathname.includes('movimentacao')) {
-      return <MovimentacaoPage />;
-    }
-    
-    // Pagina padrao (Dashboard)
-    return <DashboardPage />;
-  };
+function RouterContent() {
+  const location = useLocation();
+  const pathname = location.pathname;
 
-  return renderizarConteudo();
-
+  if (pathname.includes('movimentacao')) {
+    return <MovimentacaoPage />;
+  }
+  if (pathname.includes('estoque')) {
+    return <MovimentacaoPage />;
+  }
+  if (pathname.includes('relatorios')) {
+    return <MovimentacaoPage />;
+  }
   
+  return <DashboardPage />;
 }
 
 function ToolbarActions() {
-  const { user, logout } = useAuth();
-
+  const { logout } = useAuth();
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-      <Typography variant="body2" sx={{ color: 'white' }}>
-        Ola!
-      </Typography>
-      
       <Button
         color="inherit"
         startIcon={<Logout />}
         onClick={logout}
         sx={{ 
           border: '1px solid rgba(255,255,255,0.3)',
-          '&:hover': {
-            bgcolor: 'rgba(255,255,255,0.1)'
-          }
+          '&:hover': { bgcolor: 'rgba(255,255,255,0.1)' }
         }}
       >
         Sair
@@ -90,17 +79,15 @@ function ToolbarActions() {
   );
 }
 
-// Componente principal do layout - SEM ROTAS
 export default function DashboardLivraria() {
   return (
     <AppProvider
       navigation={NAVIGATION}
       theme={livrariaTheme}
-      // Logo da livraria
       branding={{
-        logo: <img src={logo} style={{ height: '50px' }} />,
+        logo: <img src={logo} style={{ height: '50px' }} alt="Logo" />,
         title: '',
-        homeUrl: '/dashboard',
+        homeUrl: '/dashboard/',
       }}
     >
       <DashboardLayout
@@ -108,7 +95,7 @@ export default function DashboardLivraria() {
           toolbarActions: ToolbarActions,
         }}
       >
-        <MainContent />
+        <RouterContent />
       </DashboardLayout>
     </AppProvider>
   );

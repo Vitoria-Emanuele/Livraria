@@ -7,8 +7,9 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import { NumericFormat } from 'react-number-format';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MenuItem } from '@mui/material';
+import { buscarLivroPorIsbn } from '../../services';
 
 export interface LivroData {
   isbn_livro: string;
@@ -22,13 +23,27 @@ export interface LivroData {
 
 interface LivroFormProps {
   onLivrosChange?: (livros: LivroData[]) => void;
+  onReset?: () => void; 
+  resetTrigger?: number;
 }
+
+const limparIsbn = (valor: string): string => {
+  return valor.replace(/[-\s]/g, ''); 
+};
+const limparFormatacao = (valor: string): string => {
+  return valor.replace(/\D/g, ''); 
+};
+
+const formatarValor = (valor: string): string => {
+  return valor.replace(/[^\d.]/g, '');
+};
+
 
 const GENEROS_LITERARIOS = [
   'Romance','Ficcao Cientifica','Fantasia','Terror','Misterio','Suspense','Aventura','Biografia','Historia','Poesia','Drama','Comedia','Infantil','Juvenil','Autoajuda','Didatico','Religioso','Acadêmico','Outro'
 ];
 
-export default function LivroForm({ onLivrosChange }: LivroFormProps) {
+export default function LivroForm({ onLivrosChange, onReset, resetTrigger }: LivroFormProps) {
   const [livros, setLivros] = useState<LivroData[]>([
     {
       isbn_livro: '',
@@ -42,6 +57,77 @@ export default function LivroForm({ onLivrosChange }: LivroFormProps) {
   ]);
 
   const [erros, setErros] = useState<Partial<LivroData>[]>([]);
+  const [statusBusca, setStatusBusca] = useState<{ [key: number]: string }>({});
+
+  useEffect(() => {
+    if (resetTrigger && resetTrigger > 0) {
+      setLivros([{
+        isbn_livro: '',
+        titulo_livro: '',
+        autor_livro: '',
+        genero_literario: '',
+        editora_livro: '',
+        quantidade_item_lote: '',
+        valor_item_lote: ''
+      }]);
+      setErros([]);
+      setStatusBusca({});
+      if (onLivrosChange) onLivrosChange([]);
+    }
+  }, [resetTrigger, onLivrosChange]);
+
+  const buscarLivro = async (isbn: string, index: number) => {
+    console.log('Buscando ISBN:', isbn);
+    setStatusBusca(prev => ({ ...prev, [index]: 'buscando' }));
+
+    try {
+      const isbnLimpo = limparIsbn(isbn);
+      const livro = await buscarLivroPorIsbn(isbnLimpo);
+      
+      if (livro) {
+        console.log('Livro encontrado:', livro);
+        setStatusBusca(prev => ({ ...prev, [index]: 'encontrado' }));
+        
+        const novosLivros = livros.map((item, i) => 
+          i === index ? {
+            ...item,
+            isbn_livro: isbnLimpo,
+            titulo_livro: livro.titulo_livro,
+            autor_livro: livro.autor_livro,
+            genero_literario: livro.genero_literario,
+            editora_livro: livro.editora_livro
+          } : item
+        );
+        
+        setLivros(novosLivros);
+        if (onLivrosChange) onLivrosChange(novosLivros);
+      } else {
+        console.log('ISBN não encontrado:', isbn);
+        setStatusBusca(prev => ({ ...prev, [index]: 'nao_encontrado' }));
+        
+        const confirmar = window.confirm(
+          `ISBN ${isbn} não encontrado. Deseja cadastrar como novo livro?`
+        );
+        
+        if (!confirmar) {
+          const novosLivros = livros.map((item, i) => 
+            i === index ? { ...item, isbn_livro: '' } : item
+          );
+          setLivros(novosLivros);
+          if (onLivrosChange) onLivrosChange(novosLivros);
+        } else {
+          const novosLivros = livros.map((item, i) => 
+            i === index ? { ...item, isbn_livro: isbnLimpo } : item
+          );
+          setLivros(novosLivros);
+          if (onLivrosChange) onLivrosChange(novosLivros);
+        }
+      }
+    } catch (error) {
+      console.error('Erro na busca por ISBN:', error);
+      setStatusBusca(prev => ({ ...prev, [index]: 'erro' }));
+    }
+  };
 
   const adicionarLivro = () => {
     const novosLivros = [...livros, {
@@ -63,19 +149,40 @@ export default function LivroForm({ onLivrosChange }: LivroFormProps) {
       const novosLivros = livros.filter((_, i) => i !== index);
       setLivros(novosLivros);
       setErros(prev => prev.filter((_, i) => i !== index));
+      const novoStatus = { ...statusBusca };
+      delete novoStatus[index];
+      setStatusBusca(novoStatus);
       if (onLivrosChange) onLivrosChange(novosLivros);
     }
   };
 
-  const atualizarLivro = (index: number, field: keyof LivroData, value: string) => {
-    const novosLivros = livros.map((livro, i) => 
-      i === index ? { ...livro, [field]: value } : livro
-    );
+  const atualizarLivro = async (index: number, field: keyof LivroData, value: string) => {
+    let valorFormatado = value;
     
+    if (field === 'isbn_livro') {
+      valorFormatado = limparIsbn(value);
+    }else if (field === 'quantidade_item_lote') {
+      valorFormatado = limparFormatacao(value);
+    } else if (field === 'valor_item_lote') {
+      valorFormatado = formatarValor(value);
+    }
+
+
+    const novosLivros = livros.map((livro, i) => 
+      i === index ? { ...livro, [field]: valorFormatado } : livro
+    );
+
     setLivros(novosLivros);
     if (onLivrosChange) onLivrosChange(novosLivros);
-  };
 
+    if (field === 'isbn_livro') {
+      if (valorFormatado.length >= 10) {
+        buscarLivro(valorFormatado, index);
+      } else {
+        setStatusBusca(prev => ({ ...prev, [index]: '' }));
+      }
+    }
+  };
 
   const validarFormulario = (): boolean => {
     const novosErros: Partial<LivroData>[] = [];
@@ -84,21 +191,21 @@ export default function LivroForm({ onLivrosChange }: LivroFormProps) {
     livros.forEach((livro) => {
       const erro: Partial<LivroData> = {};
 
-      if (!livro.isbn_livro) erro.isbn_livro = 'ISBN e obrigatorio';
-      if (!livro.titulo_livro) erro.titulo_livro = 'Titulo e obrigatorio';
+      if (!livro.isbn_livro) erro.isbn_livro = 'ISBN é obrigatório';
+      if (!livro.titulo_livro) erro.titulo_livro = 'Título é obrigatório';
       if (!livro.genero_literario) {
-        erro.genero_literario = 'Selecione um gênero literario';
+        erro.genero_literario = 'Selecione um gênero literário';
       }
       if (!livro.quantidade_item_lote || parseInt(livro.quantidade_item_lote) <= 0) {
-        erro.quantidade_item_lote = 'Quantidade e obrigatoria';
+        erro.quantidade_item_lote = 'Quantidade é obrigatória';
       }
       if (!livro.valor_item_lote || parseFloat(livro.valor_item_lote) <= 0) {
-        erro.valor_item_lote = 'Valor e obrigatorio';
+        erro.valor_item_lote = 'Valor é obrigatório';
       }
 
       const valorNumerico = parseFloat(livro.valor_item_lote);
-      if (!livro.valor_item_lote || isNaN(valorNumerico) || valorNumerico < 0){ 
-        erro.valor_item_lote = 'Valor unitario e obrigatorio';
+      if (!livro.valor_item_lote || isNaN(valorNumerico) || valorNumerico < 0) { 
+        erro.valor_item_lote = 'Valor unitário é obrigatório';
       }
 
       novosErros.push(erro);
@@ -107,6 +214,18 @@ export default function LivroForm({ onLivrosChange }: LivroFormProps) {
 
     setErros(novosErros);
     return valido;
+  };
+
+  const getHelperText = (index: number): string => {
+    const status = statusBusca[index];
+    return (
+      erros[index]?.isbn_livro ||
+      (status === 'buscando' ? 'Buscando...' :
+       status === 'encontrado' ? 'Livro encontrado' :
+       status === 'nao_encontrado' ? 'ISBN não cadastrado' :
+       status === 'erro' ? 'Erro na busca' : 
+       'Digite o ISBN completo (10 ou 13 dígitos)')
+    );
   };
 
   return (
@@ -144,9 +263,9 @@ export default function LivroForm({ onLivrosChange }: LivroFormProps) {
                 label="ISBN"
                 value={livro.isbn_livro}
                 onChange={(e) => atualizarLivro(index, 'isbn_livro', e.target.value)}
-                error={!!erros[index]?.isbn_livro}
-                helperText={erros[index]?.isbn_livro}
-                placeholder="978-85-123-4567-8"
+                error={!!erros[index]?.isbn_livro || statusBusca[index] === 'erro'}
+                helperText={getHelperText(index)}
+                placeholder="9788512345678"
               />
             </Grid>
 
@@ -154,7 +273,7 @@ export default function LivroForm({ onLivrosChange }: LivroFormProps) {
               <TextField
                 required
                 fullWidth
-                label="Titulo do Livro"
+                label="Título do Livro"
                 value={livro.titulo_livro}
                 onChange={(e) => atualizarLivro(index, 'titulo_livro', e.target.value)}
                 error={!!erros[index]?.titulo_livro}
@@ -176,7 +295,7 @@ export default function LivroForm({ onLivrosChange }: LivroFormProps) {
                 select
                 required
                 fullWidth
-                label="Gênero Literario"
+                label="Gênero Literário"
                 value={livro.genero_literario || ''}
                 onChange={(e) => atualizarLivro(index, 'genero_literario', e.target.value)}
                 error={!!erros[index]?.genero_literario}
@@ -208,10 +327,11 @@ export default function LivroForm({ onLivrosChange }: LivroFormProps) {
                 fullWidth
                 label="Quantidade"
                 value={livro.quantidade_item_lote}
-                onChange={(e) => atualizarLivro(index, 'quantidade_item_lote', e.target.value.replace(/\D/g, ''))}
+                onChange={(e) => atualizarLivro(index, 'quantidade_item_lote', e.target.value)}
                 error={!!erros[index]?.quantidade_item_lote}
                 helperText={erros[index]?.quantidade_item_lote}
                 type="number"
+                inputProps={{ min: 1 }}
               />
             </Grid>
 
@@ -220,7 +340,7 @@ export default function LivroForm({ onLivrosChange }: LivroFormProps) {
                 customInput={TextField}
                 required
                 fullWidth
-                label="Valor Unitario"
+                label="Valor Unitário"
                 value={livro.valor_item_lote}
                 onValueChange={(values) => {
                   atualizarLivro(index, 'valor_item_lote', values.value);

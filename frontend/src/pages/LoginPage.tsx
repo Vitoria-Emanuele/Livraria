@@ -4,6 +4,9 @@ import { Visibility, VisibilityOff, Login as LoginIcon } from '@mui/icons-materi
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate, Navigate } from 'react-router-dom';
 
+import logo from '../assets/logo.png'
+
+
 // Estilos customizados para a pagina de login
 const loginStyles = {
   container: {
@@ -130,9 +133,8 @@ const LoginPage: React.FC = () => {
     <Container component="main" maxWidth={false} sx={loginStyles.container}>
       <Paper elevation={6} sx={loginStyles.paper}>
         <Box sx={loginStyles.logoContainer}>
-          {/* Adicione sua logo aqui - substitua pelo caminho correto */}
           <img 
-            src="/logo.png" 
+            src={logo}
             alt="Logo do Sistema" 
             style={{ height: '80px', marginBottom: '16px' }} 
           />

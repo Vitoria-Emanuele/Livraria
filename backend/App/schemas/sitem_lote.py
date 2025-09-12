@@ -5,7 +5,7 @@ from typing import Optional
 class item_loteBase(BaseModel):
     id_lote: int
     id_livro: int
-    quantidade_itens_lote: int
+    quantidade_item_lote: int
     valor_item_lote: float
 
 

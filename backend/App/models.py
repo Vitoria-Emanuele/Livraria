@@ -121,7 +121,7 @@ class item_lote(Base):
                      primary_key=True, nullable=False)
     id_livro = Column(Integer, ForeignKey(
         "estoque.livro.id_livro"), primary_key=True, nullable=False)
-    quantidade_itens_lote = Column(Integer, nullable=False)
+    quantidade_item_lote = Column(Integer, nullable=False)
     valor_item_lote = Column(Numeric(9, 2), nullable=False)
 
 

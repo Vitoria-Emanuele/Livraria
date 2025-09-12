@@ -18,6 +18,14 @@ def buscar_livro(livro_id: int, db_session: Session = Depends(db.get_db)):
     return livro
 
 
+@router.get("/isbn/{isbn_livro}", response_model=slivro.LivroResponse)
+def buscar_isbn_livro(isbn_livro: str, db_session: Session = Depends(db.get_db)):
+    livro = crud_livro.buscar_isbn_livro(db_session, isbn_livro)
+    if not livro:
+        raise HTTPException(status_code=404, detail="Livro nao encontrado")
+    return livro
+
+
 @router.get("/", response_model=list[slivro.LivroResponse])
 def listar_livros(db_session: Session = Depends(db.get_db)):
     return crud_livro.listar_livros(db_session)

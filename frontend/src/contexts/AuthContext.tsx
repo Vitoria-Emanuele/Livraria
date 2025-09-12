@@ -25,7 +25,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  // Verificar se ha token valido ao inicializar
+  // Verificar se há token válido ao inicializar
   useEffect(() => {
     const token = localStorage.getItem('access_token');
     if (token) {
