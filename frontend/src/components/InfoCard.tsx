@@ -6,22 +6,17 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
 
-import WarningIcon from '@mui/icons-material/Warning';
-import SwapVertIcon from '@mui/icons-material/SwapVert';
-import PersonIcon from '@mui/icons-material/Person';
-
 
 // Interface que define as propriedades do componente
 interface InfoCardProps {
-  title: string;           // Titulo do card
-  value: string | number;  // Valor principal (pode ser texto ou número)
-  icon: React.ReactElement; // Ícone do card
-  color?: 'primary' | 'error' | 'success' | 'warning' | 'info'; // Cor do card
-  subtitle?: string;       // Texto adicional (opcional)
-  alert?: boolean;         // Se e um card de alerta
+  title: string;          
+  value: string | number;  
+  icon: React.ReactElement; 
+  color?: 'primary' | 'error' | 'success' | 'warning' | 'info'; 
+  subtitle?: string;       
+  alert?: boolean;      
 }
 
-// Componente InfoCard
 export default function InfoCard({ 
   title, 
   value, 
@@ -34,7 +29,6 @@ export default function InfoCard({
   // Hook para acessar o tema do MUI
   const theme = useTheme();
   
-  // Mapeamento de cores para estilos
   const colorStyles = {
     primary: {
       bgcolor: theme.palette.primary.light,
@@ -67,7 +61,7 @@ export default function InfoCard({
       }}
     >
       <CardContent>
-        {/* Container principal do card */}
+        
         <Box 
           sx={{ 
             display: 'flex', 
@@ -76,7 +70,7 @@ export default function InfoCard({
             mb: 2 
           }}
         >
-          {/* Área do texto */}
+          
           <Box>
             <Typography 
               variant="h6" 
@@ -105,7 +99,7 @@ export default function InfoCard({
             )}
           </Box>
 
-          {/* Área do icone */}
+          
           <Box
             sx={{
               display: 'flex',
@@ -114,14 +108,13 @@ export default function InfoCard({
               width: 60,
               height: 60,
               borderRadius: '50%',
-              ...colorStyles[color], // Aplica as cores baseadas na prop
+              ...colorStyles[color], 
             }}
           >
             {icon}
           </Box>
         </Box>
 
-        {/* Mensagem de alerta se necessario */}
         {alert && (
           <Typography 
             variant="caption" 
@@ -132,43 +125,10 @@ export default function InfoCard({
               mt: 1
             }}
           >
-            Atencao: necessaria acao imediata
+            Atencao: necessaria ação imediata
           </Typography>
         )}
       </CardContent>
     </Card>
-  );
-}
-
-// Componente de exemplo para mostrar como usar
-export function ExampleUsage() {
-  return (
-    <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-      {/* Card de estoque baixo */}
-      <InfoCard
-        title="Necessitam Reposicao"
-        value={12}
-        icon={<WarningIcon />}
-        color="error"
-        alert={true}
-      />
-      
-      {/* Card de movimentacoes */}
-      <InfoCard
-        title="Movimentacoes Hoje"
-        value={8}
-        icon={<SwapVertIcon />}
-        color="info"
-      />
-      
-      {/* Card de funcionario */}
-      <InfoCard
-        title="Funcionario"
-        value="Maria Silva"
-        icon={<PersonIcon />}
-        subtitle="Gerente de Estoque"
-        color="primary"
-      />
-    </Box>
   );
 }

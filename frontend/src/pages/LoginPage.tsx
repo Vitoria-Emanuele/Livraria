@@ -7,7 +7,7 @@ import { useNavigate, Navigate } from 'react-router-dom';
 import logo from '../assets/logo.png'
 
 
-// Estilos customizados para a pagina de login
+// estilos customizados para a pagina de login
 const loginStyles = {
   container: {
     display: 'flex',
@@ -60,7 +60,7 @@ const loginStyles = {
   },
 };
 
-// Componente principal da pagina de login
+// componente principal da pagina de login
 const LoginPage: React.FC = () => {
   const [formData, setFormData] = useState({
     email: '',
@@ -72,39 +72,39 @@ const LoginPage: React.FC = () => {
   const { login, isAuthenticated, error, clearError, isLoading } = useAuth();
   const navigate = useNavigate();
 
-  // Se o usuario ja estiver autenticado, redireciona para o dashboard
+  // se o usuario ja estiver autenticado, redireciona para o dashboard
   if (isAuthenticated) {
     return <Navigate to="/dashboard/" replace />;
   }
 
-  // Manipula mudancas nos campos do formulario
+  // manipula mudancas nos campos do formulario
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
     
-    // Limpa erros especificos do campo quando o usuario comeca a digitar
+    // limpa erros especificos do campo quando o usuario comeca a digitar
     if (errors[name as keyof typeof errors]) {
       setErrors(prev => ({ ...prev, [name]: undefined }));
     }
     
-    // Limpa erros gerais da autenticacao
+    // limpa erros gerais da autenticacao
     if (error) {
       clearError();
     }
   };
 
-  // Valida o formulario
+  // valida o formulario
   const validateForm = (): boolean => {
     const newErrors: { email?: string; password?: string } = {};
     
     if (!formData.email) {
-      newErrors.email = 'Email e obrigatorio';
+      newErrors.email = 'Email e obrigatório';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = 'Email invalido';
     }
     
     if (!formData.password) {
-      newErrors.password = 'Senha e obrigatoria';
+      newErrors.password = 'Senha e obrigatória';
     } else if (formData.password.length < 6) {
       newErrors.password = 'Senha deve ter pelo menos 6 caracteres';
     }
@@ -113,7 +113,7 @@ const LoginPage: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // Manipula o envio do formulario
+  // manipula o envio do formulario
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -125,10 +125,11 @@ const LoginPage: React.FC = () => {
       await login(formData.email, formData.password);
       navigate('/dashboard/');
     } catch (err) {
-      // O erro ja e tratado pelo hook useAuth
+      // o erro tratado pelo hook useAuth
     }
   };
 
+  // interface
   return (
     <Container component="main" maxWidth={false} sx={loginStyles.container}>
       <Paper elevation={6} sx={loginStyles.paper}>
@@ -139,10 +140,10 @@ const LoginPage: React.FC = () => {
             style={{ height: '80px', marginBottom: '16px' }} 
           />
           <Typography variant="h4" component="h1" gutterBottom color="primary">
-            Sistema Estoque
+            Sistema de Estoque
           </Typography>
           <Typography variant="body2" color="textSecondary">
-            Faca login para acessar o sistema
+            Faça login para acessar o sistema
           </Typography>
         </Box>
 
