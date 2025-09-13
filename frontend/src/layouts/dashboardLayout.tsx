@@ -12,6 +12,7 @@ import { useAuth } from '../hooks/useAuth';
 import { Box, Button } from '@mui/material';
 import { Logout } from '@mui/icons-material';
 import { useLocation } from 'react-router-dom'; 
+import RelatorioPage from '../pages/RelatoriosPage';
 
 const NAVIGATION: Navigation = [
   {
@@ -51,7 +52,7 @@ function RouterContent() {
     return <MovimentacaoPage />;
   }
   if (pathname.includes('relatorios')) {
-    return <MovimentacaoPage />;
+    return <RelatorioPage />;
   }
   
   return <DashboardPage />;
