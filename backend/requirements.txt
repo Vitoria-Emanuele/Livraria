@@ -6,3 +6,7 @@ asyncpg             # Driver assincrono para PostgreSQL
 sqlalchemy          # ORM para mapear tabelas do PostgreSQL
 pydantic            # Validacao de dados (usado pelo FastAPI)
 python-dotenv       # Para carregar variaveis de ambiente do arquivo .env
+psycopg2            # Driver sincrono para PostgreSQL (usado em algumas situacoes)
+passlib [bcrypt]    # Para hashing de senhas
+jose                # Para manipulacao de JSON Web Tokens (JWT)
+python-multipart    # Para upload de arquivos

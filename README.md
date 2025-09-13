@@ -4,8 +4,9 @@ A primeira parte do projeto contempla uma aplicacao pronta para o sistema para g
 
 ### Tecnologias: 
 
-Backend: Python, FastAPI, PostgreSQL, SQLAlchemy
-Frontend: React, TypeScript, Vite e MUI 
+- Backend: Python, FastAPI, PostgreSQL, SQLAlchemy
+
+- Frontend: React, TypeScript, Vite e MUI 
 
 ### Estrutura:
 ```
@@ -24,22 +25,29 @@ estoque-livraria/
 │       ├── 📂 crud           # Operacoes de banco de dados
 │       ├── 📂 routers        # Endpoints da API
 │       ├── 📂 schemas        # Validacao de dados
+|       ├── 📜 auth.py        # Regras de autenticação (login/JWT)
+|       ├── 📜 config.py      # Cofiguração/variáveis de ambiente
+│       ├── 📜 db.py          # Conexao com PostgreSQL
 │       ├── 📜 main.py        # Aplicacao FastAPI
 │       ├── 📜 models.py      # Modelos do banco
-│       ├── 📜 db.py          # Conexao com PostgreSQL
+│       ├── 📜 security.py    # Regras de segurança (hashing, permissões)
 │       └── 📜 requirements.txt
 │
 └── 📂 frontend
     ├── 📂 src
-    │   ├── 📂 assets         # Imagens e recursos
+    │   ├── 📂 assets               # Imagens e recursos
     │   ├── 📂 components
-    │   │   ├── 📂 movimentacao  # Formularios da aba de movimentacoes do estoque
-    │   │   └── 📂 ui           # Componentes reutilizaveis
-    │   ├── 📂 hooks          # Hooks customizados
-    │   ├── 📂 layouts        # Layouts da aplicacao
-    │   ├── 📂 pages          # Paginas principais
-    │   ├── 📂 services       # Comunicacao com API
-    │   └── 📂 styles         # Estilos CSS
-    ├── 📜 package.json       # Dependências frontend
-    └── 📜 vite.config.ts     # Configuracao Vite
+    │   │   ├── 📂 movimentacao     # Componentes da aba de movimentações
+    |   |   ├── 📂 relatorio        # Componentes para relatórios
+    │   │   └── 📂 ui               # Componentes reutilizaveis
+    │   ├── 📂 contexts             # Context API
+    │   ├── 📂 hooks                # Hooks customizados
+    │   ├── 📂 layouts              # Estruturas de layouts da aplicacao
+    │   ├── 📂 pages                # Paginas principais
+    │   ├── 📂 services             # Comunicacao com API
+    │   └── 📂 styles               # Estilos CSS
+    │   ├── 📜 App.tsx              # Componente raiz
+    │   ├── 📜 main.tsx             # Ponto de entrada da aplicação
+    │   └── 📜 vite-env.d.ts     # Tipagens globais para Vite
+
 ```
