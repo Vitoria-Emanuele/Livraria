@@ -16,7 +16,7 @@ import dayjs from 'dayjs';
 
 
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D'];
+const COLORS = ['#004D40', '#00695C', '#00897B', '#00BFA5', '#4DB6AC', '#80CBC4'];
 
 export default function GraficoEntradas() {
   const [dados, setDados] = useState<any[]>([]);
@@ -86,7 +86,7 @@ export default function GraficoEntradas() {
             <YAxis />
             <Tooltip />
             <Legend />
-            <Bar dataKey="value" fill="#0088FE" name="Quantidade de Entradas" />
+            <Bar dataKey="value" fill="#00695C" name="Quantidade de Entradas" />
           </BarChart>
         );
       
@@ -98,7 +98,7 @@ export default function GraficoEntradas() {
             <YAxis />
             <Tooltip />
             <Legend />
-            <Line type="monotone" dataKey="value" stroke="#FF8042" name="Entradas" />
+            <Line type="monotone" dataKey="value" stroke="#00695C" name="Entradas" />
           </LineChart>
         );
       
@@ -110,7 +110,7 @@ export default function GraficoEntradas() {
             <YAxis />
             <Tooltip />
             <Legend />
-            <Area type="monotone" dataKey="value" fill="#00C49F" stroke="#00C49F" name="Entradas" />
+            <Area type="monotone" dataKey="value" fill="#00695C" stroke="#00BFA5" name="Entradas" />
           </AreaChart>
         );
       

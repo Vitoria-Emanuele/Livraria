@@ -99,7 +99,7 @@ export default function GraficoFinanceiro() {
             <Line 
               type="monotone" 
               dataKey="lucros" 
-              stroke="#4ecdc4" 
+              stroke="#004D40" 
               name="Lucros" 
               strokeWidth={2}
             />

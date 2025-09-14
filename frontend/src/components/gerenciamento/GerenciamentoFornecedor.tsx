@@ -171,6 +171,7 @@ export default function GerenciamentoFornecedores() {
               <TextField
                 label="CNPJ"
                 value={formulario.cnpj_fornecedor}
+                disabled={true}
                 onChange={(e) => setFormulario({ ...formulario, cnpj_fornecedor: e.target.value })}
               />
               <TextField

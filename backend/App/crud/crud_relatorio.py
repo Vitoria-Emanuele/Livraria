@@ -87,12 +87,14 @@ def _query_retiradas(db_session, campo, agrupamento, data_inicial, data_final):
 
 
 def _query_estoque(db_session, campo, agrupamento):
+    calculo = "COUNT(*)" if campo == "genero" else "SUM(estoque_atual)"
+
     query = f"""
     SELECT 
         {"titulo_livro" if campo == "livro" else
          "genero_literario" if campo == "genero" else
          "editora_livro"} as label,
-        SUM(estoque_atual) as value
+        {calculo} as value
     FROM estoque.livro
     GROUP BY label
     ORDER BY value DESC

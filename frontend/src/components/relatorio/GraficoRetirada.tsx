@@ -15,7 +15,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 
 
-const COLORS = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#F9A826', '#6C5CE7', '#00B894'];
+const COLORS = ['#004D40', '#00695C', '#00897B', '#00BFA5', '#4DB6AC', '#80CBC4'];
 
 export default function GraficoRetiradas() {
   const [dados, setDados] = useState<any[]>([]);
@@ -85,7 +85,7 @@ export default function GraficoRetiradas() {
             <YAxis />
             <Tooltip />
             <Legend />
-            <Bar dataKey="value" fill="#FF6B6B" name="Quantidade de Retiradas" />
+            <Bar dataKey="value" fill="#004D40" name="Quantidade de Retiradas" />
           </BarChart>
         );
       
@@ -97,7 +97,7 @@ export default function GraficoRetiradas() {
             <YAxis />
             <Tooltip />
             <Legend />
-            <Line type="monotone" dataKey="value" stroke="#6C5CE7" name="Retiradas" />
+            <Line type="monotone" dataKey="value" stroke="#004D40" name="Retiradas" />
           </LineChart>
         );
       

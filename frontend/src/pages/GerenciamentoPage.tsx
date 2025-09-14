@@ -5,6 +5,7 @@ import {
 import GerenciamentoFornecedores from '../components/gerenciamento/GerenciamentoFornecedor';
 import GerenciamentoDistribuidores from '../components/gerenciamento/GerenciamentoDistribuidor';
 import GerenciamentoFuncionarios from '../components/gerenciamento/GerenciamentoFuncionario';
+import GerenciamentoLivros from '../components/gerenciamento/GerenciamentoLivros';
 
 
 
@@ -49,6 +50,7 @@ export default function GerenciamentoPage() {
           <Tab label="Fornecedores" {...a11yProps(0)} />
           <Tab label="Distribuidores" {...a11yProps(1)} />
           <Tab label="Funcionários" {...a11yProps(2)} />
+          <Tab label="Livros" {...a11yProps(3)} />
         </Tabs>
       </Box>
 
@@ -62,6 +64,9 @@ export default function GerenciamentoPage() {
 
       <CustomTabPanel value={abaAtiva} index={2}>
         <GerenciamentoFuncionarios />
+      </CustomTabPanel>
+      <CustomTabPanel value={abaAtiva} index={3}>
+        <GerenciamentoLivros />
       </CustomTabPanel>
     </Box>
   );

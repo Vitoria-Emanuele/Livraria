@@ -2,6 +2,8 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import ContentPasteSearchIcon from '@mui/icons-material/ContentPasteSearch';
 import AnalyticsIcon from '@mui/icons-material/Analytics';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
+
 import { AppProvider, type Navigation } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { livrariaTheme } from '../styles/theme';
@@ -43,8 +45,8 @@ const NAVIGATION: Navigation = [
   },
   {
     segment: 'rh',
-    title: 'Relações Humanas',
-    icon: <ContentPasteSearchIcon />,
+    title: 'Gerenciamento',
+    icon: <AppRegistrationIcon />,
   },
 ];
 

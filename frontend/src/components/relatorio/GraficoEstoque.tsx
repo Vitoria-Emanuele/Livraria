@@ -6,7 +6,7 @@ import {
 import { Box, FormControl, InputLabel, Select, MenuItem, Paper, Typography } from '@mui/material';
 import { relatorioService } from '../../services/relatorioService';
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D'];
+const COLORS = ['#004D40', '#00695C', '#00897B', '#00BFA5', '#4DB6AC', '#80CBC4'];
 
 export default function GraficoEstoque() {
   const [dados, setDados] = useState<any[]>([]);
@@ -64,7 +64,7 @@ export default function GraficoEstoque() {
               <YAxis />
               <Tooltip />
               <Legend />
-              <Bar dataKey="value" fill="#8884d8" name="Quantidade em Estoque" />
+              <Bar dataKey="value" fill="#004D40" name="Quantidade em Estoque" />
             </BarChart>
           ) : (
             <PieChart>
@@ -75,7 +75,7 @@ export default function GraficoEstoque() {
                 labelLine={false}
                 label={({ name, value }) => `${name}: ${value}`}
                 outerRadius={80}
-                fill="#8884d8"
+                fill="#004D40"
                 dataKey="value"
                 nameKey="label"
               >
