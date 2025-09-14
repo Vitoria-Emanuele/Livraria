@@ -7,10 +7,10 @@ import { useState } from 'react';
 import { useFornecedor } from '../../hooks/useFornecedor';
 import { useDistribuidor } from '../../hooks/useDistribuidor';
 import ModalForm from '../ui/ModalForm';
-import FornecedorForm from './FornecedorForm';
-import DistribuidorForm from './DistribuidorForm';
-import type { LivroData } from './LivroForm';
-import LivroForm from './LivroForm';
+import FornecedorForm from '../forms/FornecedorForm';
+import DistribuidorForm from '../forms/DistribuidorForm';
+import type { LivroData } from '../forms/LivroForm';
+import LivroForm from '../forms/LivroForm';
 import { estoqueService, type EntradaEstoqueRequest } from '../../services';
 import { useAuth } from '../../hooks/useAuth';
 

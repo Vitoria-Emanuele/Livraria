@@ -49,7 +49,7 @@ function App() {
               } 
             />
             <Route 
-              path="/estoque/*" 
+              path="/pesquisa/*" 
               element={
                 <ProtectedRoute>
                   <DashboardPage />
@@ -63,6 +63,14 @@ function App() {
                   <DashboardPage />
                 </ProtectedRoute>
               } 
+            />
+            <Route 
+              path="/rh/*" 
+              element={
+                <ProtectedRoute>
+                  <DashboardPage />
+                </ProtectedRoute>
+              }
             />
             <Route path="/" element={<Navigate to="/dashboard/" replace />} />
           </Routes>

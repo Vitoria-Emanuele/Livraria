@@ -1,5 +1,5 @@
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import InventoryIcon from '@mui/icons-material/Inventory';
+import ContentPasteSearchIcon from '@mui/icons-material/ContentPasteSearch';
 import AnalyticsIcon from '@mui/icons-material/Analytics';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import { AppProvider, type Navigation } from '@toolpad/core/AppProvider';
@@ -13,6 +13,8 @@ import { Box, Button } from '@mui/material';
 import { Logout } from '@mui/icons-material';
 import { useLocation } from 'react-router-dom'; 
 import RelatorioPage from '../pages/RelatoriosPage';
+import PesquisaPage from '../pages/PesquisaPage';
+import GerenciamentoPage from '../pages/GerenciamentoPage';
 
 const NAVIGATION: Navigation = [
   {
@@ -30,14 +32,19 @@ const NAVIGATION: Navigation = [
     icon: <AssignmentIcon />,
   },
   {
-    segment: 'estoque',
-    title: 'Controle de Estoque',
-    icon: <InventoryIcon />,
+    segment: 'pesquisa',
+    title: 'Pesquisa',
+    icon: <ContentPasteSearchIcon />,
   },
   {
     segment: 'relatorios',
     title: 'Relatorios',
     icon: <AnalyticsIcon />,
+  },
+  {
+    segment: 'rh',
+    title: 'Relações Humanas',
+    icon: <ContentPasteSearchIcon />,
   },
 ];
 
@@ -48,11 +55,14 @@ function RouterContent() {
   if (pathname.includes('movimentacao')) {
     return <MovimentacaoPage />;
   }
-  if (pathname.includes('estoque')) {
-    return <MovimentacaoPage />;
+  if (pathname.includes('pesquisa')) {
+    return <PesquisaPage />;
   }
   if (pathname.includes('relatorios')) {
     return <RelatorioPage />;
+  }
+  if (pathname.includes('rh')) {
+    return <GerenciamentoPage />;
   }
   
   return <DashboardPage />;

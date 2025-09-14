@@ -26,8 +26,8 @@ def buscar_funcionario(funcionario_id: int, db_session: Session = Depends(db.get
 
 
 @router.get("/", response_model=list[sfuncionario.FuncionarioResponse])
-def listar_funcionario(db_session: Session = Depends(db.get_db)):
-    return crud_funcionario.listar_funcionario(db_session)
+def listar_funcionarios(db_session: Session = Depends(db.get_db)):
+    return crud_funcionario.listar_funcionarios(db_session)
 
 # Criar funcionario
 

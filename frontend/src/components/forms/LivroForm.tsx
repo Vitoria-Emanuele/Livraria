@@ -40,7 +40,14 @@ const formatarValor = (valor: string): string => {
 
 
 const GENEROS_LITERARIOS = [
-  'Romance','Ficção Científica','Fantasia','Terror','Mistério','Suspense','Aventura','Biografia','História','Poesia','Drama','Comédia','Infantil','Juvenil','Autoajuda','Didático','Religioso','Acadêmico','Outro'
+  'Acadêmico', 'Ação', 'Aventura', 'Autoajuda', 'Biografia', 'Clássicos',
+  'Comédia', 'Contos', 'Crônica', 'Didático', 'Drama', 'Ensaio', 'Fantasia',
+  'Ficção Científica', 'Ficção Histórica', 'História', 'Infantil', 'Juvenil',
+  'Literatura Alemã', 'Literatura Americana', 'Literatura Brasileira',
+  'Literatura Francesa', 'Literatura Italiana', 'Literatura Japonesa',
+  'Literatura Portuguesa', 'Literatura Russa', 'Literatura Árabe', 'Literatura Africana',
+  'Literatura Latino-americana', 'Mistério', 'Modernismo', 'Poesia', 'Policial', 'Psicologia',
+   'Religioso', 'Romance', 'Suspense', 'Terror', 'Tragicomédia', 'Outro'
 ];
 
 export default function LivroForm({ onLivrosChange, onReset, resetTrigger }: LivroFormProps) {

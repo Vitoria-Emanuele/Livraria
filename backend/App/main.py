@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.App.routers import rrelatorio
+from backend.App.routers import rpesquisa, rrelatorio
 
 from .routers import rdistribuidor, rfornecedor, rfuncionario, rusuario, ritem_lote, ritem_retirada, rlivro, rlote, rregistroentrada, rretirada, rauth
 
@@ -43,3 +43,4 @@ app.include_router(ritem_lote.router)
 app.include_router(rretirada.router)
 app.include_router(ritem_retirada.router)
 app.include_router(rrelatorio.router)
+app.include_router(rpesquisa.router)

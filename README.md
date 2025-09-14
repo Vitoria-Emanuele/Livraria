@@ -38,7 +38,10 @@ estoque-livraria/
     │   ├── 📂 assets               # Imagens e recursos
     │   ├── 📂 components
     │   │   ├── 📂 movimentacao     # Componentes da aba de movimentações
-    |   |   ├── 📂 relatorio        # Componentes para relatórios
+    |   |   ├── 📂 relatorio        # Componentes da aba de relatorios
+    │   │   ├── 📂 pesquisa         # Componentes da aba de pesquisa
+    │   │   ├── 📂 gerenciamento    # Componentes da aba de gerenciamento
+    │   │   ├── 📂 forms            # Formularios reutilizaveis
     │   │   └── 📂 ui               # Componentes reutilizaveis
     │   ├── 📂 contexts             # Context API
     │   ├── 📂 hooks                # Hooks customizados
@@ -48,6 +51,6 @@ estoque-livraria/
     │   └── 📂 styles               # Estilos CSS
     │   ├── 📜 App.tsx              # Componente raiz
     │   ├── 📜 main.tsx             # Ponto de entrada da aplicação
-    │   └── 📜 vite-env.d.ts     # Tipagens globais para Vite
+    │   └── 📜 vite-env.d.ts        # Tipagens globais para Vite
 
 ```
