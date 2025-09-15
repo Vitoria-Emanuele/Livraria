@@ -24,8 +24,8 @@ def atualizar_funcionario(db: Session, funcionario_id: int, funcionario_update: 
         return None
     for key, value in funcionario_update.model_dump(exclude_unset=True).items():
         setattr(db_funcionario, key, value)
-    db.commit()
-    db.refresh(db_funcionario)
+
+    db.flush()
     return db_funcionario
 
 # Remover
@@ -35,7 +35,7 @@ def remover_funcionario(db: Session, funcionario_id: int):
     db_funcionario = buscar_funcionario(db, funcionario_id)
     if db_funcionario:
         db.delete(db_funcionario)
-        db.commit()
+
         return True
     return False
 # Criar funcionario
@@ -44,6 +44,6 @@ def remover_funcionario(db: Session, funcionario_id: int):
 def criar_funcionario(db: Session, funcionario: sfuncionario.FuncionarioCreate):
     db_funcionario = models.Funcionario(**funcionario.model_dump())
     db.add(db_funcionario)
-    db.commit()
-    db.refresh(db_funcionario)
+
+    db.flush()
     return db_funcionario

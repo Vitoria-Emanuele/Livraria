@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
 from datetime import date, time
 
 
@@ -8,7 +8,7 @@ class registro_entradaBase(BaseModel):
     hora_entrada: time
     id_fornecedor: int
     id_funcionario: int
-    id_distribuidor: Optional[int] = None  # distribuidor e opcional
+    id_distribuidor: Optional[int] = None
 
 
 class registro_entradaCreate(registro_entradaBase):
@@ -28,3 +28,22 @@ class registro_entradaResponse(registro_entradaBase):
 
     class Config:
         from_attributes = True
+
+
+class LivroEntradaCreate(BaseModel):
+    isbn_livro: str
+    titulo_livro: str
+    autor_livro: str
+    genero_literario: str
+    editora_livro: str
+    quantidade: int
+    valor_unitario: float
+
+
+class EntradaCompletaCreate(BaseModel):
+    data_entrada: date
+    hora_entrada: time
+    id_fornecedor: int
+    id_distribuidor: Optional[int] = None
+    id_funcionario: int
+    livros: List[LivroEntradaCreate]

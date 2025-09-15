@@ -23,8 +23,8 @@ def atualizar_item_retirada(db: Session, item_retirada_id: int, item_retirada_up
         return None
     for key, value in item_retirada_update.model_dump(exclude_unset=True).items():
         setattr(db_item_retirada, key, value)
-    db.commit()
-    db.refresh(db_item_retirada)
+
+    db.flush()
     return db_item_retirada
 
 # Remover
@@ -34,8 +34,9 @@ def remover_item_retirada(db: Session, item_retirada_id: int):
     db_item_retirada = buscar_item_retirada(db, item_retirada_id)
     if db_item_retirada:
         db.delete(db_item_retirada)
-        db.commit()
+
         return True
+
     return False
 
 # Criar item_retirada
@@ -44,6 +45,6 @@ def remover_item_retirada(db: Session, item_retirada_id: int):
 def criar_item_retirada(db: Session, item_retirada: sitem_retirada.item_retiradaCreate):
     db_item_retirada = models.item_retirada(**item_retirada.model_dump())
     db.add(db_item_retirada)
-    db.commit()
-    db.refresh(db_item_retirada)
+
+    db.flush()
     return db_item_retirada

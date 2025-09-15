@@ -24,8 +24,8 @@ def atualizar_lote(db: Session, lote_id: int, lote_update: slote.LoteUpdate):
         return None
     for key, value in lote_update.model_dump(exclude_unset=True).items():
         setattr(db_lote, key, value)
-    db.commit()
-    db.refresh(db_lote)
+
+    db.flush()
     return db_lote
 
 # Remover
@@ -35,7 +35,7 @@ def remover_lote(db: Session, lote_id: int):
     db_lote = buscar_lote(db, lote_id)
     if db_lote:
         db.delete(db_lote)
-        db.commit()
+
         return True
     return False
 
@@ -45,6 +45,6 @@ def remover_lote(db: Session, lote_id: int):
 def criar_lote(db: Session, lote: slote.LoteCreate):
     db_lote = models.Lote(**lote.model_dump())
     db.add(db_lote)
-    db.commit()
-    db.refresh(db_lote)
+
+    db.flush()
     return db_lote

@@ -467,79 +467,18 @@ export const estoqueService = {
       console.log('Iniciando processo de entrada de estoque:', dados);
       
       const agora = new Date();
-      const dataEntrada = agora.toISOString().split('T')[0]; // "YYYY-MM-DD"
-      const horaEntrada = agora.toTimeString().split(' ')[0]; // "HH:MM:SS"
-
+      const dataEntrada = agora.toISOString().split('T')[0]; 
+      const horaEntrada = agora.toTimeString().split(' ')[0]; 
   
-      // criar registro_entrada com data/hora automatica no backend
-      const registroEntrada = await estoqueService.criarRegistroEntrada({
+      const response = await api.post('/registro_entrada/entrada_completa', {
         data_entrada: dataEntrada,
         hora_entrada: horaEntrada,
         id_fornecedor: dados.id_fornecedor,
-        id_distribuidor: dados.id_distribuidor,
-        id_funcionario: dados.id_funcionario
+        id_distribuidor: dados.id_distribuidor, 
+        id_funcionario: dados.id_funcionario,
+        livros: dados.livros 
       });
-  
-      console.log('Registro entrada criado:', registroEntrada);
-  
-      // calcular totais para lote
-      const valorTotal = dados.livros.reduce((total, livro) => 
-        total + (livro.quantidade * livro.valor_unitario), 0);
-      
-      const quantidadeTotal = dados.livros.reduce((total, livro) => 
-        total + livro.quantidade, 0);
-  
-      console.log('Totais do lote - Valor:', valorTotal, 'Quantidade:', quantidadeTotal);
-  
-      // criar lote vinculado ao registro_entrada
-      const lote = await estoqueService.criarLote({
-        valor_lote: valorTotal,
-        quantidade_itens_lote: quantidadeTotal,
-        id_entrada: registroEntrada.id_entrada
-      });
-  
-      console.log('Lote criado:', lote);
-  
-      // processar cada livro
-      for (const [index, livro] of dados.livros.entries()) {
-        console.log(`Processando livro ${index + 1}/${dados.livros.length}:`, livro.isbn_livro);
-  
-        // verificar se livro ja existe
-        const isbnLimpo = livro.isbn_livro.replace(/[-\s]/g, '');
-        let livroExistente = await buscarLivroPorIsbn(isbnLimpo);
-        
-        if (!livroExistente) {
-          // para livro novo: criar com estoque inicial
-          console.log('Livro não encontrado, criando novo...');
-          livroExistente = await estoqueService.criarLivro({
-            isbn_livro: isbnLimpo,
-            titulo_livro: livro.titulo_livro,
-            autor_livro: livro.autor_livro,
-            genero_literario: livro.genero_literario,
-            editora_livro: livro.editora_livro,
-            estoque_atual: livro.quantidade
-          });
-          console.log('Novo livro criado:', livroExistente);
-        } else {
-          // livro existente: atualizar estoque
-          console.log('Livro existente encontrado, atualizando estoque...');
-          await estoqueService.atualizarLivro(livroExistente.id_livro, {
-            estoque_atual: livroExistente.estoque_atual + livro.quantidade
-          });
-          console.log('Estoque atualizado para:', livroExistente.estoque_atual + livro.quantidade);
-        }
-  
-        // criar item_lote
-        console.log('Criando item do lote...');
-        const itemLote = await estoqueService.criarItemLote({
-          id_lote: lote.id_lote,
-          id_livro: livroExistente.id_livro,
-          quantidade_item_lote: livro.quantidade,
-          valor_item_lote: livro.valor_unitario
-        });
-        console.log('Item lote criado:', itemLote);
-      }
-  
+
       console.log('Processo de entrada de estoque concluído com sucesso!');
   
     } catch (error) {
@@ -554,51 +493,14 @@ export const estoqueService = {
     dados: SaidaEstoqueRequest
   ): Promise<void> => {
     try {
-      console.log('Iniciando processo de saída de estoque:', dados);
 
-      // criar retirada com data/hora automatica
-      const retirada = await estoqueService.criarRetirada({
+      const response = await api.post('/retirada/saida_completa', {
         motivo_retirada: dados.motivo_retirada,
-        data_retirada: new Date().toISOString().split('T')[0], // formato YYYY-MM-DD
-        hora_retirada: new Date().toTimeString().split(' ')[0], // formato HH:MM:SS
-        id_funcionario: dados.id_funcionario
-      });
+        id_funcionario: dados.id_funcionario,
+        itens: dados.itens
+      })
 
-      console.log('Retirada criada:', retirada);
-
-      // processar cada item da retirada
-      for (const item of dados.itens) {
-        console.log('Processando item:', item);
-
-        // verificar se o livro existe e tem estoque suficiente
-        const livro = await estoqueService.buscarLivro(item.id_livro);
-        if (!livro) {
-          throw new Error(`Livro com ID ${item.id_livro} não encontrado`);
-        }
-
-        if (livro.estoque_atual < item.quantidade) {
-          throw new Error(`Estoque insuficiente para ${livro.titulo_livro}. Disponível: ${livro.estoque_atual}, Solicitado: ${item.quantidade}`);
-        }
-
-        // criar intem_retirada
-        const itemRetirada = await estoqueService.criarItemRetirada({
-          id_retirada: retirada.id_retirada,
-          id_livro: item.id_livro,
-          quantidade_itens_retirada: item.quantidade,
-          valor_unitario_retirada: item.valor_unitario
-        });
-
-        console.log('Item retirada criado:', itemRetirada);
-
-        // atualizar estoque do livro 
-        const novoEstoque = livro.estoque_atual - item.quantidade;
-        await estoqueService.atualizarLivro(item.id_livro, {
-          estoque_atual: novoEstoque
-        });
-
-        console.log(`Estoque atualizado: ${livro.titulo_livro} - ${livro.estoque_atual} → ${novoEstoque}`);
-      }
-
+    
       console.log('Processo de saída de estoque concluído com sucesso!');
 
     } catch (error) {

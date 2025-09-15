@@ -48,3 +48,16 @@ def remover_registro(registro_id: int, db_session: Session = Depends(db.get_db))
         raise HTTPException(
             status_code=404, detail="Registro de entrada nao encontrado")
     return {"ok": True}
+
+
+@router.post("/entrada_completa", response_model=sregistroentrada.registro_entradaResponse)
+def criar_entrada_completa(
+    entrada_completa: sregistroentrada.EntradaCompletaCreate,
+    db_session: Session = Depends(db.get_db)
+):
+
+    try:
+        return crud_registro_entrada.criar_entrada_completa(db_session, entrada_completa)
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail=f"Erro na entrada completa: {str(e)}")

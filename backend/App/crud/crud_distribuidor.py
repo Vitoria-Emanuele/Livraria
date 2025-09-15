@@ -23,8 +23,7 @@ def atualizar_distribuidor(db: Session, distribuidor_id: int, distribuidor_updat
         return None
     for key, value in distribuidor_update.model_dump(exclude_unset=True).items():
         setattr(db_distribuidor, key, value)
-    db.commit()
-    db.refresh(db_distribuidor)
+    db.flush()
     return db_distribuidor
 
 # Remover
@@ -34,7 +33,7 @@ def remover_distribuidor(db: Session, distribuidor_id: int):
     db_distribuidor = buscar_distribuidor(db, distribuidor_id)
     if db_distribuidor:
         db.delete(db_distribuidor)
-        db.commit()
+
         return True
     return False
 
@@ -44,6 +43,6 @@ def remover_distribuidor(db: Session, distribuidor_id: int):
 def criar_distribuidor(db: Session, distribuidor: sdistribuidor.DistribuidorCreate):
     db_distribuidor = models.Distribuidor(**distribuidor.model_dump())
     db.add(db_distribuidor)
-    db.commit()
-    db.refresh(db_distribuidor)
+    db.flush()
+
     return db_distribuidor

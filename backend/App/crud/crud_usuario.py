@@ -38,8 +38,7 @@ def atualizar_usuario(db: Session, usuario_id: int, usuario_update: susuario.Usu
     for key, value in update_data.items():
         setattr(db_usuario, key, value)
 
-    db.commit()
-    db.refresh(db_usuario)
+    db.flush()
     return db_usuario
 
 
@@ -48,7 +47,7 @@ def remover_usuario(db: Session, usuario_id: int):
     db_usuario = buscar_usuario(db, usuario_id)
     if db_usuario:
         db.delete(db_usuario)
-        db.commit()
+
         return True
     return False
 
@@ -63,6 +62,6 @@ def criar_usuario(db: Session, usuario: susuario.UsuarioCreate):
         id_funcionario=usuario.id_funcionario,
     )
     db.add(db_usuario)
-    db.commit()
-    db.refresh(db_usuario)
+
+    db.flush()
     return db_usuario

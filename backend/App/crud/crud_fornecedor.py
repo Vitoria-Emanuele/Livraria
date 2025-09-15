@@ -23,8 +23,8 @@ def atualizar_fornecedor(db: Session, fornecedor_id: int, fornecedor_update: sfo
         return None
     for key, value in fornecedor_update.model_dump(exclude_unset=True).items():
         setattr(db_fornecedor, key, value)
-    db.commit()
-    db.refresh(db_fornecedor)
+
+    db.flush()
     return db_fornecedor
 
 # Remover
@@ -34,7 +34,7 @@ def remover_fornecedor(db: Session, fornecedor_id: int):
     db_fornecedor = buscar_fornecedor(db, fornecedor_id)
     if db_fornecedor:
         db.delete(db_fornecedor)
-        db.commit()
+
         return True
     return False
 
@@ -44,6 +44,6 @@ def remover_fornecedor(db: Session, fornecedor_id: int):
 def criar_fornecedor(db: Session, fornecedor: sfornecedor.FornecedorCreate):
     db_fornecedor = models.Fornecedor(**fornecedor.model_dump())
     db.add(db_fornecedor)
-    db.commit()
-    db.refresh(db_fornecedor)
+
+    db.flush()
     return db_fornecedor

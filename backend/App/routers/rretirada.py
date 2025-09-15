@@ -43,3 +43,15 @@ def remover_retirada(retirada_id: int, db_session: Session = Depends(db.get_db))
     if not sucesso:
         raise HTTPException(status_code=404, detail="Retirada nao encontrada")
     return {"ok": True}
+
+
+@router.post("/saida_completa", response_model=sretirada.RetiradaResponse)
+def criar_saida_completa(
+    saida_completa: sretirada.SaidaCompletaCreate,
+    db_session: Session = Depends(db.get_db)
+):
+    try:
+        return crud_retirada.criar_saida_completa(db_session, saida_completa)
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail=f"Erro na saída completa: {str(e)}")

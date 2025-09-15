@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
 from datetime import date, time
 
 
@@ -26,3 +26,15 @@ class RetiradaResponse(RetiradaBase):
 
     class Config:
         from_attributes = True
+
+
+class ItemSaidaCreate(BaseModel):
+    id_livro: int
+    quantidade: int
+    valor_unitario: float
+
+
+class SaidaCompletaCreate(BaseModel):
+    motivo_retirada: str
+    id_funcionario: int
+    itens: List[ItemSaidaCreate]

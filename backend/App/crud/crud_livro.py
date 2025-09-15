@@ -30,8 +30,8 @@ def atualizar_livro(db: Session, livro_id: int, livro_update: slivro.LivroUpdate
         return None
     for key, value in livro_update.model_dump(exclude_unset=True).items():
         setattr(db_livro, key, value)
-    db.commit()
-    db.refresh(db_livro)
+
+    db.flush()
     return db_livro
 
 # Remover
@@ -41,7 +41,7 @@ def remover_livro(db: Session, livro_id: int):
     db_livro = buscar_livro(db, livro_id)
     if db_livro:
         db.delete(db_livro)
-        db.commit()
+
         return True
     return False
 
@@ -51,6 +51,6 @@ def remover_livro(db: Session, livro_id: int):
 def criar_livro(db: Session, livro: slivro.LivroCreate):
     db_livro = models.Livro(**livro.model_dump())
     db.add(db_livro)
-    db.commit()
-    db.refresh(db_livro)
+
+    db.flush()
     return db_livro
