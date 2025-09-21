@@ -54,3 +54,5 @@ estoque-livraria/
     │   └── 📜 vite-env.d.ts        # Tipagens globais para Vite
 
 ```
+
+A segunda parte do projeto estende o sistema anterior para incorporar o sistema de vendas.
