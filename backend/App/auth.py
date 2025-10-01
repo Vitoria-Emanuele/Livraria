@@ -8,11 +8,9 @@ from sqlalchemy.orm import Session
 from . import models, db
 from .config import settings
 
-# Contexto para hash de senha (usa bcrypt)
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-# Definicao do esquema OAuth2
-# Esse "tokenUrl" deve apontar para a rota de login que criaremos (/login)
+
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 

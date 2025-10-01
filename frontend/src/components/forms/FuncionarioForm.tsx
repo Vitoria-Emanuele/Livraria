@@ -76,7 +76,8 @@ export default function FuncionarioFormCompleto({ onSubmit, onCancel }: Funciona
       
       const usuarioCriado = await estoqueService.criarUsuario({
         ...dadosUsuario,
-        id_funcionario: funcionarioCriado.id_funcionario
+        id_funcionario: funcionarioCriado.id_funcionario,
+        ativo: true
       });
 
       if (onSubmit) {
@@ -339,8 +340,7 @@ export default function FuncionarioFormCompleto({ onSubmit, onCancel }: Funciona
               label="Permissão"
               onChange={(e) => setDadosUsuario(prev => ({ ...prev, role: e.target.value }))}
             >
-              <MenuItem value="user">Usuário</MenuItem>
-              <MenuItem value="admin">Administrador</MenuItem>
+              <MenuItem value="FUNCIONARIO">Usuário</MenuItem>
             </Select>
           </FormControl>
         </Grid>

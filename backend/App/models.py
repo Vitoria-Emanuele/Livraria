@@ -71,7 +71,9 @@ class Usuario(Base):
     role = Column(String(20), nullable=False)
     ativo = Column(Boolean, nullable=False, default=True)
     id_funcionario = Column(Integer, ForeignKey(
-        "estoque.funcionario.id_funcionario"), nullable=False, unique=True)
+        "estoque.funcionario.id_funcionario"), unique=True, nullable=True)
+    id_cliente = Column(Integer, ForeignKey(
+        "estoque.cliente.id_cliente"), unique=True, nullable=True)
 
 
 class registro_entrada(Base):
@@ -111,6 +113,7 @@ class Livro(Base):
     genero_literario = Column(String(50), nullable=False)
     editora_livro = Column(String(100), nullable=False)
     estoque_atual = Column(Integer, nullable=False, default=0)
+    valor_venda = Column(Numeric(9, 2), nullable=False)
 
 
 class item_lote(Base):
@@ -147,3 +150,84 @@ class item_retirada(Base):
         "estoque.retirada.id_retirada"), primary_key=True, nullable=False)
     quantidade_itens_retirada = Column(Integer, nullable=False)
     valor_unitario_retirada = Column(Numeric(9, 2), nullable=False)
+
+
+class Cliente(Base):
+    __tablename__ = "cliente"
+    __table_args__ = {"schema": "estoque"}
+
+    id_cliente = Column(Integer, primary_key=True, index=True)
+    nome_cliente = Column(String(100), nullable=False)
+    cpf_cliente = Column(String(14), unique=True, nullable=False)
+    data_nascimento_cliente = Column(Date, nullable=False)
+    telefone_cliente = Column(String(20), nullable=False)
+    email_cliente = Column(String(100), nullable=False)
+    logradouro_cliente = Column(String(100), nullable=False)
+    numero_logradouro_cliente = Column(Integer, nullable=False)
+    bairro_cliente = Column(String(100), nullable=False)
+    cidade_cliente = Column(String(50), nullable=False)
+    estado_cliente = Column(String(2), nullable=False)
+    cep_cliente = Column(String(10), nullable=False)
+    complemento_cliente = Column(String(50), nullable=True)
+
+
+class Cupom(Base):
+    __tablename__ = "cupom"
+    __table_args__ = {"schema": "estoque"}
+
+    id_cupom = Column(Integer, primary_key=True, index=True)
+    codigo_cupom = Column(String(20), unique=True, nullable=False)
+    tipo_cupom = Column(String(50), nullable=True)
+    percentual_desconto = Column(Numeric(5, 2), nullable=False)
+    regra_cupom = Column(String(250), nullable=True)
+    data_validade = Column(Date, nullable=False)
+
+
+class Compra(Base):
+    __tablename__ = "compra"
+    __table_args__ = {"schema": "estoque"}
+
+    id_compra = Column(Integer, primary_key=True, index=True)
+    data_compra = Column(Date, nullable=False)
+    hora_compra = Column(Time, nullable=False)
+    total_bruto = Column(Numeric(9, 2), nullable=False)
+    desconto_aplicado = Column(Numeric(9, 2), nullable=False)
+    total_liquido = Column(Numeric(9, 2), nullable=False)
+
+    id_cliente = Column(Integer, ForeignKey(
+        "estoque.cliente.id_cliente"), nullable=False)
+    id_funcionario = Column(Integer, ForeignKey(
+        "estoque.funcionario.id_funcionario"), nullable=False)
+    id_cupom = Column(Integer, ForeignKey(
+        "estoque.cupom.id_cupom"), nullable=True)
+    status_compra = Column(String(50), default="AGUARDANDO_PAGAMENTO")
+
+
+class item_compra(Base):
+    __tablename__ = "item_compra"
+    __table_args__ = {"schema": "estoque"}
+
+    id_item_compra = Column(Integer, primary_key=True,
+                            index=True)
+    id_compra = Column(Integer, ForeignKey(
+        "estoque.compra.id_compra"), nullable=False)
+    id_livro = Column(Integer, ForeignKey(
+        "estoque.livro.id_livro"), nullable=False)
+    quantidade_item_compra = Column(Integer, nullable=False)
+    valor_unitario_compra = Column(Numeric(9, 2), nullable=False)
+
+
+class Pagamento(Base):
+    __tablename__ = "pagamento"
+    __table_args__ = {"schema": "estoque"}
+
+    id_pagamento = Column(Integer, primary_key=True, index=True)
+    id_compra = Column(Integer, ForeignKey(
+        "estoque.compra.id_compra"), unique=True, nullable=False)
+    forma_pagamento = Column(String(20), nullable=False)
+    status_pagamento = Column(String(20), nullable=False)
+    data_pagamento = Column(Date, nullable=False)
+    hora_pagamento = Column(Time, nullable=False)
+    valor_pago = Column(Numeric(9, 2), nullable=False)
+    status_pagamento = Column(String(50), nullable=False,
+                              default="AGUARDANDO_PAGAMENTO")

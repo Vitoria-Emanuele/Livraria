@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
-import {Container, Paper, TextField,Button, Typography, Box, Alert, InputAdornment, IconButton, CircularProgress} from '@mui/material';
+import {
+  Container, Paper, TextField, Button, Typography, Box, Alert, 
+  InputAdornment, IconButton, CircularProgress
+} from '@mui/material';
 import { Visibility, VisibilityOff, Login as LoginIcon } from '@mui/icons-material';
-import { useAuth } from '../hooks/useAuth';
 import { useNavigate, Navigate } from 'react-router-dom';
 
 import logo from '../assets/logo.png'
+import { useAuth } from '../hooks/useAuth';
+import authService from '../services/authService';
 
 const loginStyles = {
   container: {
@@ -58,7 +62,6 @@ const loginStyles = {
   },
 };
 
-// componente principal da pagina de login
 const LoginPage: React.FC = () => {
   const [formData, setFormData] = useState({
     email: '',
@@ -66,43 +69,40 @@ const LoginPage: React.FC = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string>('');
   
-  const { login, isAuthenticated, error, clearError, isLoading } = useAuth();
+  const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
-  // se o usuario ja estiver autenticado, redireciona para o dashboard
   if (isAuthenticated) {
-    return <Navigate to="/dashboard/" replace />;
+    return <Navigate to="/loja/" replace />;
   }
 
-  // manipula mudancas nos campos do formulario
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
     
-    // limpa erros especificos do campo quando o usuario comeca a digitar
     if (errors[name as keyof typeof errors]) {
       setErrors(prev => ({ ...prev, [name]: undefined }));
     }
     
-    // limpa erros gerais da autenticacao
     if (error) {
-      clearError();
+      setError('');
     }
   };
 
-  // valida o formulario
   const validateForm = (): boolean => {
     const newErrors: { email?: string; password?: string } = {};
     
     if (!formData.email) {
-      newErrors.email = 'Email e obrigatório';
+      newErrors.email = 'Email é obrigatório';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email invalido';
+      newErrors.email = 'Email inválido';
     }
     
     if (!formData.password) {
-      newErrors.password = 'Senha e obrigatória';
+      newErrors.password = 'Senha é obrigatória';
     } else if (formData.password.length < 6) {
       newErrors.password = 'Senha deve ter pelo menos 6 caracteres';
     }
@@ -111,7 +111,6 @@ const LoginPage: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // manipula o envio do formulario
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -119,15 +118,33 @@ const LoginPage: React.FC = () => {
       return;
     }
     
+    setIsLoading(true);
+    setError('');
+
     try {
-      await login(formData.email, formData.password);
-      navigate('/dashboard/');
-    } catch (err) {
-      // o erro tratado pelo hook useAuth
+      const response = await authService.login(formData.email, formData.password);
+      
+      localStorage.setItem('access_token', response.access_token);
+      localStorage.setItem('userRole', response.role);
+      localStorage.setItem('userId', response.usuario_id.toString());
+      localStorage.setItem('userEmail', response.email);
+      
+      if (response.role === 'FUNCIONARIO' || response.role === 'ADMIN') {
+        window.location.href = '/dashboard/'; // ← RECARREGA A PÁGINA
+      } else if (response.role === 'CLIENTE') {
+        window.location.href = '/loja/';
+      } else {
+        window.location.href = '/loja/';
+      }
+
+
+    } catch (err: any) {
+      setError(err.response?.data?.detail || 'Erro ao fazer login');
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  // interface
   return (
     <Container component="main" maxWidth={false} sx={loginStyles.container}>
       <Paper elevation={6} sx={loginStyles.paper}>
@@ -138,15 +155,15 @@ const LoginPage: React.FC = () => {
             style={{ height: '80px', marginBottom: '16px' }} 
           />
           <Typography variant="h4" component="h1" gutterBottom color="primary">
-            Sistema de Estoque
+            Livraria do Tik Tok
           </Typography>
           <Typography variant="body2" color="textSecondary">
-            Faça login para acessar o sistema
+            Faça login para acessar a loja
           </Typography>
         </Box>
 
         {error && (
-          <Alert severity="error" sx={{ mb: 2, width: '100%' }} onClose={clearError}>
+          <Alert severity="error" sx={{ mb: 2, width: '100%' }} onClose={() => setError('')}>
             {error}
           </Alert>
         )}
@@ -208,15 +225,7 @@ const LoginPage: React.FC = () => {
             {isLoading ? 'Entrando...' : 'Entrar'}
           </Button>
           
-          <Box sx={loginStyles.linksContainer}>
-            <Typography 
-              component="a" 
-              href="/forgot-password" 
-              sx={loginStyles.link}
-            >
-              Esqueceu sua senha?
-            </Typography>
-          </Box>
+          
         </Box>
       </Paper>
     </Container>

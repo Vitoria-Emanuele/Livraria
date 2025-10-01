@@ -143,6 +143,7 @@ export interface Livro {
   genero_literario: string;
   editora_livro: string;
   estoque_atual: number;
+  valor_venda: number;
 }
 
 export interface LivroCreate {
@@ -152,6 +153,7 @@ export interface LivroCreate {
   genero_literario: string;
   editora_livro: string;
   estoque_atual: number;
+  valor_venda:number
 }
 
 // interface do Item Lote
@@ -207,15 +209,19 @@ export interface Usuario {
   senha_hash: string;
   role: string;
   ativo: boolean;
-  id_funcionario: number;
+
+  id_funcionario?: number | null;
+  id_cliente?: number | null;
 }
 
 export interface UsuarioCreate {
   email_login: string;
   senha: string; 
   role: string;
-  ativo: boolean;
-  id_funcionario: number;
+  ativo?: boolean;
+  
+  id_funcionario?: number;
+  id_cliente?: number;
 }
 
 export interface UsuarioUpdate {
@@ -223,7 +229,10 @@ export interface UsuarioUpdate {
   senha?: string; 
   role?: string;
   ativo?: boolean;
-  id_funcionario?: number;
+  
+  id_funcionario?: number | null;
+  id_cliente?: number | null;
+
 }
 
 export interface LoginRequest {
@@ -286,6 +295,112 @@ export interface SaidaEstoqueRequest {
   }>;
 }
 
+// interface do Cliente
+export interface Cliente {
+  id_cliente: number;
+  nome_cliente: string;
+  cpf_cliente: string;
+  data_nascimento_cliente: string;
+  telefone_cliente: string;
+  email_cliente: string;
+  logradouro_cliente: string;
+  numero_logradouro_cliente: number;
+  bairro_cliente: string;
+  cidade_cliente: string;
+  estado_cliente: string;
+  cep_cliente: string;
+  complemento_cliente: string;
+}
+
+export interface ClienteCreate {
+  nome_cliente: string;
+  cpf_cliente: string;
+  data_nascimento_cliente: string;
+  telefone_cliente: string;
+  email_cliente: string;
+  logradouro_cliente: string;
+  numero_logradouro_cliente: number;
+  bairro_cliente: string;
+  cidade_cliente: string;
+  estado_cliente: string;
+  cep_cliente: string;
+  complemento_cliente: string;
+}
+
+// Interface para Compra
+export interface Compra {
+  id_compra: number;
+  data_compra: string;
+  hora_compra: string;
+  total_bruto: number;
+  desconto_aplicado: number;
+  total_liquido: number;
+  id_cliente: number;
+  id_funcionario: number;
+  id_cupom?: number;
+  status_compra: string;
+}
+
+export interface CompraCreate {
+  data_compra: string;
+  hora_compra: string;
+  total_bruto: number;
+  desconto_aplicado: number;
+  total_liquido: number;
+  id_cliente: number;
+  id_funcionario: number;
+  id_cupom?: number;
+  status_compra: string;
+}
+
+// Interface para ItemCompra
+export interface ItemCompra {
+  id_item_compra: number;
+  id_compra: number;
+  id_livro: number;
+  quantidade_item_compra: number;
+  valor_unitario_compra: number;
+}
+
+export interface ItemCompraCreate {
+  id_compra: number;
+  id_livro: number;
+  quantidade_item_compra: number;
+  valor_unitario_compra: number;
+}
+
+// Interface para Pagamento
+export interface Pagamento {
+  id_pagamento: number;
+  id_compra: number;
+  forma_pagamento: string;
+  status_pagamento: string;
+  data_pagamento: string;
+  hora_pagamento: string;
+  valor_pago: number;
+}
+
+export interface PagamentoCreate {
+  id_compra: number;
+  forma_pagamento: string;
+  status_pagamento: string;
+  data_pagamento: string;
+  hora_pagamento: string;
+  valor_pago: number;
+}
+
+// Interface para CompraCompletaRequest -   CORREÇÃO: Remover valor_unitario
+export interface CompraCompletaRequest {
+  id_cliente: number;
+  id_funcionario?: number;
+  itens: Array<{
+    id_livro: number;
+    quantidade: number;
+    //   REMOVIDO: valor_unitario: number;
+  }>;
+  forma_pagamento: string;
+  id_cupom?: number;
+}
 
 export const estoqueService = {
 
@@ -458,7 +573,21 @@ export const estoqueService = {
   removerUsuario: (usuario_id: number): Promise<{ ok: boolean }> =>
     api.delete(`/usuario/${usuario_id}`).then(response => response.data),
 
-
+  // cliente
+  buscarCliente: (cliente_id: number): Promise<Cliente> => 
+    api.get(`/cliente/${cliente_id}`).then(response => response.data),
+  
+  listarCliente: (): Promise<Cliente[]> => 
+    api.get('/cliente/').then(response => response.data),
+  
+  criarCliente: (cliente: ClienteCreate): Promise<Cliente> => 
+    api.post('/cliente/', cliente).then(response => response.data),
+  
+  atualizarCliente: (cliente_id: number, cliente: Partial<ClienteCreate>): Promise<Cliente> => 
+    api.put(`/cliente/${cliente_id}`, cliente).then(response => response.data),
+  
+  removerCliente: (cliente_id: number): Promise<{ok: boolean}> => 
+    api.delete(`/cliente/${cliente_id}`).then(response => response.data),
 
   criarEntradaEstoqueCompleta : async (
     dados: EntradaEstoqueRequest
@@ -485,7 +614,6 @@ export const estoqueService = {
       console.error('Erro no processo completo de entrada de estoque:', error);
       throw new Error('Falha ao processar entrada de estoque: ' + (error as Error).message);
     }
-
   },
 
   // saida completa
@@ -493,21 +621,137 @@ export const estoqueService = {
     dados: SaidaEstoqueRequest
   ): Promise<void> => {
     try {
-
       const response = await api.post('/retirada/saida_completa', {
         motivo_retirada: dados.motivo_retirada,
         id_funcionario: dados.id_funcionario,
         itens: dados.itens
-      })
-
+      });
     
       console.log('Processo de saída de estoque concluído com sucesso!');
-
     } catch (error) {
       console.error('Erro no processo completo de saída de estoque:', error);
       throw new Error('Falha ao processar saída de estoque: ' + (error as Error).message);
     }
-  }
+  },
 
+  // COMPRAS
+  criarCompra: (compra: CompraCreate): Promise<Compra> =>
+    api.post('/compra/', compra).then(response => response.data),
+
+  buscarCompra: (compra_id: number): Promise<Compra> =>
+    api.get(`/compra/${compra_id}`).then(response => response.data),
+
+  listarCompras: (): Promise<Compra[]> =>
+    api.get('/compra/').then(response => response.data),
+
+  // ITENS COMPRA
+  criarItemCompra: (itemCompra: ItemCompraCreate): Promise<ItemCompra> =>
+    api.post('/item_compra/', itemCompra).then(response => response.data),
+
+  listarItensCompra: (compra_id: number): Promise<ItemCompra[]> =>
+    api.get(`/item_compra/${compra_id}`).then(response => response.data),
+
+  // PAGAMENTOS
+  criarPagamento: (pagamento: PagamentoCreate): Promise<Pagamento> =>
+    api.post('/pagamento/', pagamento).then(response => response.data),
+
+  //   CORREÇÃO COMPLETA: criarCompraCompleta
+  criarCompraCompleta: async (dados: CompraCompletaRequest): Promise<{compra: Compra, pagamento: Pagamento}> => {
+    try {
+      console.log('📤 Iniciando processo de compra completa:', dados);
+      
+      //   Dados para a compra (sem valor_unitario)
+      const compraData = {
+        id_cliente: dados.id_cliente,
+        id_funcionario: dados.id_funcionario || 1,
+        id_cupom: dados.id_cupom,
+        itens: dados.itens.map(item => ({
+          id_livro: item.id_livro,
+          quantidade: item.quantidade
+        }))
+      };
+
+      console.log('📦 Dados enviados para /compra/completa:', compraData);
+
+      const compra = await api.post('/compra/completa', compraData)
+        .then(response => response.data);
+
+      console.log('  Compra criada (Aguardando pagamento):', compra);
+
+      const agora = new Date();
+      const dataAtual = agora.toISOString().split('T')[0];
+      const horaAtual = agora.toTimeString().split(' ')[0];
+
+      //   Dados para o pagamento
+      const pagamentoData = {
+        id_compra: compra.id_compra,
+        forma_pagamento: dados.forma_pagamento,
+        status_pagamento: 'PENDENTE',
+        data_pagamento: dataAtual,
+        hora_pagamento: horaAtual,
+        valor_pago: compra.total_liquido
+      };
+
+      console.log('💰 Dados enviados para /pagamento/:', pagamentoData);
+
+      const pagamento = await api.post('/pagamento/', pagamentoData)
+        .then(response => response.data);
+
+      console.log('  Pagamento criado (Pendente):', pagamento);
+
+      return { compra, pagamento };
+    } catch (error: any) {
+      //   MELHOR TRATAMENTO DE ERRO
+      console.error('  Erro no processo de compra completa:', error);
+      
+      if (error.response) {
+        console.error('  Detalhes do erro:', error.response.data);
+        console.error('  Status:', error.response.status);
+      }
+      
+      throw new Error('Falha ao processar compra: ' + 
+        (error.response?.data?.detail || error.response?.data?.message || error.message));
+    }
+  },
+
+  // CONFIRMAR PAGAMENTO
+  confirmarPagamento: async (idCompra: number, formaPagamento: string): Promise<{compra: Compra, pagamento: Pagamento}> => {
+    try {
+      console.log(` Confirmando pagamento da compra ${idCompra}`);
+      
+      const agora = new Date();
+      const dataAtual = agora.toISOString().split('T')[0];
+      const horaAtual = agora.toTimeString().split(' ')[0];
+
+      // 1. Buscar compra para pegar o total
+      const compra = await api.get(`/compra/${idCompra}`).then(response => response.data);
+
+      // 2. Atualizar compra para status PAGO
+      const compraAtualizada = await api.put(`/compra/${idCompra}`, {
+        status_compra: "PAGO"
+      }).then(response => response.data);
+
+      // 3. Atualizar pagamento para CONFIRMADO
+      const pagamento = await api.put(`/pagamento/compra/${idCompra}`, {
+        forma_pagamento: formaPagamento,
+        status_pagamento: 'CONFIRMADO',
+        data_pagamento: dataAtual,
+        hora_pagamento: horaAtual,
+        valor_pago: compra.total_liquido
+      }).then(response => response.data);
+
+      console.log('  Pagamento confirmado:', pagamento);
+
+      return { compra: compraAtualizada, pagamento };
+    } catch (error: any) {
+      console.error('  Erro ao confirmar pagamento:', error);
+      throw new Error('Falha ao confirmar pagamento: ' + 
+        (error.response?.data?.detail || error.message));
+    }
+  },
+
+  // LISTAR COMPRAS PENDENTES
+  listarComprasPendentes: (): Promise<Compra[]> =>
+    api.get('/compra/pendentes/').then(response => response.data)
 
 };

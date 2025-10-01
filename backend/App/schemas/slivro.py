@@ -9,6 +9,7 @@ class LivroBase(BaseModel):
     genero_literario: str
     editora_livro: str
     estoque_atual: int = 0
+    valor_venda: float
 
 
 class LivroCreate(LivroBase):
@@ -22,6 +23,7 @@ class LivroUpdate(BaseModel):
     genero_literario: Optional[str] = None
     editora_livro: Optional[str] = None
     estoque_atual: Optional[int] = None
+    valor_venda: Optional[float] = None
 
 
 class LivroResponse(LivroBase):

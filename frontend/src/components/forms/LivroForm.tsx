@@ -19,6 +19,7 @@ export interface LivroData {
   editora_livro: string;
   quantidade_item_lote: string;
   valor_item_lote: string;
+  valor_venda: string
 }
 
 interface LivroFormProps {
@@ -59,7 +60,8 @@ export default function LivroForm({ onLivrosChange, onReset, resetTrigger }: Liv
       genero_literario: '',
       editora_livro: '',
       quantidade_item_lote: '',
-      valor_item_lote: ''
+      valor_item_lote: '',
+      valor_venda: ''
     }
   ]);
 
@@ -75,7 +77,8 @@ export default function LivroForm({ onLivrosChange, onReset, resetTrigger }: Liv
         genero_literario: '',
         editora_livro: '',
         quantidade_item_lote: '',
-        valor_item_lote: ''
+        valor_item_lote: '',
+        valor_venda:''
       }]);
       setErros([]);
       setStatusBusca({});
@@ -144,7 +147,8 @@ export default function LivroForm({ onLivrosChange, onReset, resetTrigger }: Liv
       genero_literario: '',
       editora_livro: '',
       quantidade_item_lote: '',
-      valor_item_lote: ''
+      valor_item_lote: '',
+      valor_venda:''
     }];
     
     setLivros(novosLivros);
@@ -171,6 +175,8 @@ export default function LivroForm({ onLivrosChange, onReset, resetTrigger }: Liv
     }else if (field === 'quantidade_item_lote') {
       valorFormatado = limparFormatacao(value);
     } else if (field === 'valor_item_lote') {
+      valorFormatado = formatarValor(value);
+    }else if (field === 'valor_venda') {
       valorFormatado = formatarValor(value);
     }
 
@@ -208,6 +214,9 @@ export default function LivroForm({ onLivrosChange, onReset, resetTrigger }: Liv
       }
       if (!livro.valor_item_lote || parseFloat(livro.valor_item_lote) <= 0) {
         erro.valor_item_lote = 'Valor é obrigatório';
+      }
+      if (!livro.valor_venda || parseFloat(livro.valor_venda) <= 0) {
+        erro.valor_venda = 'Valor é obrigatório';
       }
 
       const valorNumerico = parseFloat(livro.valor_item_lote);
@@ -340,7 +349,6 @@ export default function LivroForm({ onLivrosChange, onReset, resetTrigger }: Liv
                 error={!!erros[index]?.quantidade_item_lote}
                 helperText={erros[index]?.quantidade_item_lote}
                 type="number"
-                inputProps={{ min: 1 }}
               />
             </Grid>
 
@@ -364,6 +372,29 @@ export default function LivroForm({ onLivrosChange, onReset, resetTrigger }: Liv
                 helperText={erros[index]?.valor_item_lote}
               />
             </Grid>
+
+            <Grid size={{ xs: 12, sm: 3 }}>
+              <NumericFormat
+                customInput={TextField}
+                required
+                fullWidth
+                label="Valor Unitário para venda"
+                value={livro.valor_venda}
+                onValueChange={(values) => {
+                  atualizarLivro(index, 'valor_venda', values.value);
+                }}
+                decimalScale={2}
+                fixedDecimalScale
+                decimalSeparator=","
+                thousandSeparator="."
+                prefix="R$ "
+                placeholder="R$ 0,00"
+                error={!!erros[index]?.valor_venda}
+                helperText={erros[index]?.valor_venda}
+              />
+            </Grid>
+
+
           </Grid>
         </Box>
       ))}
